@@ -1,5 +1,7 @@
-import 'package:appbankdarm/components/cartao.dart';
+import 'package:appbankdarm/services/auth_service.dart';
+import 'package:appbankdarm/widgets/cartao.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
+import 'package:provider/provider.dart';
 
 import '../../repositories/cartao_repository.dart';
 import 'package:flutter/material.dart';
@@ -63,7 +65,7 @@ class _HomeUserState extends State<HomeUser> {
           ),
           ListTile(
             title: const Text('Sair', style: TextStyle(color: Colors.red)),
-            onTap: () => Navigator.of(context).pushNamed(AppRoutes.PRELOAD),
+            onTap: () => context.read<AuthService>().logout(),
             leading: const Icon(Icons.logout, size: 30),
             iconColor: Colors.red,
           )

@@ -16,6 +16,7 @@ class _PreloadState extends State<Preload> {
         child: Column(
           children: [
             Flexible(
+              flex: 3,
               child: Container(
                 color: Colors.black,
                 child: const Center(
@@ -29,72 +30,74 @@ class _PreloadState extends State<Preload> {
                 ),
               ),
             ),
-            Container(
-              width: double.infinity,
-              height: 200,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
+            Flexible(
+              flex: 1,
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
                 ),
-              ),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      height: 50,
-                      margin: const EdgeInsets.symmetric(horizontal: 20),
-                      child: ElevatedButton(
-                        onPressed: () => {
-                          Navigator.of(context)
-                              .pushNamed(AppRoutes.LOGIN_CPF_USER)
-                        },
-                        child: const Text("Entrar"),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        height: 50,
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        child: ElevatedButton(
+                          onPressed: () => {
+                            Navigator.of(context)
+                                .pushNamed(AppRoutes.LOGIN_CPF_USER)
+                          },
+                          child: const Text("Entrar"),
+                        ),
                       ),
-                    ),
-                    Container(
-                      width: double.infinity,
-                      height: 50,
-                      margin: const EdgeInsets.symmetric(horizontal: 20),
-                      child: OutlinedButton(
-                        onPressed: () => Navigator.of(context)
-                            .pushNamed(AppRoutes.REGISTER_CPF_USER),
-                        style: ButtonStyle(
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
+                      Container(
+                        width: double.infinity,
+                        height: 50,
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        child: OutlinedButton(
+                          onPressed: () => Navigator.of(context)
+                              .pushNamed(AppRoutes.REGISTER_CPF_USER),
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
                             ),
-                          ),
-                          side: MaterialStateProperty.all(
-                            const BorderSide(
-                              width: 3,
+                            side: MaterialStateProperty.all(
+                              const BorderSide(
+                                width: 3,
+                              ),
                             ),
+                            elevation: ButtonStyleButton.allOrNull(0.0),
+                            foregroundColor:
+                                MaterialStateProperty.all<Color>(Colors.black),
                           ),
-                          elevation: ButtonStyleButton.allOrNull(0.0),
+                          child: const Text(
+                            "Criar conta",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () => {},
+                        style: const ButtonStyle(
                           foregroundColor:
-                              MaterialStateProperty.all<Color>(Colors.black),
+                              MaterialStatePropertyAll(Colors.black),
                         ),
                         child: const Text(
-                          "Criar conta",
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          'Entrar como admin',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 15),
                         ),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () => {},
-                      style: const ButtonStyle(
-                        foregroundColor: MaterialStatePropertyAll(Colors.black),
-                      ),
-                      child: const Text(
-                        'Entrar como admin',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 15),
-                      ),
-                    )
-                  ]),
+                      )
+                    ]),
+              ),
             ),
           ],
         ),

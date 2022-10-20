@@ -1,4 +1,4 @@
-import 'package:appbankdarm/components/cartao.dart';
+import 'package:appbankdarm/widgets/cartao.dart';
 import 'package:flutter/material.dart';
 
 class CartaoRepository {

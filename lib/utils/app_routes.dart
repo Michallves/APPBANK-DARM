@@ -1,7 +1,8 @@
 // ignore_for_file: constant_identifier_names
 
 abstract class AppRoutes {
-  static const PRELOAD = '/';
+  static const AUTHCHECK = '/';
+  static const PRELOAD = '/Preload';
   static const LOADING = '/Loading';
   static const LOGIN_CPF_USER = '/LoginCpfUser';
   static const LOGIN_PASSWORD_USER = '/LoginPasswordUser';

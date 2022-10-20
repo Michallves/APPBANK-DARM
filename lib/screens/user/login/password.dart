@@ -1,6 +1,8 @@
+import 'package:appbankdarm/services/auth_service.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
+import 'package:provider/provider.dart';
 
 class LoginPasswordUser extends StatefulWidget {
   const LoginPasswordUser({super.key});
@@ -11,6 +13,7 @@ class LoginPasswordUser extends StatefulWidget {
 
 class _LoginPasswordUserState extends State<LoginPasswordUser> {
   bool isButtonActive = false;
+  final email = TextEditingController(text: 'maicon@gmail.com');
   final password = TextEditingController();
 
   @override
@@ -26,11 +29,18 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
     });
   }
 
-  pressButton() {
-    Navigator.of(context).pushNamedAndRemoveUntil(
-        AppRoutes.HOME, (Route<dynamic> route) => false);
-  }
 
+    login() async {
+      try {
+        await context.read<AuthService>().login(email.text, password.text);
+      } on AuthException catch (e) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(e.message)));
+      }
+    }
+  
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -80,7 +90,7 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
                 child: ElevatedButton(
                   onPressed: isButtonActive == true
                       ? () {
-                          pressButton();
+                          login();
                         }
                       : null,
                   child: const Text("entrar"),

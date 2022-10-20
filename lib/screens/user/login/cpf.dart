@@ -13,9 +13,9 @@ class LoginCpfUser extends StatefulWidget {
 class _LoginCpfUserState extends State<LoginCpfUser> {
   bool isButtonActive = false;
   bool labelErr = false;
-  final cpf = TextEditingController();
-  final formFieldKey = GlobalKey<FormFieldState>();
 
+  final formFieldKey = GlobalKey<FormFieldState>();
+  final cpf = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -27,6 +27,7 @@ class _LoginCpfUserState extends State<LoginCpfUser> {
         formFieldKey.currentState?.validate();
       }
     });
+    print(cpf.text);
   }
 
   pressButton() {

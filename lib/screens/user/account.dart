@@ -19,7 +19,22 @@ class _AccountUserState extends State<AccountUser> {
 
   File? _image;
 
-  Future<File?> _pickImage() async {
+  Future<void> _pickImageCamera() async {
+    final picker = ImagePicker();
+    XFile? pickedImage = await picker.pickImage(
+      source: ImageSource.camera,
+      imageQuality: 50,
+      maxWidth: 150,
+    );
+
+    if (pickedImage != null) {
+      setState(() {
+        _image = File(pickedImage.path);
+      });
+    }
+  }
+
+  Future<void> _pickImageGallery() async {
     final picker = ImagePicker();
     XFile? pickedImage = await picker.pickImage(
       source: ImageSource.gallery,
@@ -27,7 +42,11 @@ class _AccountUserState extends State<AccountUser> {
       maxWidth: 150,
     );
 
-    if (pickedImage != null) return null;
+    if (pickedImage != null) {
+      setState(() {
+        _image = File(pickedImage.path);
+      });
+    }
   }
 
   void showBottomSheet() => showModalBottomSheet(
@@ -49,18 +68,21 @@ class _AccountUserState extends State<AccountUser> {
                 ListTile(
                   iconColor: Colors.black,
                   title: const Text('Camera'),
-                  leading: const Icon(Icons.camera_alt),
-                  onTap: _pickImage,
+                  leading: const Icon(Icons.camera_alt_outlined),
+                  onTap: _pickImageCamera,
                 ),
-                const ListTile(
+                ListTile(
                   iconColor: Colors.black,
-                  title: Text('Galeria'),
-                  leading: Icon(Icons.image),
-                  onTap: null,
+                  title: const Text('Galeria'),
+                  leading: const Icon(
+                    Icons.image_outlined,
+                  ),
+                  onTap: _pickImageGallery,
                 )
               ],
             ),
           ));
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

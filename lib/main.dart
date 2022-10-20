@@ -1,5 +1,10 @@
-import 'package:appbankdarm/utils/app_routes.dart';
+import 'package:appbankdarm/services/auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
+import 'firebase_options.dart';
+import 'package:appbankdarm/utils/app_routes.dart';
+//Routes
 import 'screens/loading.dart';
 import 'screens/preload.dart';
 //Pages Login User
@@ -28,8 +33,16 @@ import 'screens/user/register_card/number.dart';
 import 'screens/user/register_card/cvc.dart';
 import 'screens/user/register_card/validity.dart';
 
-void main() {
-  runApp(const AppBank());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (context) => AuthService()),
+  ], child: const AppBank()));
 }
 
 class AppBank extends StatelessWidget {

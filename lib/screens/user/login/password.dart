@@ -29,16 +29,14 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
     });
   }
 
-
-    login() async {
-      try {
-        await context.read<AuthService>().login(email.text, password.text);
-      } on AuthException catch (e) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(e.message)));
-      }
+  login() async {
+    try {
+      await context.read<AuthService>().login(email.text, password.text);
+    } on AuthException catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.message)));
     }
-  
+  }
 
   @override
   Widget build(BuildContext context) {

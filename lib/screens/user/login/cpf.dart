@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:appbankdarm/databases/db_firestore.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

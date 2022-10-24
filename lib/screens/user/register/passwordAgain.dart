@@ -1,8 +1,10 @@
 import 'package:appbankdarm/services/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
 import 'package:provider/provider.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../../databases/db_firestore.dart';
 import '../../../utils/app_routes.dart';
 
 class RegisterPasswordAgainUser extends StatefulWidget {
@@ -32,12 +34,38 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
   }
 
   register() async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    late FirebaseFirestore db;
     try {
-      await context.read<AuthService>().register();
-      return Navigator.of(context).pushNamed(AppRoutes.HOMEUSER);
-    } on AuthException catch (error) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(error.message)));
+      await auth
+          .createUserWithEmailAndPassword(
+              email: context.read<AuthService>().email!,
+              password: passwordConfirm.text)
+          .then((UserCredential userCredential) async => {
+                db = DBFirestore.get(),
+                await db.collection("users").doc(userCredential.user?.uid).set({
+                  "cpf": context.read<AuthService>().cpf!,
+                  'name': context.read<AuthService>().name!,
+                  "email": context.read<AuthService>().email!,
+                  " telephone": context.read<AuthService>().telephone!,
+                  "accountType": context.read<AuthService>().accountType!,
+                  "address": {
+                    'state': context.read<AuthService>().address![0],
+                    "city": context.read<AuthService>().address![1],
+                    "neighborhood": context.read<AuthService>().address![2],
+                    "street": context.read<AuthService>().address![3],
+                    "number": context.read<AuthService>().address![4],
+                  },
+                }).then((value) => Navigator.of(context)
+                    .pushReplacementNamed(AppRoutes.HOMEUSER))
+              });
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('A senha é muito fraca!')));
+      } else if (e.code == 'email-already-in-use') {
+        const SnackBar(content: Text('Este email ja está cadastrado'));
+      }
     }
   }
 

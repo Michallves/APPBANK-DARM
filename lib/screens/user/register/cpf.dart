@@ -5,6 +5,8 @@ import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import '../../../databases/db_firestore.dart';
+
 class RegisterCpfUser extends StatefulWidget {
   const RegisterCpfUser({super.key});
 
@@ -30,14 +32,55 @@ class _RegisterCpfUserState extends State<RegisterCpfUser> {
     });
   }
 
-  void pressButton() {
+  void pressButton() async {
     UtilBrasilFields.isCPFValido(cpf.text) == true
         ? {
-            context.read<AuthService>().cpf = cpf.text,
-            Navigator.of(context).pushNamed(AppRoutes.REGISTER_NAME_USER)
-          }
+            await DBFirestore.get()
+                .collection("users")
+                .where("cpf", isEqualTo: cpf.text)
+                .get()
+                .then((snapshot) => snapshot.docs.forEach((doc) => {
+                .catchError((_) => {
+                      context.read<AuthService>().cpf = cpf.text,
+                      Navigator.of(context)
+                          .pushNamed(AppRoutes.REGISTER_NAME_USER)
+                    })
+          
         : formFieldKey.currentState?.validate();
   }
+
+  void showBottomSheet() => showModalBottomSheet(
+      context: context,
+      builder: (context) => SizedBox(
+            height: 220,
+            child: Column(children: [
+              Expanded(
+                  child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: const [
+                  Text(
+                    'CPF já cadastrado',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    'toque em ${'entrar'} para acessar sua conta.',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              )),
+              Container(
+                width: double.infinity,
+                height: 50,
+                margin: const EdgeInsets.all(20),
+                child: ElevatedButton(
+                    onPressed: () => Navigator.of(context)
+                        .pushNamed(AppRoutes.LOGIN_CPF_USER),
+                    child: const Text('entrar')),
+              )
+            ]),
+          ));
 
   @override
   Widget build(BuildContext context) {

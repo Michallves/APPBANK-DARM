@@ -1,8 +1,6 @@
-import 'package:appbankdarm/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:appbankdarm/widgets/cartao.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
-import 'package:provider/provider.dart';
 
 import '../../repositories/cartao_repository.dart';
 import 'package:flutter/material.dart';

@@ -1,4 +1,5 @@
 import 'package:appbankdarm/services/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:appbankdarm/widgets/cartao.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:provider/provider.dart';
@@ -17,8 +18,9 @@ class _HomeUserState extends State<HomeUser> {
   final tabela = CartaoRepository.tabela;
 
   logout() async {
-    await context.read<AuthService>().logout();
-    return Navigator.of(context).pushNamed(AppRoutes.PRELOAD);
+    await FirebaseAuth.instance
+        .signOut()
+        .then((_) => Navigator.of(context).pushNamed(AppRoutes.PRELOAD));
   }
 
   @override

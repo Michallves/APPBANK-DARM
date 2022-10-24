@@ -16,6 +16,7 @@ class LoginCpfUser extends StatefulWidget {
 
 class _LoginCpfUserState extends State<LoginCpfUser> {
   bool isButtonActive = false;
+  bool isLoading = false;
   bool labelErr = false;
 
   final formFieldKey = GlobalKey<FormFieldState>();
@@ -25,6 +26,9 @@ class _LoginCpfUserState extends State<LoginCpfUser> {
   @override
   void initState() {
     super.initState();
+    setState(() {
+      isLoading = false;
+    });
     cpf.addListener(() {
       if (cpf.text.length == 14) {
         setState(() => isButtonActive = true);
@@ -37,18 +41,29 @@ class _LoginCpfUserState extends State<LoginCpfUser> {
 
   pushEmail() async {
     db = DBFirestore.get();
-    final snapshot =
-        await db.collection("users").where("cpf", isEqualTo: cpf.text).get();
-    snapshot.docs.forEach(
-        (doc) => {context.read<AuthService>().email = doc.data()["email"]});
-    Navigator.of(context).pushNamed(AppRoutes.LOGIN_PASSWORD_USER);
+    await db
+        .collection("users")
+        .where("cpf", isEqualTo: cpf.text)
+        .get()
+        .then((snapshot) => snapshot.docs.forEach(
+            (doc) => {context.read<AuthService>().email = doc.data()["email"]}))
+        .then((_) => {
+              setState(() => isLoading = false),
+              Navigator.of(context).pushNamed(AppRoutes.LOGIN_PASSWORD_USER),
+            });
   }
 
   late FirebaseFirestore db;
   pressButton() async {
+    setState(() {
+      isLoading = true;
+    });
     UtilBrasilFields.isCPFValido(cpf.text) == true
         ? {pushEmail()}
-        : formFieldKey.currentState?.validate();
+        : {
+            formFieldKey.currentState?.validate(),
+            setState(() => isLoading = false)
+          };
   }
 
   Widget build(BuildContext context) {
@@ -109,7 +124,15 @@ class _LoginCpfUserState extends State<LoginCpfUser> {
             margin: const EdgeInsets.all(20),
             child: ElevatedButton(
               onPressed: isButtonActive == true ? () => pressButton() : null,
-              child: const Text("continuar"),
+              child: isLoading == false
+                  ? const Text("entrar")
+                  : const SizedBox(
+                      width: 25,
+                      height: 25,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                      ),
+                    ),
             ),
           ),
         ],

@@ -15,6 +15,7 @@ class RegisterPasswordAgainUser extends StatefulWidget {
 
 class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
   bool isButtonActive = false;
+  bool isLoading = false;
   final passwordConfirm = TextEditingController();
 
   @override
@@ -33,7 +34,7 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
   register() async {
     try {
       await context.read<AuthService>().register();
-      return Navigator.of(context).pushNamed(AppRoutes.PRELOAD);
+      return Navigator.of(context).pushNamed(AppRoutes.HOMEUSER);
     } on AuthException catch (error) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(error.message)));
@@ -83,7 +84,9 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
                       register();
                     }
                   : null,
-              child: const Text("entrar"),
+              child: isLoading == false
+                  ? const Text("entrar")
+                  : CircularProgressIndicator(color: Colors.white),
             ),
           ),
         ],

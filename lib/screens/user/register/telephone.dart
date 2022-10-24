@@ -1,7 +1,9 @@
+import 'package:appbankdarm/services/auth_service.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 class RegisterTelephoneUser extends StatefulWidget {
   const RegisterTelephoneUser({super.key});
@@ -27,6 +29,7 @@ class _RegisterTelephoneUserState extends State<RegisterTelephoneUser> {
   }
 
   pressButton() {
+    context.read<AuthService>().telephone = telephone.text;
     Navigator.of(context).pushNamed(AppRoutes.REGISTER_ADDRESS_USER);
   }
 

@@ -14,7 +14,7 @@ class _AccountUserState extends State<AccountUser> {
   bool isButtonActive = false;
 
   void pressButton() {
-    Navigator.of(context).pushNamed(AppRoutes.HOME);
+    Navigator.of(context).pushNamed(AppRoutes.HOMEUSER);
   }
 
   File? _image;

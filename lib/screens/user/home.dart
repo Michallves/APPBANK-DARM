@@ -16,6 +16,11 @@ class HomeUser extends StatefulWidget {
 class _HomeUserState extends State<HomeUser> {
   final tabela = CartaoRepository.tabela;
 
+  logout() async {
+    await context.read<AuthService>().logout();
+    return Navigator.of(context).pushNamed(AppRoutes.PRELOAD);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,52 +30,53 @@ class _HomeUserState extends State<HomeUser> {
         ),
       ),
       drawer: Drawer(
+          backgroundColor: Colors.white,
           child: ListView(
-        children: [
-          DrawerHeader(
-              child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: const [
-              CircleAvatar(
-                radius: 30,
-                backgroundColor: Colors.red,
-                child: Text(
-                  'MA',
-                  style: TextStyle(color: Colors.white, fontSize: 25),
-                ),
+            children: [
+              DrawerHeader(
+                  child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: const [
+                  CircleAvatar(
+                    radius: 30,
+                    backgroundColor: Colors.red,
+                    child: Text(
+                      'MA',
+                      style: TextStyle(color: Colors.white, fontSize: 25),
+                    ),
+                  ),
+                  Text('Michael Alves Pereira', style: TextStyle(fontSize: 18))
+                ],
+              )),
+              ListTile(
+                title: const Text('Conta'),
+                onTap: () =>
+                    Navigator.of(context).pushNamed(AppRoutes.ACCOUNT_USER),
+                leading: const Icon(Icons.account_circle_outlined, size: 30),
+                iconColor: Colors.black,
               ),
-              Text('Michael Alves Pereira', style: TextStyle(fontSize: 18))
+              ListTile(
+                title: const Text('Criar cartão'),
+                onTap: () =>
+                    Navigator.of(context).pushNamed(AppRoutes.CREATE_CARD_NAME),
+                leading: const Icon(Icons.add_card, size: 30),
+                iconColor: Colors.black,
+              ),
+              ListTile(
+                title: const Text('Cadastrar cartão'),
+                onTap: () => Navigator.of(context)
+                    .pushNamed(AppRoutes.REGISTER_CARD_NAME),
+                leading: const Icon(Icons.credit_card, size: 30),
+                iconColor: Colors.black,
+              ),
+              ListTile(
+                title: const Text('Sair', style: TextStyle(color: Colors.red)),
+                onTap: () => logout(),
+                leading: const Icon(Icons.logout, size: 30),
+                iconColor: Colors.red,
+              )
             ],
           )),
-          ListTile(
-            title: const Text('Conta'),
-            onTap: () =>
-                Navigator.of(context).pushNamed(AppRoutes.ACCOUNT_USER),
-            leading: const Icon(Icons.account_circle_outlined, size: 30),
-            iconColor: Colors.black,
-          ),
-          ListTile(
-            title: const Text('Criar cartão'),
-            onTap: () =>
-                Navigator.of(context).pushNamed(AppRoutes.CREATE_CARD_NAME),
-            leading: const Icon(Icons.add_card, size: 30),
-            iconColor: Colors.black,
-          ),
-          ListTile(
-            title: const Text('Cadastrar cartão'),
-            onTap: () =>
-                Navigator.of(context).pushNamed(AppRoutes.REGISTER_CARD_NAME),
-            leading: const Icon(Icons.credit_card, size: 30),
-            iconColor: Colors.black,
-          ),
-          ListTile(
-            title: const Text('Sair', style: TextStyle(color: Colors.red)),
-            onTap: () => context.read<AuthService>().logout(),
-            leading: const Icon(Icons.logout, size: 30),
-            iconColor: Colors.red,
-          )
-        ],
-      )),
       body: ListView.separated(
           itemBuilder: (BuildContext context, int cartao) => Cartao(
                 id: tabela[cartao].id,

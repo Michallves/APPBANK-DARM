@@ -1,6 +1,8 @@
+import 'package:appbankdarm/services/auth_service.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 class RegisterAddressUser extends StatefulWidget {
   const RegisterAddressUser({super.key});
@@ -11,7 +13,6 @@ class RegisterAddressUser extends StatefulWidget {
 
 class _RegisterAddressUserState extends State<RegisterAddressUser> {
   bool isButtonActive = false;
-  List address = [];
   final state = TextEditingController();
   final city = TextEditingController();
   final neighborhood = TextEditingController();
@@ -38,6 +39,13 @@ class _RegisterAddressUserState extends State<RegisterAddressUser> {
   }
 
   void pressButton() {
+    context.read<AuthService>().address = [
+      state.text,
+      city.text,
+      neighborhood.text,
+      street.text,
+      number.text
+    ];
     Navigator.of(context).pushNamed(AppRoutes.REGISTER_ACCOUNT_TYPE_USER);
   }
 

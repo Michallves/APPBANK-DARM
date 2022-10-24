@@ -1,7 +1,9 @@
+import 'package:appbankdarm/services/auth_service.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 class RegisterCpfUser extends StatefulWidget {
   const RegisterCpfUser({super.key});
@@ -30,7 +32,10 @@ class _RegisterCpfUserState extends State<RegisterCpfUser> {
 
   void pressButton() {
     UtilBrasilFields.isCPFValido(cpf.text) == true
-        ? Navigator.of(context).pushNamed(AppRoutes.REGISTER_NAME_USER)
+        ? {
+            context.read<AuthService>().cpf = cpf.text,
+            Navigator.of(context).pushNamed(AppRoutes.REGISTER_NAME_USER)
+          }
         : formFieldKey.currentState?.validate();
   }
 

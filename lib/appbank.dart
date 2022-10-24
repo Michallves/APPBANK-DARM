@@ -76,7 +76,7 @@ class AppBank extends StatelessWidget {
         AppRoutes.REGISTER_PASSWORD_AGAIN_USER: (ctx) =>
             const RegisterPasswordAgainUser(),
         //Home User
-        AppRoutes.HOME: (ctx) => const HomeUser(),
+        AppRoutes.HOMEUSER: (ctx) => const HomeUser(),
         AppRoutes.ACCOUNT_USER: (ctx) => const AccountUser(),
         //Create Card User
         AppRoutes.CREATE_CARD_NAME: (ctx) => const CreateCardName(),

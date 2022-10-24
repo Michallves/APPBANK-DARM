@@ -1,6 +1,8 @@
+import 'package:appbankdarm/services/auth_service.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
+import 'package:provider/provider.dart';
 
 class RegisterPasswordUser extends StatefulWidget {
   const RegisterPasswordUser({super.key});
@@ -22,11 +24,11 @@ class _RegisterPasswordUserState extends State<RegisterPasswordUser> {
       } else {
         setState(() => isButtonActive = false);
       }
-      print(password.text.length);
     });
   }
 
   void pressButton() {
+    context.read<AuthService>().password = password.text;
     Navigator.of(context).pushNamed(AppRoutes.REGISTER_PASSWORD_AGAIN_USER);
   }
 

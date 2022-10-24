@@ -10,7 +10,7 @@ class Cartao extends StatefulWidget {
       required this.name,
       required this.validity,
       required this.cvc,
-      required this.type});
+      this.type});
 
   final String id;
   final String number;
@@ -18,7 +18,7 @@ class Cartao extends StatefulWidget {
   final String name;
   final String validity;
   final String cvc;
-  final String type;
+  final String? type;
 
   @override
   State<Cartao> createState({id, number, flag}) => _CartaoState();
@@ -128,7 +128,8 @@ class _CartaoState extends State<Cartao> {
                                   ),
                                 ),
                                 Container(
-                                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                  margin:
+                                      const EdgeInsets.fromLTRB(0, 10, 0, 0),
                                   child: Text(
                                     '****',
                                     style: TextStyle(
@@ -140,7 +141,8 @@ class _CartaoState extends State<Cartao> {
                                   ),
                                 ),
                                 Container(
-                                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                  margin:
+                                      const EdgeInsets.fromLTRB(0, 10, 0, 0),
                                   child: Text(
                                     '****',
                                     style: TextStyle(
@@ -249,7 +251,7 @@ class _CartaoState extends State<Cartao> {
                         child: Row(
                           children: [
                             Expanded(
-                                child: (widget.type != ''
+                                child: (widget.type != null
                                     ? Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.end,

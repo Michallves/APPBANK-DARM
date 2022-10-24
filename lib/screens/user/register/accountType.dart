@@ -1,5 +1,7 @@
+import 'package:appbankdarm/services/auth_service.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class RegisterAccountTypeUser extends StatefulWidget {
   const RegisterAccountTypeUser({super.key});
@@ -14,6 +16,7 @@ class _RegisterAccountTypeUserState extends State<RegisterAccountTypeUser> {
   String accountType = '';
 
   void pressButton() {
+    context.read<AuthService>().accountType = accountType;
     Navigator.of(context).pushNamed(AppRoutes.REGISTER_PASSWORD_USER);
   }
 
@@ -22,7 +25,7 @@ class _RegisterAccountTypeUserState extends State<RegisterAccountTypeUser> {
     if (accountType != '') {
       isButtonActive = true;
     }
-    print(accountType);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -31,7 +34,7 @@ class _RegisterAccountTypeUserState extends State<RegisterAccountTypeUser> {
       ),
       body: Column(
         children: [
-          SingleChildScrollView(
+          Expanded(
             child: Column(children: [
               ListTile(
                 title: const Text('Poupança'),

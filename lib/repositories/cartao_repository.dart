@@ -1,5 +1,4 @@
 import 'package:appbankdarm/widgets/cartao.dart';
-import 'package:flutter/material.dart';
 
 class CartaoRepository {
   static List<Cartao> tabela = [
@@ -37,7 +36,6 @@ class CartaoRepository {
       name: 'Hermeson Alves Pereira',
       validity: '14/10',
       cvc: '445',
-      type: '',
     ),
     const Cartao(
       id: '05',

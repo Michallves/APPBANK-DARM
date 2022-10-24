@@ -1,6 +1,9 @@
-import 'package:appbankdarm/utils/app_routes.dart';
+import 'package:appbankdarm/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
+import 'package:provider/provider.dart';
+
+import '../../../utils/app_routes.dart';
 
 class RegisterPasswordAgainUser extends StatefulWidget {
   const RegisterPasswordAgainUser({super.key});
@@ -12,24 +15,29 @@ class RegisterPasswordAgainUser extends StatefulWidget {
 
 class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
   bool isButtonActive = false;
-  final password = TextEditingController();
+  final passwordConfirm = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    password.addListener(() {
-      if (password.text.length == 6) {
+    passwordConfirm.addListener(() {
+      if (passwordConfirm.text.length == 6 &&
+          context.read<AuthService>().password == passwordConfirm.text) {
         setState(() => isButtonActive = true);
       } else {
         setState(() => isButtonActive = false);
       }
-      print(password.text);
     });
   }
 
-  void pressButton() {
-    Navigator.of(context).pushNamedAndRemoveUntil(
-        AppRoutes.HOME, (Route<dynamic> route) => false);
+  register() async {
+    try {
+      await context.read<AuthService>().register();
+      return Navigator.of(context).pushNamed(AppRoutes.PRELOAD);
+    } on AuthException catch (error) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(error.message)));
+    }
   }
 
   @override
@@ -46,7 +54,7 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
             child: Container(
               margin: const EdgeInsets.symmetric(vertical: 40),
               child: PinCodeTextField(
-                controller: password,
+                controller: passwordConfirm,
                 autofocus: true,
                 keyboardType: TextInputType.number,
                 errorBorderColor: Colors.red,
@@ -72,7 +80,7 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
             child: ElevatedButton(
               onPressed: isButtonActive == true
                   ? () {
-                      pressButton();
+                      register();
                     }
                   : null,
               child: const Text("entrar"),

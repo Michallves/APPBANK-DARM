@@ -1,7 +1,13 @@
+import 'dart:html';
+
+import 'package:appbankdarm/databases/db_firestore.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/services.dart';
+import 'package:appbankdarm/services/auth_service.dart';
+import 'package:provider/provider.dart';
 
 class LoginCpfUser extends StatefulWidget {
   const LoginCpfUser({super.key});
@@ -16,6 +22,8 @@ class _LoginCpfUserState extends State<LoginCpfUser> {
 
   final formFieldKey = GlobalKey<FormFieldState>();
   final cpf = TextEditingController();
+  String? email;
+
   @override
   void initState() {
     super.initState();
@@ -27,12 +35,21 @@ class _LoginCpfUserState extends State<LoginCpfUser> {
         formFieldKey.currentState?.validate();
       }
     });
-    print(cpf.text);
   }
 
-  pressButton() {
+  pushEmail() async {
+    db = DBFirestore.get();
+    final snapshot =
+        await db.collection("users").where("cpf", isEqualTo: cpf.text).get();
+    snapshot.docs.forEach(
+        (doc) => {context.read<AuthService>().email = doc.data()["email"]});
+    Navigator.of(context).pushNamed(AppRoutes.LOGIN_PASSWORD_USER);
+  }
+
+  late FirebaseFirestore db;
+  pressButton() async {
     UtilBrasilFields.isCPFValido(cpf.text) == true
-        ? Navigator.of(context).pushNamed(AppRoutes.LOGIN_PASSWORD_USER)
+        ? {pushEmail()}
         : formFieldKey.currentState?.validate();
   }
 

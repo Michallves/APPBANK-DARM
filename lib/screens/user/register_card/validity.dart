@@ -28,7 +28,7 @@ class _RegisterCardValidityState extends State<RegisterCardValidity> {
   }
 
   void pressButton() {
-    Navigator.of(context).pushNamed(AppRoutes.HOME);
+    Navigator.of(context).pushNamed(AppRoutes.HOMEUSER);
   }
 
   @override

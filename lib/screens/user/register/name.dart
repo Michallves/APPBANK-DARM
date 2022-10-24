@@ -1,5 +1,7 @@
+import 'package:appbankdarm/services/auth_service.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class RegisterNameUser extends StatefulWidget {
   const RegisterNameUser({super.key});
@@ -25,6 +27,7 @@ class _RegisterNameUserState extends State<RegisterNameUser> {
   }
 
   void pressButton() {
+    context.read<AuthService>().name = name.text;
     Navigator.of(context).pushNamed(AppRoutes.REGISTER_EMAIL_USER);
   }
 

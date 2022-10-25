@@ -10,7 +10,7 @@ class AuthService extends ChangeNotifier {
   String? name;
   String? email;
   String? telephone;
-  List? address;
+  List<String>? address;
   String? accountType;
   String? password;
 

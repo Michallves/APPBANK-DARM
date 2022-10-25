@@ -53,16 +53,24 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
 
   void showBottomSheet() => showModalBottomSheet(
       isDismissible: false,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       context: context,
       builder: (context) => SizedBox(
-            height: 220,
+            height: 250,
             child: Column(children: [
-              const Expanded(
-                  child: Center(
-                      child: Text(
-                'Senha incorreta!',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ))),
+              Expanded(
+                  child: Column(
+                children: const [
+                  Text(
+                    'Senha incorreta!',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    'a senha que você inseriu está incorreta. Tente novamente.',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ],
+              )),
               Container(
                 width: double.infinity,
                 height: 50,
@@ -156,7 +164,7 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
                               borderRadius: BorderRadius.circular(30),
                             ),
                           ),
-                          child: SizedBox(
+                          child: const SizedBox(
                             width: 25,
                             height: 25,
                             child: CircularProgressIndicator(

@@ -39,21 +39,6 @@ class _LoginCpfUserState extends State<LoginCpfUser> {
     });
   }
 
-  pushEmail() async {
-    db = DBFirestore.get();
-    await db
-        .collection("users")
-        .where("cpf", isEqualTo: cpf.text)
-        .get()
-        .then((snapshot) => snapshot.docs.forEach(
-            (doc) => {context.read<AuthService>().email = doc.data()["email"]}))
-        .then((_) => {
-              setState(() => isLoading = false),
-              Navigator.of(context).pushNamed(AppRoutes.LOGIN_PASSWORD_USER),
-            });
-  }
-
-  late FirebaseFirestore db;
   pressButton() async {
     setState(() {
       isLoading = true;
@@ -65,6 +50,96 @@ class _LoginCpfUserState extends State<LoginCpfUser> {
             setState(() => isLoading = false)
           };
   }
+
+  pushEmail() async {
+    db = DBFirestore.get();
+    await db
+        .collection("users")
+        .where("cpf", isEqualTo: cpf.text)
+        .get()
+        .then((snapshot) => {
+              if (snapshot.docs.isNotEmpty)
+                {
+                  snapshot.docs.forEach((doc) => {
+                        context.read<AuthService>().email = doc.data()["email"],
+                        setState(() => isLoading = false),
+                        Navigator.of(context)
+                            .pushNamed(AppRoutes.LOGIN_PASSWORD_USER)
+                      })
+                }
+              else
+                {setState(() => isLoading = false), showBottomSheet()}
+            });
+  }
+
+  void showBottomSheet() => showModalBottomSheet(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      context: context,
+      builder: (context) => SizedBox(
+            height: 300,
+            child: Column(children: [
+              Expanded(
+                  child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: const [
+                  Text(
+                    'CPF não encontrado',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    'crie um cadastro para você agora mesmo',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              )),
+              Column(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: 50,
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    child: ElevatedButton(
+                        onPressed: () => Navigator.of(context)
+                            .pushNamed(AppRoutes.REGISTER_CPF_USER),
+                        child: const Text('criar cadastro')),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    height: 50,
+                    margin: const EdgeInsets.all(20),
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                        side: MaterialStateProperty.all(
+                          const BorderSide(
+                            width: 3,
+                          ),
+                        ),
+                        elevation: ButtonStyleButton.allOrNull(0.0),
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(Colors.black),
+                      ),
+                      child: const Text(
+                        "agora não",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            ]),
+          ));
+  late FirebaseFirestore db;
 
   Widget build(BuildContext context) {
     return Scaffold(

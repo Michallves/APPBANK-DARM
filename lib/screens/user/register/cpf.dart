@@ -39,17 +39,26 @@ class _RegisterCpfUserState extends State<RegisterCpfUser> {
                 .collection("users")
                 .where("cpf", isEqualTo: cpf.text)
                 .get()
-                .then((snapshot) => snapshot.docs.forEach((doc) => {
-                .catchError((_) => {
-                      context.read<AuthService>().cpf = cpf.text,
-                      Navigator.of(context)
-                          .pushNamed(AppRoutes.REGISTER_NAME_USER)
-                    })
-          
+                .then(
+                  (res) => {
+                    if (res.docs.isNotEmpty)
+                      {showBottomSheet()}
+                    else
+                      {
+                        context.read<AuthService>().cpf = cpf.text,
+                        Navigator.of(context)
+                            .pushNamed(AppRoutes.REGISTER_NAME_USER)
+                      }
+                  },
+                )
+          }
         : formFieldKey.currentState?.validate();
   }
 
   void showBottomSheet() => showModalBottomSheet(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
       context: context,
       builder: (context) => SizedBox(
             height: 220,

@@ -34,20 +34,20 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
   }
 
   register() async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
     late FirebaseFirestore db;
     try {
-      await auth
+      await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
-              email: context.read<AuthService>().email!,
-              password: passwordConfirm.text)
+            email: context.read<AuthService>().email!,
+            password: context.read<AuthService>().password!,
+          )
           .then((UserCredential userCredential) async => {
                 db = DBFirestore.get(),
                 await db.collection("users").doc(userCredential.user?.uid).set({
                   "cpf": context.read<AuthService>().cpf!,
                   'name': context.read<AuthService>().name!,
                   "email": context.read<AuthService>().email!,
-                  " telephone": context.read<AuthService>().telephone!,
+                  "telephone": context.read<AuthService>().telephone!,
                   "accountType": context.read<AuthService>().accountType!,
                   "address": {
                     'state': context.read<AuthService>().address![0],
@@ -56,7 +56,7 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
                     "street": context.read<AuthService>().address![3],
                     "number": context.read<AuthService>().address![4],
                   },
-                }).then((value) => Navigator.of(context)
+                }).then((_) => Navigator.of(context)
                     .pushReplacementNamed(AppRoutes.HOMEUSER))
               });
     } on FirebaseAuthException catch (e) {
@@ -64,7 +64,8 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('A senha é muito fraca!')));
       } else if (e.code == 'email-already-in-use') {
-        const SnackBar(content: Text('Este email ja está cadastrado'));
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Este email ja está cadastrado')));
       }
     }
   }

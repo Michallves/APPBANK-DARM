@@ -40,13 +40,11 @@ class _RegisterAddressUserState extends State<RegisterAddressUser> {
 
   void pressButton() {
     context.read<AuthService>().address = [
-      {
-        "state": state.text,
-        "city": city.text,
-        "neighborhood": neighborhood.text,
-        "street": street.text,
-        "number": number.text,
-      }
+      state.text,
+      city.text,
+      neighborhood.text,
+      street.text,
+      number.text,
     ];
     Navigator.of(context).pushNamed(AppRoutes.REGISTER_ACCOUNT_TYPE_USER);
   }

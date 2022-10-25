@@ -2,6 +2,9 @@ import 'dart:io';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+
+import '../../services/user_service.dart';
 
 class AccountUser extends StatefulWidget {
   const AccountUser({super.key});
@@ -31,6 +34,7 @@ class _AccountUserState extends State<AccountUser> {
       setState(() {
         _image = File(pickedImage.path);
       });
+      Navigator.of(context).pop();
     }
   }
 
@@ -46,10 +50,14 @@ class _AccountUserState extends State<AccountUser> {
       setState(() {
         _image = File(pickedImage.path);
       });
+      Navigator.of(context).pop();
     }
   }
 
   void showBottomSheet() => showModalBottomSheet(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
       context: context,
       builder: (context) => SizedBox(
             height: 200,
@@ -64,7 +72,7 @@ class _AccountUserState extends State<AccountUser> {
                     ),
                   ),
                 ),
-                const Divider(height: 1),
+                const Divider(height: 2),
                 ListTile(
                   iconColor: Colors.black,
                   title: const Text('Camera'),
@@ -102,13 +110,19 @@ class _AccountUserState extends State<AccountUser> {
                       onTap: () => showBottomSheet(),
                       child: CircleAvatar(
                         radius: 80,
-                        backgroundColor: Colors.grey,
                         backgroundImage:
                             _image != null ? FileImage(_image!) : null,
-                        child: const Text(
-                          'MA',
-                          style: TextStyle(color: Colors.white, fontSize: 80),
-                        ),
+                        child: _image == null
+                            ? Text(
+                                context
+                                    .read<UserService>()
+                                    .name
+                                    .substring(0, 2)
+                                    .toUpperCase(),
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 80),
+                              )
+                            : null,
                       ),
                     ),
                     const SizedBox(

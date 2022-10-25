@@ -1,16 +1,14 @@
 import 'package:appbankdarm/databases/db_firestore.dart';
 import 'package:appbankdarm/services/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 
-class UserRepository extends ChangeNotifier {
+class UserService extends ChangeNotifier {
   late FirebaseFirestore db;
   late AuthService auth;
+  late String name;
 
-  User? user;
-
-  UserRepository({required this.auth}) {
+  UserService({required this.auth}) {
     _startRepository();
   }
 
@@ -26,9 +24,9 @@ class UserRepository extends ChangeNotifier {
   _readUser() async {
     await db.collection("users").doc(auth.usuario?.uid).get().then(
       (DocumentSnapshot doc) {
-        return doc.data();
+        name = doc.get('name');
       },
-      onError: (e) => print("Error getting document: $e"),
     );
+    notifyListeners();
   }
 }

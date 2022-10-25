@@ -1,5 +1,10 @@
+import 'package:appbankdarm/services/auth_service.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../../databases/db_firestore.dart';
 
 class RegisterCardName extends StatefulWidget {
   const RegisterCardName({super.key});
@@ -24,8 +29,20 @@ class _RegisterCardNameState extends State<RegisterCardName> {
     });
   }
 
-  void pressButton() {
-    Navigator.of(context).pushNamed(AppRoutes.REGISTER_CARD_NUMBER);
+  registerCard() async {
+    late FirebaseFirestore db;
+    db = DBFirestore.get();
+    await db
+        .collection("users")
+        .doc(context.read<AuthService>().usuario?.uid)
+        .update({
+      "cards": [
+        {
+          'name': name.text,
+        }
+      ],
+    }).then((_) =>
+            Navigator.of(context).pushReplacementNamed(AppRoutes.HOMEUSER));
   }
 
   @override
@@ -63,7 +80,7 @@ class _RegisterCardNameState extends State<RegisterCardName> {
             height: 50,
             margin: const EdgeInsets.all(20),
             child: ElevatedButton(
-              onPressed: isButtonActive == true ? () => pressButton() : null,
+              onPressed: isButtonActive == true ? () => registerCard() : null,
               child: const Text("continuar"),
             ),
           ),

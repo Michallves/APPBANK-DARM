@@ -74,7 +74,7 @@ class _LoginCpfUserState extends State<LoginCpfUser> {
 
   void showBottomSheet() => showModalBottomSheet(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(10),
       ),
       context: context,
       builder: (context) => SizedBox(

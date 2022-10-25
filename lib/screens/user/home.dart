@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:appbankdarm/widgets/cartao.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
-
+import 'package:provider/provider.dart';
+import '../../services/user_service.dart';
 import '../../repositories/cartao_repository.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +24,7 @@ class _HomeUserState extends State<HomeUser> {
 
   @override
   Widget build(BuildContext context) {
+    print(context.read<UserService>());
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -36,16 +38,20 @@ class _HomeUserState extends State<HomeUser> {
               DrawerHeader(
                   child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: const [
+                children: [
                   CircleAvatar(
-                    radius: 30,
-                    backgroundColor: Colors.red,
+                    radius: 40,
                     child: Text(
-                      'MA',
-                      style: TextStyle(color: Colors.white, fontSize: 25),
+                      context
+                          .read<UserService>()
+                          .name
+                          .substring(0, 2)
+                          .toUpperCase(),
+                      style: const TextStyle(color: Colors.white, fontSize: 25),
                     ),
                   ),
-                  Text('Michael Alves Pereira', style: TextStyle(fontSize: 18))
+                  Text(context.read<UserService>().name,
+                      style: const TextStyle(fontSize: 18))
                 ],
               )),
               ListTile(
@@ -77,20 +83,22 @@ class _HomeUserState extends State<HomeUser> {
               )
             ],
           )),
-      body: ListView.separated(
-          itemBuilder: (BuildContext context, int cartao) => Cartao(
-                id: tabela[cartao].id,
-                number: tabela[cartao].number,
-                flag: tabela[cartao].flag,
-                name: tabela[cartao].name,
-                validity: tabela[cartao].validity,
-                cvc: tabela[cartao].cvc,
-                type: tabela[cartao].type,
-              ),
-          padding: const EdgeInsets.all(20),
-          separatorBuilder: (_, ____) =>
-              const Padding(padding: EdgeInsets.all(10)),
-          itemCount: tabela.length),
+      body: Container(
+        child: ListView.separated(
+            itemBuilder: (BuildContext context, int cartao) => Cartao(
+                  id: tabela[cartao].id,
+                  number: tabela[cartao].number,
+                  flag: tabela[cartao].flag,
+                  name: tabela[cartao].name,
+                  validity: tabela[cartao].validity,
+                  cvc: tabela[cartao].cvc,
+                  type: tabela[cartao].type,
+                ),
+            padding: const EdgeInsets.all(20),
+            separatorBuilder: (_, ____) =>
+                const Padding(padding: EdgeInsets.all(10)),
+            itemCount: tabela.length),
+      ),
     );
   }
 }

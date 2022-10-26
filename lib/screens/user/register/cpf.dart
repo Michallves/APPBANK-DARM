@@ -1,12 +1,11 @@
 import 'package:appbankdarm/services/auth_service.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:appbankdarm/widgets/bottom_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-
-import '../../../databases/db_firestore.dart';
 
 class RegisterCpfUser extends StatefulWidget {
   const RegisterCpfUser({super.key});
@@ -17,6 +16,7 @@ class RegisterCpfUser extends StatefulWidget {
 
 class _RegisterCpfUserState extends State<RegisterCpfUser> {
   bool isButtonActive = false;
+  bool isLoading = false;
   bool labelErr = false;
   final cpf = TextEditingController();
   final formFieldKey = GlobalKey<FormFieldState>();
@@ -33,17 +33,23 @@ class _RegisterCpfUserState extends State<RegisterCpfUser> {
     });
   }
 
-  void pressButton() async {
+  _validate() {
+    formFieldKey.currentState?.validate();
+    setState(() => isLoading = false);
+  }
+
+  _pushCpf() async {
     UtilBrasilFields.isCPFValido(cpf.text) == true
         ? {
-            await DBFirestore.get()
-                .collection("users")
+            await FirebaseFirestore.instance.collection("users")
                 .where("cpf", isEqualTo: cpf.text)
                 .get()
                 .then(
                   (res) => {
                     if (res.docs.isNotEmpty)
-                      {showBottomSheet()}
+                      {
+                        showModal(),
+                      }
                     else
                       {
                         context.read<AuthService>().cpf = cpf.text,
@@ -53,10 +59,20 @@ class _RegisterCpfUserState extends State<RegisterCpfUser> {
                   },
                 )
           }
-        : formFieldKey.currentState?.validate();
+        : _validate();
+    setState(() {
+      isLoading = false;
+    });
   }
 
-  void showBottomSheet() => showModalBottomSheet(
+  _pressButton() async {
+    setState(() {
+      isLoading = true;
+    });
+    _pushCpf();
+  }
+
+  void showModal() => showModalBottomSheet(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
@@ -144,9 +160,10 @@ class _RegisterCpfUserState extends State<RegisterCpfUser> {
             ),
           ),
           BottomButtom(
-            onPress: () => pressButton(),
+            onPress: () => _pressButton(),
             title: 'continuar',
             isButtonActive: isButtonActive,
+            isLoading: isLoading,
           )
         ],
       ),

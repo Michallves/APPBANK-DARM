@@ -24,7 +24,7 @@ class _CreateCardNameState extends State<CreateCardName> {
     });
   }
 
-  void pressButton() {
+  _pressButton() {
     Navigator.of(context).pushNamed(AppRoutes.CREATE_CARD_TYPE);
   }
 
@@ -63,7 +63,7 @@ class _CreateCardNameState extends State<CreateCardName> {
             height: 50,
             margin: const EdgeInsets.all(20),
             child: ElevatedButton(
-              onPressed: isButtonActive == true ? () => pressButton() : null,
+              onPressed: isButtonActive == true ? () => _pressButton() : null,
               child: const Text("continuar"),
             ),
           ),

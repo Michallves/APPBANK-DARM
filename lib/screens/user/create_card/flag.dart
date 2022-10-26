@@ -11,7 +11,7 @@ class _CreateCardFlagState extends State<CreateCardFlag> {
   bool isButtonActive = false;
   String flag = '';
 
-  pressButton() {
+  _pressButton() {
     Navigator.of(context).pushNamed('/createCardValidity');
   }
 
@@ -128,7 +128,7 @@ class _CreateCardFlagState extends State<CreateCardFlag> {
             height: 50,
             margin: const EdgeInsets.all(20),
             child: ElevatedButton(
-              onPressed: isButtonActive == true ? () => pressButton() : null,
+              onPressed: isButtonActive == true ? () => _pressButton() : null,
               child: const Text("continuar"),
             ),
           ),

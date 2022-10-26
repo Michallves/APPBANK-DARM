@@ -5,6 +5,8 @@ import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import '../../../widgets/bottom_button.dart';
+
 class RegisterTelephoneUser extends StatefulWidget {
   const RegisterTelephoneUser({super.key});
 
@@ -28,7 +30,7 @@ class _RegisterTelephoneUserState extends State<RegisterTelephoneUser> {
     });
   }
 
-  pressButton() {
+  _pressButton() {
     context.read<AuthService>().telephone = telephone.text;
     Navigator.of(context).pushNamed(AppRoutes.REGISTER_ADDRESS_USER);
   }
@@ -69,15 +71,11 @@ class _RegisterTelephoneUserState extends State<RegisterTelephoneUser> {
               ),
             ),
           ),
-          Container(
-            width: double.infinity,
-            height: 50,
-            margin: const EdgeInsets.all(20),
-            child: ElevatedButton(
-              onPressed: isButtonActive == true ? () => pressButton() : null,
-              child: const Text("continuar"),
-            ),
-          ),
+          BottomButtom(
+            onPress: () => _pressButton(),
+            title: 'continuar',
+            isButtonActive: isButtonActive,
+          )
         ],
       ),
     );

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
 import 'package:provider/provider.dart';
 
+import '../../../widgets/bottom_button.dart';
+
 class RegisterPasswordUser extends StatefulWidget {
   const RegisterPasswordUser({super.key});
 
@@ -27,7 +29,7 @@ class _RegisterPasswordUserState extends State<RegisterPasswordUser> {
     });
   }
 
-  void pressButton() {
+  _pressButton() {
     context.read<AuthService>().password = password.text;
     Navigator.of(context).pushNamed(AppRoutes.REGISTER_PASSWORD_AGAIN_USER);
   }
@@ -65,19 +67,11 @@ class _RegisterPasswordUserState extends State<RegisterPasswordUser> {
               ),
             ),
           ),
-          Container(
-            width: double.infinity,
-            height: 50,
-            margin: const EdgeInsets.all(20),
-            child: ElevatedButton(
-              onPressed: isButtonActive == true
-                  ? () {
-                      pressButton();
-                    }
-                  : null,
-              child: const Text("continuar"),
-            ),
-          ),
+          BottomButtom(
+            onPress: () => _pressButton(),
+            title: 'continuar',
+            isButtonActive: isButtonActive,
+          )
         ],
       ),
     );

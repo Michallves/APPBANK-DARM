@@ -16,7 +16,7 @@ class AccountUser extends StatefulWidget {
 class _AccountUserState extends State<AccountUser> {
   bool isButtonActive = false;
 
-  void pressButton() {
+  _pressButton() {
     Navigator.of(context).pushNamed(AppRoutes.HOMEUSER);
   }
 
@@ -34,7 +34,7 @@ class _AccountUserState extends State<AccountUser> {
       setState(() {
         _image = File(pickedImage.path);
       });
-      Navigator.of(context).pop();
+      () => Navigator.of(context).pop();
     }
   }
 
@@ -50,11 +50,11 @@ class _AccountUserState extends State<AccountUser> {
       setState(() {
         _image = File(pickedImage.path);
       });
-      Navigator.of(context).pop();
+      () => Navigator.of(context).pop();
     }
   }
 
-  void showBottomSheet() => showModalBottomSheet(
+  void showModal() => showModalBottomSheet(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
@@ -107,7 +107,7 @@ class _AccountUserState extends State<AccountUser> {
                 child: Column(
                   children: [
                     GestureDetector(
-                      onTap: () => showBottomSheet(),
+                      onTap: () => showModal(),
                       child: CircleAvatar(
                         radius: 80,
                         backgroundImage:
@@ -128,8 +128,8 @@ class _AccountUserState extends State<AccountUser> {
                     const SizedBox(
                       height: 40,
                     ),
-                    const Text('Michael Alves Pereira',
-                        style: TextStyle(fontSize: 25))
+                    Text(context.read<UserService>().name,
+                        style: const TextStyle(fontSize: 25))
                   ],
                 )),
           ),
@@ -138,7 +138,7 @@ class _AccountUserState extends State<AccountUser> {
             height: 50,
             margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
             child: ElevatedButton(
-              onPressed: () => pressButton(),
+              onPressed: () => _pressButton(),
               child: const Text("alterar senha"),
             ),
           ),
@@ -147,7 +147,7 @@ class _AccountUserState extends State<AccountUser> {
             height: 50,
             margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
             child: ElevatedButton(
-              onPressed: () => pressButton(),
+              onPressed: () => _pressButton(),
               child: const Text("excluir conta"),
             ),
           ),

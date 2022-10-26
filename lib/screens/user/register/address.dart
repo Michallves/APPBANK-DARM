@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import '../../../widgets/bottom_button.dart';
+
 class RegisterAddressUser extends StatefulWidget {
   const RegisterAddressUser({super.key});
 
@@ -38,7 +40,7 @@ class _RegisterAddressUserState extends State<RegisterAddressUser> {
     });
   }
 
-  void pressButton() {
+  _pressButton() {
     context.read<AuthService>().address = [
       state.text,
       city.text,
@@ -150,15 +152,11 @@ class _RegisterAddressUserState extends State<RegisterAddressUser> {
               ),
             ),
           ),
-          Container(
-            width: double.infinity,
-            height: 50,
-            margin: const EdgeInsets.all(20),
-            child: ElevatedButton(
-              onPressed: isButtonActive == true ? () => pressButton() : null,
-              child: const Text("continuar"),
-            ),
-          ),
+          BottomButtom(
+            onPress: () => _pressButton(),
+            title: 'continuar',
+            isButtonActive: isButtonActive,
+          )
         ],
       ),
     );

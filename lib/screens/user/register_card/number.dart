@@ -77,7 +77,7 @@ class _RegisterCardNumberState extends State<RegisterCardNumber> {
     });
   }
 
-  void pressButton() {
+  _pressButton() {
     Navigator.of(context).pushNamed(AppRoutes.REGISTER_CARD_CVC);
   }
 
@@ -158,7 +158,7 @@ class _RegisterCardNumberState extends State<RegisterCardNumber> {
             height: 50,
             margin: const EdgeInsets.all(20),
             child: ElevatedButton(
-              onPressed: isButtonActive == true ? () => pressButton() : null,
+              onPressed: isButtonActive == true ? () => _pressButton() : null,
               child: const Text("continuar"),
             ),
           ),

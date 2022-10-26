@@ -4,8 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../databases/db_firestore.dart';
-
 class RegisterCardName extends StatefulWidget {
   const RegisterCardName({super.key});
 
@@ -30,17 +28,13 @@ class _RegisterCardNameState extends State<RegisterCardName> {
   }
 
   registerCard() async {
-    late FirebaseFirestore db;
-    db = DBFirestore.get();
-    await db
+    await FirebaseFirestore.instance
         .collection("users")
         .doc(context.read<AuthService>().usuario?.uid)
         .update({
-      "cards": [
-        {
-          'name': name.text,
-        }
-      ],
+      "cards": FieldValue.arrayUnion([
+        {'name': name.text}
+      ]),
     }).then((_) =>
             Navigator.of(context).pushReplacementNamed(AppRoutes.HOMEUSER));
   }

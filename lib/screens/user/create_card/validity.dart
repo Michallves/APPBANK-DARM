@@ -12,7 +12,7 @@ class _CreateCardValidityState extends State<CreateCardValidity> {
   bool isButtonActive = false;
   String validity = '';
 
-  void pressButton() {
+  _pressButton() {
     Navigator.of(context).pushNamed(AppRoutes.HOMEUSER);
   }
 
@@ -115,7 +115,7 @@ class _CreateCardValidityState extends State<CreateCardValidity> {
             height: 50,
             margin: const EdgeInsets.all(20),
             child: ElevatedButton(
-              onPressed: isButtonActive == true ? () => pressButton() : null,
+              onPressed: isButtonActive == true ? () => _pressButton() : null,
               child: const Text("criar cartão"),
             ),
           ),

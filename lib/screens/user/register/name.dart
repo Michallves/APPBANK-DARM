@@ -1,5 +1,6 @@
 import 'package:appbankdarm/services/auth_service.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
+import 'package:appbankdarm/widgets/bottom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,7 +27,7 @@ class _RegisterNameUserState extends State<RegisterNameUser> {
     });
   }
 
-  void pressButton() {
+  _pressButton() {
     context.read<AuthService>().name = name.text;
     Navigator.of(context).pushNamed(AppRoutes.REGISTER_EMAIL_USER);
   }
@@ -62,15 +63,10 @@ class _RegisterNameUserState extends State<RegisterNameUser> {
               ),
             ),
           ),
-          Container(
-            width: double.infinity,
-            height: 50,
-            margin: const EdgeInsets.all(20),
-            child: ElevatedButton(
-              onPressed: isButtonActive == true ? () => pressButton() : null,
-              child: const Text("continuar"),
-            ),
-          ),
+          BottomButtom(
+              isButtonActive: isButtonActive,
+              onPress: () => _pressButton(),
+              title: "Continuar")
         ],
       ),
     );

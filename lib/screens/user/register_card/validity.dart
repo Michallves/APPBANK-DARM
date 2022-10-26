@@ -27,7 +27,7 @@ class _RegisterCardValidityState extends State<RegisterCardValidity> {
     });
   }
 
-  void pressButton() {
+  _pressButton() {
     Navigator.of(context).pushNamed(AppRoutes.HOMEUSER);
   }
 
@@ -66,7 +66,7 @@ class _RegisterCardValidityState extends State<RegisterCardValidity> {
             height: 50,
             margin: const EdgeInsets.all(20),
             child: ElevatedButton(
-              onPressed: isButtonActive == true ? () => pressButton() : null,
+              onPressed: isButtonActive == true ? () => _pressButton() : null,
               child: const Text("cadastrar cartão"),
             ),
           ),

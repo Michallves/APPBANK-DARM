@@ -2,6 +2,8 @@ import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
 
+import '../../../widgets/bottom_button.dart';
+
 class RegisterCardCvc extends StatefulWidget {
   const RegisterCardCvc({super.key});
 
@@ -26,7 +28,7 @@ class _RegisterCardCvcState extends State<RegisterCardCvc> {
     });
   }
 
-  void pressButton() {
+  _pressButton() {
     Navigator.of(context).pushNamed(AppRoutes.REGISTER_CARD_VALIDITY);
   }
 
@@ -61,19 +63,11 @@ class _RegisterCardCvcState extends State<RegisterCardCvc> {
               ),
             ),
           ),
-          Container(
-            width: double.infinity,
-            height: 50,
-            margin: const EdgeInsets.all(20),
-            child: ElevatedButton(
-              onPressed: isButtonActive == true
-                  ? () {
-                      pressButton();
-                    }
-                  : null,
-              child: const Text("continuar"),
-            ),
-          ),
+          BottomButtom(
+            onPress: () => _pressButton(),
+            title: 'continuar',
+            isButtonActive: isButtonActive,
+          )
         ],
       ),
     );

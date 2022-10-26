@@ -5,6 +5,7 @@ import 'package:pin_code_text_field/pin_code_text_field.dart';
 import 'package:provider/provider.dart';
 
 import '../../../utils/app_routes.dart';
+import '../../../widgets/bottom_button.dart';
 
 class LoginPasswordUser extends StatefulWidget {
   const LoginPasswordUser({super.key});
@@ -41,17 +42,16 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
           .signInWithEmailAndPassword(
               email: context.read<AuthService>().email!,
               password: password.text)
-          .then((_) => Navigator.of(context).pushNamed(AppRoutes.HOMEUSER));
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'wrong-password') {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Senha incorreta. Tente novamente')));
-      }
-      showBottomSheet();
+          .then((_) => {
+                Navigator.of(context).pushNamed(AppRoutes.HOMEUSER),
+                context.read<AuthService>().getUser()
+              });
+    } on FirebaseAuthException catch (_) {
+      showModal();
     }
   }
 
-  void showBottomSheet() => showModalBottomSheet(
+  void showModal() => showModalBottomSheet(
       isDismissible: false,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       context: context,
@@ -142,36 +142,12 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
                         fontSize: 16,
                         fontWeight: FontWeight.bold)),
               ),
-              Container(
-                  width: double.infinity,
-                  height: 50,
-                  margin: const EdgeInsets.all(20),
-                  child: isLoading == false
-                      ? ElevatedButton(
-                          onPressed: isButtonActive == true
-                              ? () {
-                                  login();
-                                }
-                              : null,
-                          child: const Text("entrar"))
-                      : ElevatedButton(
-                          onPressed: null,
-                          style: ElevatedButton.styleFrom(
-                            disabledBackgroundColor: Colors.black,
-                            foregroundColor: Colors.white,
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                          ),
-                          child: const SizedBox(
-                            width: 25,
-                            height: 25,
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                            ),
-                          ),
-                        )),
+              BottomButtom(
+                onPress: () => login(),
+                title: 'entrar',
+                isButtonActive: isButtonActive,
+                isLoading: isLoading,
+              )
             ],
           ),
         ],

@@ -12,7 +12,7 @@ class _CreateCardTypeState extends State<CreateCardType> {
   bool isButtonActive = false;
   String type = '';
 
-  void pressButton() {
+  _pressButton() {
     Navigator.of(context).pushNamed(AppRoutes.CREATE_CARD_VALIDITY);
   }
 
@@ -133,7 +133,7 @@ class _CreateCardTypeState extends State<CreateCardType> {
             height: 50,
             margin: const EdgeInsets.all(20),
             child: ElevatedButton(
-              onPressed: isButtonActive == true ? () => pressButton() : null,
+              onPressed: isButtonActive == true ? () => _pressButton() : null,
               child: const Text("continuar"),
             ),
           ),

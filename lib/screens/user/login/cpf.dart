@@ -1,4 +1,3 @@
-import 'package:appbankdarm/databases/db_firestore.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:appbankdarm/widgets/bottom_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -40,21 +39,13 @@ class _LoginCpfUserState extends State<LoginCpfUser> {
     });
   }
 
-  pressButton() async {
-    setState(() {
-      isLoading = true;
-    });
-    UtilBrasilFields.isCPFValido(cpf.text) == true
-        ? {pushEmail()}
-        : {
-            formFieldKey.currentState?.validate(),
-            setState(() => isLoading = false)
-          };
+  _validate() {
+    formFieldKey.currentState?.validate();
+    setState(() => isLoading = false);
   }
 
-  pushEmail() async {
-    db = DBFirestore.get();
-    await db
+  _pushEmail() async {
+    await FirebaseFirestore.instance
         .collection("users")
         .where("cpf", isEqualTo: cpf.text)
         .get()
@@ -63,17 +54,26 @@ class _LoginCpfUserState extends State<LoginCpfUser> {
                 {
                   snapshot.docs.forEach((doc) => {
                         context.read<AuthService>().email = doc.data()["email"],
-                        setState(() => isLoading = false),
                         Navigator.of(context)
                             .pushNamed(AppRoutes.LOGIN_PASSWORD_USER)
                       })
                 }
               else
-                {setState(() => isLoading = false), showBottomSheet()}
+                {showModal()}
             });
+    setState(() => isLoading = false);
   }
 
-  void showBottomSheet() => showModalBottomSheet(
+  _pressButton() async {
+    setState(() {
+      isLoading = true;
+    });
+    UtilBrasilFields.isCPFValido(cpf.text) == true
+        ? {_pushEmail()}
+        : {_validate()};
+  }
+
+  void showModal() => showModalBottomSheet(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
@@ -198,8 +198,8 @@ class _LoginCpfUserState extends State<LoginCpfUser> {
           BottomButtom(
               isLoading: isLoading,
               isButtonActive: isButtonActive,
-              onPress: () => pressButton(),
-              title: 'entrar')
+              onPress: () => _pressButton(),
+              title: 'continuar')
         ],
       ),
     );

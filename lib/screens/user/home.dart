@@ -17,14 +17,13 @@ class _HomeUserState extends State<HomeUser> {
   final tabela = CartaoRepository.tabela;
 
   logout() async {
-    await FirebaseAuth.instance
-        .signOut()
-        .then((_) => Navigator.of(context).pushNamed(AppRoutes.PRELOAD));
+    await FirebaseAuth.instance.signOut().then(
+        (_) => Navigator.of(context).pushReplacementNamed(AppRoutes.PRELOAD));
   }
 
   @override
   Widget build(BuildContext context) {
-    print(context.read<UserService>());
+    print(context.read<UserService>().cards);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -42,11 +41,7 @@ class _HomeUserState extends State<HomeUser> {
                   CircleAvatar(
                     radius: 40,
                     child: Text(
-                      context
-                          .read<UserService>()
-                          .name
-                          .substring(0, 2)
-                          .toUpperCase(),
+                      context.read<UserService>().name,
                       style: const TextStyle(color: Colors.white, fontSize: 25),
                     ),
                   ),
@@ -83,22 +78,20 @@ class _HomeUserState extends State<HomeUser> {
               )
             ],
           )),
-      body: Container(
-        child: ListView.separated(
-            itemBuilder: (BuildContext context, int cartao) => Cartao(
-                  id: tabela[cartao].id,
-                  number: tabela[cartao].number,
-                  flag: tabela[cartao].flag,
-                  name: tabela[cartao].name,
-                  validity: tabela[cartao].validity,
-                  cvc: tabela[cartao].cvc,
-                  type: tabela[cartao].type,
-                ),
-            padding: const EdgeInsets.all(20),
-            separatorBuilder: (_, ____) =>
-                const Padding(padding: EdgeInsets.all(10)),
-            itemCount: tabela.length),
-      ),
+      body: ListView.separated(
+          itemBuilder: (BuildContext context, int cartao) => Cartao(
+                id: tabela[cartao].id,
+                number: tabela[cartao].number,
+                flag: tabela[cartao].flag,
+                name: tabela[cartao].name,
+                validity: tabela[cartao].validity,
+                cvc: tabela[cartao].cvc,
+                type: tabela[cartao].type,
+              ),
+          padding: const EdgeInsets.all(20),
+          separatorBuilder: (_, ____) =>
+              const Padding(padding: EdgeInsets.all(10)),
+          itemCount: tabela.length),
     );
   }
 }

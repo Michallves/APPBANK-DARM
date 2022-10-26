@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../../databases/db_firestore.dart';
 import '../../../utils/app_routes.dart';
+import '../../../widgets/bottom_button.dart';
 
 class RegisterPasswordAgainUser extends StatefulWidget {
   const RegisterPasswordAgainUser({super.key});
@@ -34,6 +34,9 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
   }
 
   register() async {
+    setState(() {
+      isLoading = true;
+    });
     late FirebaseFirestore db;
     try {
       await FirebaseAuth.instance
@@ -42,8 +45,10 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
             password: context.read<AuthService>().password!,
           )
           .then((UserCredential userCredential) async => {
-                db = DBFirestore.get(),
-                await db.collection("users").doc(userCredential.user?.uid).set({
+                await FirebaseFirestore.instance
+                    .collection("users")
+                    .doc(userCredential.user?.uid)
+                    .set({
                   "cpf": context.read<AuthService>().cpf!,
                   'name': context.read<AuthService>().name!,
                   "email": context.read<AuthService>().email!,
@@ -56,16 +61,19 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
                     "street": context.read<AuthService>().address![3],
                     "number": context.read<AuthService>().address![4],
                   },
-                }).then((_) => Navigator.of(context)
-                    .pushReplacementNamed(AppRoutes.HOMEUSER))
+                }).then((_) => {
+                          Navigator.of(context)
+                              .pushReplacementNamed(AppRoutes.HOMEUSER),
+                          context.read<AuthService>().getUser()
+                        })
               });
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('A senha é muito fraca!')));
-      } else if (e.code == 'email-already-in-use') {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Este email ja está cadastrado')));
+        setState(() {
+          isLoading = false;
+        });
       }
     }
   }
@@ -103,21 +111,12 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
               ),
             ),
           ),
-          Container(
-            width: double.infinity,
-            height: 50,
-            margin: const EdgeInsets.all(20),
-            child: ElevatedButton(
-              onPressed: isButtonActive == true
-                  ? () {
-                      register();
-                    }
-                  : null,
-              child: isLoading == false
-                  ? const Text("entrar")
-                  : CircularProgressIndicator(color: Colors.white),
-            ),
-          ),
+          BottomButtom(
+            onPress: () => register(),
+            title: 'criar conta',
+            isButtonActive: isButtonActive,
+            isLoading: isLoading,
+          )
         ],
       ),
     );

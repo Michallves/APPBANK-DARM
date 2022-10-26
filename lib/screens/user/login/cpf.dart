@@ -1,5 +1,6 @@
 import 'package:appbankdarm/databases/db_firestore.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
+import 'package:appbankdarm/widgets/bottom_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:brasil_fields/brasil_fields.dart';
@@ -141,6 +142,7 @@ class _LoginCpfUserState extends State<LoginCpfUser> {
           ));
   late FirebaseFirestore db;
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -193,23 +195,11 @@ class _LoginCpfUserState extends State<LoginCpfUser> {
               ),
             ),
           ),
-          Container(
-            width: double.infinity,
-            height: 50,
-            margin: const EdgeInsets.all(20),
-            child: ElevatedButton(
-              onPressed: isButtonActive == true ? () => pressButton() : null,
-              child: isLoading == false
-                  ? const Text("entrar")
-                  : const SizedBox(
-                      width: 25,
-                      height: 25,
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
-                      ),
-                    ),
-            ),
-          ),
+          BottomButtom(
+              isLoading: isLoading,
+              isButtonActive: isButtonActive,
+              onPress: () => pressButton(),
+              title: 'entrar')
         ],
       ),
     );

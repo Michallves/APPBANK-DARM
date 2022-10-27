@@ -73,9 +73,15 @@ class _LoginCpfUserState extends State<LoginCpfUser> {
         : {_validate()};
   }
 
+  _notFindCpf() {
+    context.read<AuthService>().cpf = cpf.text;
+    Navigator.of(context).pushNamed(AppRoutes.REGISTER_NAME_USER);
+  }
+
   void showModal() => showModalBottomSheet(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10), topRight: Radius.circular(10)),
       ),
       context: context,
       builder: (context) => SizedBox(
@@ -99,48 +105,12 @@ class _LoginCpfUserState extends State<LoginCpfUser> {
               )),
               Column(
                 children: [
-                  Container(
-                    width: double.infinity,
-                    height: 50,
-                    margin: const EdgeInsets.symmetric(horizontal: 20),
-                    child: ElevatedButton(
-                        onPressed: () => Navigator.of(context)
-                            .pushNamed(AppRoutes.REGISTER_CPF_USER),
-                        child: const Text('criar cadastro')),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    height: 50,
-                    margin: const EdgeInsets.all(20),
-                    child: OutlinedButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                        ),
-                        side: MaterialStateProperty.all(
-                          const BorderSide(
-                            width: 3,
-                          ),
-                        ),
-                        elevation: ButtonStyleButton.allOrNull(0.0),
-                        foregroundColor:
-                            MaterialStateProperty.all<Color>(Colors.black),
-                      ),
-                      child: const Text(
-                        "agora não",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
+                  BottomButtom(
+                      onPress: () => _notFindCpf(), title: 'criar cadastro'),
                 ],
               )
             ]),
           ));
-  late FirebaseFirestore db;
 
   @override
   Widget build(BuildContext context) {

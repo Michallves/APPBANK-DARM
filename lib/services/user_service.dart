@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 class UserService extends ChangeNotifier {
   late AuthService auth;
+  late String name;
 
   UserService({required this.auth}) {
     _startRepository();

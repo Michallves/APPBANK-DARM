@@ -23,7 +23,7 @@ class _HomeUserState extends State<HomeUser> {
 
   @override
   Widget build(BuildContext context) {
-    print(context.read<UserService>().cards);
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text(

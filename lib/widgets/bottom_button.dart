@@ -4,12 +4,12 @@ class BottomButtom extends StatefulWidget {
   const BottomButtom(
       {super.key,
       this.isLoading,
-      required this.isButtonActive,
+      this.isButtonActive,
       required this.onPress,
       required this.title});
 
   final String title;
-  final bool isButtonActive;
+  final bool? isButtonActive;
   final bool? isLoading;
   final Function onPress;
 
@@ -26,7 +26,7 @@ class _BottomButtomState extends State<BottomButtom> {
         margin: const EdgeInsets.all(20),
         child: widget.isLoading != true
             ? ElevatedButton(
-                onPressed: widget.isButtonActive == true
+                onPressed: widget.isButtonActive != false
                     ? () {
                         widget.onPress();
                       }

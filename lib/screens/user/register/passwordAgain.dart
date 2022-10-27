@@ -19,13 +19,13 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
   bool isButtonActive = false;
   bool isLoading = false;
   final passwordConfirm = TextEditingController();
-
+  late FocusNode myFocusNode;
   @override
   void initState() {
     super.initState();
+    myFocusNode = FocusNode();
     passwordConfirm.addListener(() {
-      if (passwordConfirm.text.length == 6 &&
-          context.read<AuthService>().password == passwordConfirm.text) {
+      if (passwordConfirm.text.length == 6) {
         setState(() => isButtonActive = true);
       } else {
         setState(() => isButtonActive = false);
@@ -33,16 +33,15 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
     });
   }
 
-  register() async {
+  _register() async {
     setState(() {
       isLoading = true;
     });
-    late FirebaseFirestore db;
     try {
       await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
             email: context.read<AuthService>().email!,
-            password: context.read<AuthService>().password!,
+            password: passwordConfirm.text,
           )
           .then((UserCredential userCredential) async => {
                 await FirebaseFirestore.instance
@@ -64,19 +63,70 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
                 }).then((_) => {
                           Navigator.of(context)
                               .pushReplacementNamed(AppRoutes.HOMEUSER),
-                          context.read<AuthService>().getUser()
                         })
               });
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('A senha é muito fraca!')));
-        setState(() {
-          isLoading = false;
-        });
-      }
+    } on FirebaseAuthException catch (_) {
+      _showModal();
     }
   }
+
+  _pressButton() {
+    if (context.read<AuthService>().password == passwordConfirm.text) {
+      _register();
+    } else {
+      _showModal();
+    }
+  }
+
+  _showModal() => showModalBottomSheet(
+      isDismissible: false,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+      ),
+      context: context,
+      builder: (context) => SizedBox(
+            height: 250,
+            child: Column(children: [
+              Expanded(
+                  child: Column(
+                children: const [
+                  Text(
+                    'as senhas são diferentes',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    'a senha e a confirmação de senha precisam ser exatamentes iguais',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ],
+              )),
+              Container(
+                width: double.infinity,
+                height: 50,
+                margin: const EdgeInsets.all(20),
+                child: ElevatedButton(
+                    onPressed: () => {
+                          setState(() => {
+                                passwordConfirm.clear(),
+                                passwordConfirm.clearComposing(),
+                                isLoading = false,
+                              }),
+                          Navigator.of(context).pop(),
+                          myFocusNode.requestFocus(),
+                        },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red[600],
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    child: const Text('Tentar novamente')),
+              )
+            ]),
+          ));
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +144,7 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
               child: PinCodeTextField(
                 controller: passwordConfirm,
                 autofocus: true,
+                focusNode: myFocusNode,
                 keyboardType: TextInputType.number,
                 errorBorderColor: Colors.red,
                 pinBoxWidth: 35,
@@ -112,7 +163,7 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
             ),
           ),
           BottomButtom(
-            onPress: () => register(),
+            onPress: () => _pressButton(),
             title: 'criar conta',
             isButtonActive: isButtonActive,
             isLoading: isLoading,

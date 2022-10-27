@@ -22,8 +22,8 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
 
   @override
   void initState() {
-    myFocusNode = FocusNode();
     super.initState();
+    myFocusNode = FocusNode();
     password.addListener(() {
       if (password.text.length == 6) {
         setState(() => isButtonActive = true);
@@ -33,7 +33,7 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
     });
   }
 
-  login() async {
+  _login() async {
     setState(() {
       isLoading = true;
     });
@@ -47,13 +47,16 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
                 context.read<AuthService>().getUser()
               });
     } on FirebaseAuthException catch (_) {
-      showModal();
+      _showModal();
     }
   }
 
-  void showModal() => showModalBottomSheet(
+  _showModal() => showModalBottomSheet(
       isDismissible: false,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+      ),
       context: context,
       builder: (context) => SizedBox(
             height: 250,
@@ -143,7 +146,7 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
                         fontWeight: FontWeight.bold)),
               ),
               BottomButtom(
-                onPress: () => login(),
+                onPress: () => _login(),
                 title: 'entrar',
                 isButtonActive: isButtonActive,
                 isLoading: isLoading,

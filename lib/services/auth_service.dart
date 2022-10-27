@@ -17,6 +17,7 @@ class AuthService extends ChangeNotifier {
   AuthService() {
     _authCheck();
   }
+  
 
   _authCheck() {
     _auth.authStateChanges().listen((User? user) {

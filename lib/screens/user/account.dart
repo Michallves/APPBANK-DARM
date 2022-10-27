@@ -55,8 +55,9 @@ class _AccountUserState extends State<AccountUser> {
   }
 
   void showModal() => showModalBottomSheet(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10), topRight: Radius.circular(10)),
       ),
       context: context,
       builder: (context) => SizedBox(

@@ -3,7 +3,6 @@ import 'package:appbankdarm/widgets/cartao.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:provider/provider.dart';
 import '../../services/user_service.dart';
-import '../../repositories/cartao_repository.dart';
 import 'package:flutter/material.dart';
 
 class HomeUser extends StatefulWidget {
@@ -14,16 +13,16 @@ class HomeUser extends StatefulWidget {
 }
 
 class _HomeUserState extends State<HomeUser> {
-  final tabela = CartaoRepository.tabela;
-
-  logout() async {
+  _logout() async {
     await FirebaseAuth.instance.signOut().then(
         (_) => Navigator.of(context).pushReplacementNamed(AppRoutes.PRELOAD));
   }
 
   @override
   Widget build(BuildContext context) {
-    
+    final tabela = Provider.of<UserService>(context).cards;
+    UserService user = Provider.of<UserService>(context);
+    print(Provider.of<UserService>(context).cards);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -41,12 +40,11 @@ class _HomeUserState extends State<HomeUser> {
                   CircleAvatar(
                     radius: 40,
                     child: Text(
-                      context.read<UserService>().name,
-                      style: const TextStyle(color: Colors.white, fontSize: 25),
+                      user.name.substring(0, 2).toUpperCase(),
+                      style: const TextStyle(color: Colors.white, fontSize: 30),
                     ),
                   ),
-                  Text(context.read<UserService>().name,
-                      style: const TextStyle(fontSize: 18))
+                  Text(user.name, style: const TextStyle(fontSize: 18))
                 ],
               )),
               ListTile(
@@ -72,7 +70,7 @@ class _HomeUserState extends State<HomeUser> {
               ),
               ListTile(
                 title: const Text('Sair', style: TextStyle(color: Colors.red)),
-                onTap: () => logout(),
+                onTap: () => _logout(),
                 leading: const Icon(Icons.logout, size: 30),
                 iconColor: Colors.red,
               )

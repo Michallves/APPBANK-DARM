@@ -61,6 +61,7 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
                     "number": context.read<AuthService>().address![4],
                   },
                 }).then((_) => {
+                          context.read<AuthService>().getUser(),
                           Navigator.of(context)
                               .pushReplacementNamed(AppRoutes.HOMEUSER),
                         })

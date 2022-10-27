@@ -43,8 +43,8 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
               email: context.read<AuthService>().email!,
               password: password.text)
           .then((_) => {
+                context.read<AuthService>().getUser(),
                 Navigator.of(context).pushNamed(AppRoutes.HOMEUSER),
-                context.read<AuthService>().getUser()
               });
     } on FirebaseAuthException catch (_) {
       _showModal();

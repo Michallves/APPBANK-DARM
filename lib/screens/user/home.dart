@@ -21,7 +21,7 @@ class _HomeUserState extends State<HomeUser> {
   @override
   Widget build(BuildContext context) {
     final tabela = Provider.of<UserService>(context).cards;
-    UserService user = Provider.of<UserService>(context);
+     context.read<UserService>().readUser();
     print(Provider.of<UserService>(context).cards);
     return Scaffold(
       appBar: AppBar(
@@ -40,11 +40,16 @@ class _HomeUserState extends State<HomeUser> {
                   CircleAvatar(
                     radius: 40,
                     child: Text(
-                      user.name.substring(0, 2).toUpperCase(),
+                      context
+                          .read<UserService>()
+                          .name
+                          .substring(0, 2)
+                          .toUpperCase(),
                       style: const TextStyle(color: Colors.white, fontSize: 30),
                     ),
                   ),
-                  Text(user.name, style: const TextStyle(fontSize: 18))
+                  Text(context.read<UserService>().name,
+                      style: const TextStyle(fontSize: 18))
                 ],
               )),
               ListTile(

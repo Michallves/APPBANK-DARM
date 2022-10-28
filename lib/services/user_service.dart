@@ -1,44 +1,24 @@
 import 'package:appbankdarm/services/auth_service.dart';
 import 'package:appbankdarm/widgets/cartao.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class UserService extends ChangeNotifier {
-  late AuthService auth;
+  late User user;
   late String name = 'none';
+  late dynamic userData;
 
-  late List<Cartao> cards = <Cartao>[
-    const Cartao(
-        id: '02',
-        number: '51561651515116666',
-        flag: 'mastercard',
-        name: '5',
-        validity: '65',
-        cvc: '5'),
-    const Cartao(
-        id: '01',
-        number: '515616515151444441',
-        flag: 'visa',
-        name: '5',
-        validity: '65',
-        cvc: '5'),
-  ];
+  late List<Cartao> cards = <Cartao>[];
 
-  UserService({required this.auth}) {
-    _startRepository();
-  }
-
-  _startRepository() async {
-    await _readUser();
-  }
-
-  _readUser() async {
+  readUser() async {
     await FirebaseFirestore.instance
         .collection("users")
-        .doc(auth.usuario?.uid)
+        .doc(user.uid)
         .get()
         .then((DocumentSnapshot doc) {
-      name = doc.get('name');
+      Object? data = doc.data();
+      userData = data;
     });
   }
 }

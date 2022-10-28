@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../services/user_service.dart';
+
 class RegisterCardName extends StatefulWidget {
   const RegisterCardName({super.key});
 
@@ -30,7 +32,7 @@ class _RegisterCardNameState extends State<RegisterCardName> {
   registerCard() async {
     await FirebaseFirestore.instance
         .collection("users")
-        .doc(context.read<AuthService>().usuario?.uid)
+        .doc(context.read<UserService>().user.uid)
         .update({
       "cards": FieldValue.arrayUnion([
         {'name': name.text}

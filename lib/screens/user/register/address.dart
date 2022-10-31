@@ -155,7 +155,7 @@ class _RegisterAddressUserState extends State<RegisterAddressUser> {
           BottomButtom(
             onPress: () => _pressButton(),
             title: 'continuar',
-            isButtonActive: isButtonActive,
+            enabled: isButtonActive,
           )
         ],
       ),

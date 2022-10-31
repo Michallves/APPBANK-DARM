@@ -1,6 +1,8 @@
+import 'package:appbankdarm/services/card_service.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
+import 'package:provider/provider.dart';
 
 import '../../../widgets/bottom_button.dart';
 
@@ -17,18 +19,18 @@ class _RegisterCardCvcState extends State<RegisterCardCvc> {
 
   @override
   void initState() {
-    super.initState();
     cvc.addListener(() {
       if (cvc.text.length == 3) {
         setState(() => isButtonActive = true);
       } else {
         setState(() => isButtonActive = false);
       }
-      print(cvc.text);
     });
+    super.initState();
   }
 
   _pressButton() {
+    context.read<CardService>().cvc = cvc.text;
     Navigator.of(context).pushNamed(AppRoutes.REGISTER_CARD_VALIDITY);
   }
 
@@ -64,10 +66,9 @@ class _RegisterCardCvcState extends State<RegisterCardCvc> {
             ),
           ),
           BottomButtom(
-            onPress: () => _pressButton(),
-            title: 'continuar',
-            isButtonActive: isButtonActive,
-          )
+              enabled: isButtonActive,
+              onPress: () => isButtonActive == true ? _pressButton() : null,
+              title: "continuar")
         ],
       ),
     );

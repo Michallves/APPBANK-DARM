@@ -1,7 +1,13 @@
 import 'package:appbankdarm/utils/app_routes.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+
+import '../../../services/card_service.dart';
+import '../../../services/user_service.dart';
+import '../../../widgets/bottom_button.dart';
 
 class RegisterCardValidity extends StatefulWidget {
   const RegisterCardValidity({super.key});
@@ -12,11 +18,11 @@ class RegisterCardValidity extends StatefulWidget {
 
 class _RegisterCardValidityState extends State<RegisterCardValidity> {
   bool isButtonActive = false;
+  bool isLoading = false;
   final validity = TextEditingController();
 
   @override
   void initState() {
-    super.initState();
     validity.addListener(() {
       if (validity.text.length == 5 &&
           int.parse(UtilBrasilFields.removeCaracteres(validity.text)) < 1230) {
@@ -25,10 +31,27 @@ class _RegisterCardValidityState extends State<RegisterCardValidity> {
         setState(() => isButtonActive = false);
       }
     });
+    super.initState();
   }
 
-  _pressButton() {
-    Navigator.of(context).pushNamed(AppRoutes.HOMEUSER);
+  _registerCard() async {
+    setState(() => isLoading = true);
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(context.read<UserService>().user.uid)
+        .collection('cards')
+        .doc()
+        .set({
+      'name': context.read<CardService>().name,
+      'number': context.read<CardService>().number,
+      'flag': context.read<CardService>().flag,
+      'cvc': context.read<CardService>().cvc,
+      'validity': validity.text,
+      'type': '',
+    }).then((_) =>
+            Navigator.of(context).pushReplacementNamed(AppRoutes.HOMEUSER));
+
+    setState(() => isLoading = false);
   }
 
   @override
@@ -61,15 +84,11 @@ class _RegisterCardValidityState extends State<RegisterCardValidity> {
               ),
             ),
           ),
-          Container(
-            width: double.infinity,
-            height: 50,
-            margin: const EdgeInsets.all(20),
-            child: ElevatedButton(
-              onPressed: isButtonActive == true ? () => _pressButton() : null,
-              child: const Text("cadastrar cartão"),
-            ),
-          ),
+          BottomButtom(
+              loading: isLoading,
+              enabled: isButtonActive,
+              onPress: () => isButtonActive == true ? _registerCard() : null,
+              title: "cadastrar cartão"),
         ],
       ),
     );

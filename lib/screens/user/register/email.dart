@@ -59,7 +59,7 @@ class _RegisterEmailUserState extends State<RegisterEmailUser> {
   }
 
   void showModal() => showModalBottomSheet(
-       shape: const RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(10), topRight: Radius.circular(10)),
       ),
@@ -133,8 +133,8 @@ class _RegisterEmailUserState extends State<RegisterEmailUser> {
           BottomButtom(
             onPress: () => _pressButton(),
             title: 'continuar',
-            isButtonActive: isButtonActive,
-            isLoading: isLoading,
+            enabled: isButtonActive,
+            loading: isLoading,
           )
         ],
       ),

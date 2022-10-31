@@ -41,7 +41,8 @@ class _RegisterCpfUserState extends State<RegisterCpfUser> {
   _pushCpf() async {
     UtilBrasilFields.isCPFValido(cpf.text) == true
         ? {
-            await FirebaseFirestore.instance.collection("users")
+            await FirebaseFirestore.instance
+                .collection("users")
                 .where("cpf", isEqualTo: cpf.text)
                 .get()
                 .then(
@@ -65,49 +66,12 @@ class _RegisterCpfUserState extends State<RegisterCpfUser> {
     });
   }
 
-  _pressButton() async {
+  _pressButton()  {
     setState(() {
       isLoading = true;
     });
     _pushCpf();
   }
-
-  void showModal() => showModalBottomSheet(
-    shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-      ),
-      context: context,
-      builder: (context) => SizedBox(
-            height: 220,
-            child: Column(children: [
-              Expanded(
-                  child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: const [
-                  Text(
-                    'CPF já cadastrado',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    'toque em ${'entrar'} para acessar sua conta.',
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                ],
-              )),
-              Container(
-                width: double.infinity,
-                height: 50,
-                margin: const EdgeInsets.all(20),
-                child: ElevatedButton(
-                    onPressed: () => Navigator.of(context)
-                        .pushNamed(AppRoutes.LOGIN_CPF_USER),
-                    child: const Text('entrar')),
-              )
-            ]),
-          ));
 
   @override
   Widget build(BuildContext context) {
@@ -163,11 +127,43 @@ class _RegisterCpfUserState extends State<RegisterCpfUser> {
           BottomButtom(
             onPress: () => _pressButton(),
             title: 'continuar',
-            isButtonActive: isButtonActive,
-            isLoading: isLoading,
+            enabled: isButtonActive,
+            loading: isLoading,
           )
         ],
       ),
     );
   }
+
+  void showModal() => showModalBottomSheet(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+      ),
+      context: context,
+      builder: (context) => SizedBox(
+            height: 220,
+            child: Column(children: [
+              Expanded(
+                  child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: const [
+                  Text(
+                    'CPF já cadastrado',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    'toque em "entrar" para acessar sua conta.',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              )),
+              BottomButtom(
+                  onPress: () =>
+                      Navigator.of(context).pushNamed(AppRoutes.LOGIN_CPF_USER),
+                  title: 'entrar')
+            ]),
+          ));
 }

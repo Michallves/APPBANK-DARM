@@ -22,7 +22,6 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
   late FocusNode myFocusNode;
   @override
   void initState() {
-    super.initState();
     myFocusNode = FocusNode();
     passwordConfirm.addListener(() {
       if (passwordConfirm.text.length == 6) {
@@ -31,6 +30,7 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
         setState(() => isButtonActive = false);
       }
     });
+    super.initState();
   }
 
   _register() async {
@@ -67,7 +67,7 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
                         })
               });
     } on FirebaseAuthException catch (_) {
-      _showModal();
+      showModal();
     }
   }
 
@@ -75,11 +75,57 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
     if (context.read<AuthService>().password == passwordConfirm.text) {
       _register();
     } else {
-      _showModal();
+      showModal();
     }
   }
 
-  _showModal() => showModalBottomSheet(
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'senha novamente',
+        ),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: Container(
+              margin: const EdgeInsets.symmetric(vertical: 40),
+              child: PinCodeTextField(
+                controller: passwordConfirm,
+                autofocus: true,
+                
+                focusNode: myFocusNode,
+                keyboardType: TextInputType.number,
+                errorBorderColor: Colors.red,
+                pinBoxWidth: 35,
+                pinBoxHeight: 50,
+                pinBoxRadius: 10,
+                pinBoxOuterPadding: const EdgeInsets.symmetric(horizontal: 10),
+                wrapAlignment: WrapAlignment.spaceAround,
+                maxLength: 6,
+                hideCharacter: true,
+                maskCharacter: '•',
+                pinTextStyle: const TextStyle(fontSize: 20),
+                highlight: true,
+                defaultBorderColor: Colors.black38,
+                hasTextBorderColor: Colors.black38,
+              ),
+            ),
+          ),
+          BottomButtom(
+            onPress: () => _pressButton(),
+            title: 'criar conta',
+            enabled: isButtonActive,
+            loading: isLoading,
+          )
+        ],
+      ),
+    );
+  }
+
+  void showModal() => showModalBottomSheet(
       isDismissible: false,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -128,49 +174,4 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
               )
             ]),
           ));
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'senha novamente',
-        ),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Container(
-              margin: const EdgeInsets.symmetric(vertical: 40),
-              child: PinCodeTextField(
-                controller: passwordConfirm,
-                autofocus: true,
-                focusNode: myFocusNode,
-                keyboardType: TextInputType.number,
-                errorBorderColor: Colors.red,
-                pinBoxWidth: 35,
-                pinBoxHeight: 50,
-                pinBoxRadius: 10,
-                pinBoxOuterPadding: const EdgeInsets.symmetric(horizontal: 10),
-                wrapAlignment: WrapAlignment.spaceAround,
-                maxLength: 6,
-                hideCharacter: true,
-                maskCharacter: '•',
-                pinTextStyle: const TextStyle(fontSize: 20),
-                highlight: true,
-                defaultBorderColor: Colors.black38,
-                hasTextBorderColor: Colors.black38,
-              ),
-            ),
-          ),
-          BottomButtom(
-            onPress: () => _pressButton(),
-            title: 'criar conta',
-            isButtonActive: isButtonActive,
-            isLoading: isLoading,
-          )
-        ],
-      ),
-    );
-  }
 }

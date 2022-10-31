@@ -49,6 +49,7 @@ class _RegisterNameUserState extends State<RegisterNameUser> {
                 controller: name,
                 autofocus: true,
                 keyboardType: TextInputType.name,
+              
                 style: const TextStyle(fontSize: 26),
                 decoration: const InputDecoration(
                   labelText: 'nome completo',
@@ -64,7 +65,7 @@ class _RegisterNameUserState extends State<RegisterNameUser> {
             ),
           ),
           BottomButtom(
-              isButtonActive: isButtonActive,
+              enabled: isButtonActive,
               onPress: () => _pressButton(),
               title: "Continuar")
         ],

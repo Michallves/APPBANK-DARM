@@ -166,8 +166,8 @@ class _LoginCpfUserState extends State<LoginCpfUser> {
             ),
           ),
           BottomButtom(
-              isLoading: isLoading,
-              isButtonActive: isButtonActive,
+              loading: isLoading,
+              enabled: isButtonActive,
               onPress: () => _pressButton(),
               title: 'continuar')
         ],

@@ -1,9 +1,13 @@
-import 'dart:ui';
-
+import 'package:appbankdarm/services/user_service.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
+import 'package:appbankdarm/widgets/bottom_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+
+import '../../../services/card_service.dart';
 
 class RegisterCardNumber extends StatefulWidget {
   const RegisterCardNumber({super.key});
@@ -14,12 +18,14 @@ class RegisterCardNumber extends StatefulWidget {
 
 class _RegisterCardNumberState extends State<RegisterCardNumber> {
   bool isButtonActive = false;
+  bool isLoading = false;
   String flag = '';
   final number = TextEditingController();
+  late FocusNode myFocusNode;
 
   @override
   void initState() {
-    super.initState();
+    myFocusNode = FocusNode();
     number.addListener(() {
       var numberText = UtilBrasilFields.removeCaracteres(number.text);
       var oneDig = numberText.substring(0, 1);
@@ -75,10 +81,38 @@ class _RegisterCardNumberState extends State<RegisterCardNumber> {
         setState(() => {isButtonActive = false, flag = ""});
       }
     });
+    super.initState();
   }
 
-  _pressButton() {
-    Navigator.of(context).pushNamed(AppRoutes.REGISTER_CARD_CVC);
+  _pressButton() async {
+    setState(() {
+      isLoading = true;
+    });
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(context.read<UserService>().user.uid)
+        .collection('cards')
+        .where("number",
+            isEqualTo: UtilBrasilFields.removeCaracteres(number.text))
+        .get()
+        .then(
+          (res) => {
+            if (res.docs.isNotEmpty)
+              {
+                showModal(),
+              }
+            else
+              {
+                context.read<CardService>().number =
+                    UtilBrasilFields.removeCaracteres(number.text),
+                context.read<CardService>().flag = flag,
+                Navigator.of(context).pushNamed(AppRoutes.REGISTER_CARD_CVC),
+              }
+          },
+        );
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -97,14 +131,15 @@ class _RegisterCardNumberState extends State<RegisterCardNumber> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
+                    SizedBox(
                         width: MediaQuery.of(context).size.width - 140,
                         child: TextField(
                           controller: number,
                           keyboardType: TextInputType.number,
+                          focusNode: myFocusNode,
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly,
-                            CartaoBancarioInputFormatter()
+                            CartaoBancarioInputFormatter(),
                           ],
                           autofocus: true,
                           style: const TextStyle(fontSize: 26),
@@ -153,17 +188,49 @@ class _RegisterCardNumberState extends State<RegisterCardNumber> {
                   ],
                 )),
           ),
-          Container(
-            width: double.infinity,
-            height: 50,
-            margin: const EdgeInsets.all(20),
-            child: ElevatedButton(
-              onPressed: isButtonActive == true ? () => _pressButton() : null,
-              child: const Text("continuar"),
-            ),
-          ),
+          BottomButtom(
+              enabled: isButtonActive,
+              onPress: () => isButtonActive == true ? _pressButton() : null,
+              title: "continuar")
         ],
       ),
     );
   }
+
+  void showModal() => showModalBottomSheet(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+      ),
+      isScrollControlled: false,
+      context: context,
+      builder: (context) => SizedBox(
+            height: 220,
+            child: Column(children: [
+              Expanded(
+                  child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: const [
+                  Text(
+                    'Cartão já cadastrado',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    'toque em "tentar novamente".',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              )),
+              BottomButtom(
+                  loading: isLoading,
+                  onPress: () => {
+                        Navigator.of(context).pop(),
+                        number.clear(),
+                        myFocusNode.requestFocus(),
+                      },
+                  title: 'tentar novamente')
+            ]),
+          ));
 }

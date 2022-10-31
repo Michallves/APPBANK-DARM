@@ -74,7 +74,7 @@ class _RegisterTelephoneUserState extends State<RegisterTelephoneUser> {
           BottomButtom(
             onPress: () => _pressButton(),
             title: 'continuar',
-            isButtonActive: isButtonActive,
+            enabled: isButtonActive,
           )
         ],
       ),

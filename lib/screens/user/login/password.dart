@@ -147,8 +147,8 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
               BottomButtom(
                 onPress: () => _login(),
                 title: 'entrar',
-                isButtonActive: isButtonActive,
-                isLoading: isLoading,
+                enabled: isButtonActive,
+                loading: isLoading,
               )
             ],
           ),

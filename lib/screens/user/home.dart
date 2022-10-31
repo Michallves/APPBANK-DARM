@@ -1,3 +1,8 @@
+import 'dart:html';
+
+import 'package:appbankdarm/services/auth_service.dart';
+import 'package:appbankdarm/widgets/bottom_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:appbankdarm/widgets/cartao.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
@@ -13,16 +18,45 @@ class HomeUser extends StatefulWidget {
 }
 
 class _HomeUserState extends State<HomeUser> {
+  late String name = 'none';
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(context.read<UserService>().user.uid)
+        .get()
+        .then((doc) => setState(() => name = doc.get('name')));
+
+    super.initState();
+  }
+
   _logout() async {
     await FirebaseAuth.instance.signOut().then(
         (_) => Navigator.of(context).pushReplacementNamed(AppRoutes.PRELOAD));
   }
 
+  _deleteCard(card) async {
+    setState(() {
+      isLoading = true;
+    });
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(context.read<UserService>().user.uid)
+        .collection('cards')
+        .doc(card)
+        .delete()
+        .then((_) {
+      setState(() {
+        isLoading = false;
+      });
+      Navigator.of(context).pop();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final tabela = Provider.of<UserService>(context).cards;
-     context.read<UserService>().readUser();
-    print(Provider.of<UserService>(context).cards);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -40,16 +74,11 @@ class _HomeUserState extends State<HomeUser> {
                   CircleAvatar(
                     radius: 40,
                     child: Text(
-                      context
-                          .read<UserService>()
-                          .name
-                          .substring(0, 2)
-                          .toUpperCase(),
+                      name.toString().substring(0, 2).toUpperCase(),
                       style: const TextStyle(color: Colors.white, fontSize: 30),
                     ),
                   ),
-                  Text(context.read<UserService>().name,
-                      style: const TextStyle(fontSize: 18))
+                  Text(name.toString(), style: const TextStyle(fontSize: 18))
                 ],
               )),
               ListTile(
@@ -81,20 +110,63 @@ class _HomeUserState extends State<HomeUser> {
               )
             ],
           )),
-      body: ListView.separated(
-          itemBuilder: (BuildContext context, int cartao) => Cartao(
-                id: tabela[cartao].id,
-                number: tabela[cartao].number,
-                flag: tabela[cartao].flag,
-                name: tabela[cartao].name,
-                validity: tabela[cartao].validity,
-                cvc: tabela[cartao].cvc,
-                type: tabela[cartao].type,
-              ),
-          padding: const EdgeInsets.all(20),
-          separatorBuilder: (_, ____) =>
-              const Padding(padding: EdgeInsets.all(10)),
-          itemCount: tabela.length),
+      body: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection("users")
+              .doc(context.read<UserService>().user.uid)
+              .collection('cards')
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else {
+              return ListView.separated(
+                  padding: const EdgeInsets.all(20),
+                  separatorBuilder: (_, ___) =>
+                      const Padding(padding: EdgeInsets.all(10)),
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: ((context, index) {
+                    DocumentSnapshot card = snapshot.data!.docs[index];
+                    return GestureDetector(
+                      onLongPress: () => showModal(card),
+                      child: Cartao(
+                          number: card['number'],
+                          flag: card['flag'],
+                          name: card['name'],
+                          type: card['type'] ?? '',
+                          validity: card['validity'],
+                          cvc: card['cvc'],
+                          obscure: true),
+                    );
+                  }));
+            }
+          }),
     );
   }
+
+  void showModal(card) => showModalBottomSheet(
+        constraints:
+            BoxConstraints.expand(height: MediaQuery.of(context).size.height),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+        ),
+        context: context,
+        builder: (context) => SizedBox(
+          child: Column(children: [
+            BottomButtom(
+              onPress: () => _deleteCard(card?.id),
+              title: 'excluir cartão',
+              color: Colors.redAccent,
+              loading: isLoading,
+            ),
+            BottomButtom(
+                onPress: () => Navigator.of(context).pop(),
+                title: 'cancelar',
+                color: Colors.grey[350])
+          ]),
+        ),
+      );
 }

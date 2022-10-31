@@ -1,31 +1,29 @@
-import 'package:appbankdarm/repositories/cartao_repository.dart';
 import 'package:flutter/material.dart';
 
 class Cartao extends StatefulWidget {
   const Cartao(
       {super.key,
-      required this.id,
       required this.number,
       required this.flag,
       required this.name,
       required this.validity,
       required this.cvc,
-      this.type});
+      this.type,
+      this.obscure});
 
-  final String id;
   final String number;
   final String flag;
   final String name;
   final String validity;
   final String cvc;
   final String? type;
+  final bool? obscure;
 
   @override
-  State<Cartao> createState({id, number, flag}) => _CartaoState();
+  State<Cartao> createState() => _CartaoState();
 }
 
 class _CartaoState extends State<Cartao> {
-  final tabela = CartaoRepository.tabela;
   bool front = true;
 
   @override
@@ -127,32 +125,46 @@ class _CartaoState extends State<Cartao> {
                                         MediaQuery.of(context).textScaleFactor,
                                   ),
                                 ),
-                                Container(
-                                  margin:
-                                      const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                  child: Text(
-                                    '****',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 34 *
-                                          MediaQuery.of(context)
-                                              .textScaleFactor,
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  margin:
-                                      const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                  child: Text(
-                                    '****',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 34 *
-                                          MediaQuery.of(context)
-                                              .textScaleFactor,
-                                    ),
-                                  ),
-                                ),
+                                (widget.obscure == false
+                                    ? Text(widget.number.substring(4, 8),
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 25 *
+                                              MediaQuery.of(context)
+                                                  .textScaleFactor,
+                                        ))
+                                    : Container(
+                                        margin: const EdgeInsets.fromLTRB(
+                                            0, 10, 0, 0),
+                                        child: Text(
+                                          '****',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 34 *
+                                                MediaQuery.of(context)
+                                                    .textScaleFactor,
+                                          ),
+                                        ))),
+                                (widget.obscure == false
+                                    ? Text(widget.number.substring(8, 12),
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 25 *
+                                              MediaQuery.of(context)
+                                                  .textScaleFactor,
+                                        ))
+                                    : Container(
+                                        margin: const EdgeInsets.fromLTRB(
+                                            0, 10, 0, 0),
+                                        child: Text(
+                                          '****',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 34 *
+                                                MediaQuery.of(context)
+                                                    .textScaleFactor,
+                                          ),
+                                        ))),
                                 Text(
                                   widget.number.substring(12, 16),
                                   style: TextStyle(
@@ -251,7 +263,7 @@ class _CartaoState extends State<Cartao> {
                         child: Row(
                           children: [
                             Expanded(
-                                child: (widget.type != null
+                                child: (widget.type != ''
                                     ? Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.end,

@@ -79,7 +79,7 @@ class _RegisterAccountTypeUserState extends State<RegisterAccountTypeUser> {
           BottomButtom(
             onPress: () => _pressButton(),
             title: 'continuar',
-            isButtonActive: isButtonActive,
+            enabled: isButtonActive,
           )
         ],
       ),

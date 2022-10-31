@@ -70,7 +70,7 @@ class _RegisterPasswordUserState extends State<RegisterPasswordUser> {
           BottomButtom(
             onPress: () => _pressButton(),
             title: 'continuar',
-            isButtonActive: isButtonActive,
+            enabled: isButtonActive,
           )
         ],
       ),

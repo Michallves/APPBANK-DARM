@@ -13,16 +13,6 @@ class AuthService extends ChangeNotifier {
   String? accountType;
   String? password;
 
-  pushEmail(cpf) async {
-    await FirebaseFirestore.instance
-        .collection("users")
-        .where("cpf", isEqualTo: cpf)
-        .get()
-        .then((snapshot) => {
-              snapshot.docs.forEach((doc) => {
-                    email = doc.data()["email"],
-                  })
-            });
-    return email;
-  }
+  
+  
 }

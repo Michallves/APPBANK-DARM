@@ -16,10 +16,12 @@ class RegisterPasswordUser extends StatefulWidget {
 class _RegisterPasswordUserState extends State<RegisterPasswordUser> {
   bool isButtonActive = false;
   final password = TextEditingController();
+  late FocusNode myFocusNode;
 
   @override
   void initState() {
-    super.initState();
+    myFocusNode = FocusNode();
+    myFocusNode.requestFocus();
     password.addListener(() {
       if (password.text.length == 6) {
         setState(() => isButtonActive = true);
@@ -27,12 +29,15 @@ class _RegisterPasswordUserState extends State<RegisterPasswordUser> {
         setState(() => isButtonActive = false);
       }
     });
+    super.initState();
   }
 
   _pressButton() {
     context.read<AuthService>().password = password.text;
     Navigator.of(context).pushNamed(AppRoutes.REGISTER_PASSWORD_AGAIN_USER);
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +56,7 @@ class _RegisterPasswordUserState extends State<RegisterPasswordUser> {
                 controller: password,
                 keyboardType: TextInputType.number,
                 errorBorderColor: Colors.red,
+                focusNode: myFocusNode,
                 pinBoxWidth: 35,
                 pinBoxHeight: 50,
                 pinBoxRadius: 10,

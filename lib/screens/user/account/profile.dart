@@ -18,7 +18,7 @@ class AccountUser extends StatefulWidget {
 
 class _AccountUserState extends State<AccountUser> {
   String? name;
-  bool isLoading = false;
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -26,7 +26,8 @@ class _AccountUserState extends State<AccountUser> {
         .collection('users')
         .doc(context.read<AuthService>().user?.uid)
         .get()
-        .then((doc) => setState(() => name = doc.get('name')));
+        .then((doc) =>
+            setState(() => {name = doc.get('name'), isLoading = false}));
 
     super.initState();
   }
@@ -109,7 +110,7 @@ class _AccountUserState extends State<AccountUser> {
                       child: Column(
                         children: [
                           GestureDetector(
-                            onTap: () => _showModal(),
+                            onTap: () => pickAndUploadImage(),
                             child: CircleAvatar(
                               radius: 80,
                               backgroundImage:

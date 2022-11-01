@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../../utils/app_routes.dart';
 import '../../../widgets/bottom_button.dart';
 
 class RegisterPasswordAgainUser extends StatefulWidget {

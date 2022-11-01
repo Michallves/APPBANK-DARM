@@ -46,10 +46,14 @@ class _RegisterCpfUserState extends State<RegisterCpfUser> {
                 .where("cpf", isEqualTo: cpf.text)
                 .get()
                 .then(
-                  (res) => {
-                    if (res.docs.isNotEmpty)
+                  (snapshot) => {
+                    if (snapshot.docs.isNotEmpty)
                       {
-                        showModal(),
+                        snapshot.docs.forEach((doc) => {
+                              context.read<AuthService>().email =
+                                  doc.data()["email"],
+                              showModal()
+                            })
                       }
                     else
                       {
@@ -66,7 +70,7 @@ class _RegisterCpfUserState extends State<RegisterCpfUser> {
     });
   }
 
-  _pressButton()  {
+  _pressButton() {
     setState(() {
       isLoading = true;
     });
@@ -142,7 +146,7 @@ class _RegisterCpfUserState extends State<RegisterCpfUser> {
       ),
       context: context,
       builder: (context) => SizedBox(
-            height: 220,
+            height: 300,
             child: Column(children: [
               Expanded(
                   child: Column(
@@ -161,9 +165,14 @@ class _RegisterCpfUserState extends State<RegisterCpfUser> {
                 ],
               )),
               BottomButtom(
-                  onPress: () =>
-                      Navigator.of(context).pushNamed(AppRoutes.LOGIN_CPF_USER),
-                  title: 'entrar')
+                  onPress: () => Navigator.of(context)
+                      .pushNamed(AppRoutes.LOGIN_PASSWORD_USER),
+                  title: 'entrar'),
+              BottomButtom(
+                onPress: () => Navigator.of(context).pop(),
+                title: 'agora não',
+                color: Colors.grey[350],
+              )
             ]),
           ));
 }

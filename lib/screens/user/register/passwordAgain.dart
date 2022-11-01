@@ -23,6 +23,7 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
   @override
   void initState() {
     myFocusNode = FocusNode();
+    myFocusNode.requestFocus();
     passwordConfirm.addListener(() {
       if (passwordConfirm.text.length == 6) {
         setState(() => isButtonActive = true);
@@ -62,7 +63,6 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
                   },
                 }),
                 context.read<AuthService>().user = userCredential.user,
-                Navigator.of(context).pushReplacementNamed(AppRoutes.HOMEUSER),
               });
     } on FirebaseAuthException catch (_) {
       showModal();
@@ -92,7 +92,6 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
               margin: const EdgeInsets.symmetric(vertical: 40),
               child: PinCodeTextField(
                 controller: passwordConfirm,
-                autofocus: true,
                 focusNode: myFocusNode,
                 keyboardType: TextInputType.number,
                 errorBorderColor: Colors.red,
@@ -131,44 +130,36 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
       context: context,
       builder: (context) => SizedBox(
             height: 250,
-            child: Column(children: [
-              Expanded(
-                  child: Column(
-                children: const [
-                  Text(
-                    'as senhas são diferentes',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    'a senha e a confirmação de senha precisam ser exatamentes iguais',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ],
-              )),
-              Container(
-                width: double.infinity,
-                height: 50,
-                margin: const EdgeInsets.all(20),
-                child: ElevatedButton(
-                    onPressed: () => {
-                          setState(() => {
-                                passwordConfirm.clear(),
-                                passwordConfirm.clearComposing(),
-                                isLoading = false,
-                              }),
-                          Navigator.of(context).pop(),
-                          myFocusNode.requestFocus(),
-                        },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red[600],
-                      foregroundColor: Colors.white,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                      child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: const [
+                      Text(
+                        'as senhas são diferentes',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                       ),
-                    ),
-                    child: const Text('Tentar novamente')),
-              )
-            ]),
+                      Text(
+                        'a senha e a confirmação de senha precisam ser exatamentes iguais',
+                         textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  )),
+                  BottomButtom(
+                    onPress: () => {
+                      setState(() => {
+                            isLoading = false,
+                          }),
+                      Navigator.of(context).pop(),
+                      myFocusNode.requestFocus(),
+                    },
+                    title: 'tentar novamente',
+                    color: Colors.redAccent,
+                  )
+                ]),
           ));
 }

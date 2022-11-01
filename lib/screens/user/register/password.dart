@@ -49,7 +49,6 @@ class _RegisterPasswordUserState extends State<RegisterPasswordUser> {
               margin: const EdgeInsets.symmetric(vertical: 40),
               child: PinCodeTextField(
                 controller: password,
-                autofocus: true,
                 keyboardType: TextInputType.number,
                 errorBorderColor: Colors.red,
                 pinBoxWidth: 35,

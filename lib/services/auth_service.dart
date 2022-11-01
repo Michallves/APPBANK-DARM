@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -11,4 +12,17 @@ class AuthService extends ChangeNotifier {
   List<String>? address;
   String? accountType;
   String? password;
+
+  pushEmail(cpf) async {
+    await FirebaseFirestore.instance
+        .collection("users")
+        .where("cpf", isEqualTo: cpf)
+        .get()
+        .then((snapshot) => {
+              snapshot.docs.forEach((doc) => {
+                    email = doc.data()["email"],
+                  })
+            });
+    return email;
+  }
 }

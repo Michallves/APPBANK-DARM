@@ -22,7 +22,6 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
 
   @override
   void initState() {
-    super.initState();
     myFocusNode = FocusNode();
     password.addListener(() {
       if (password.text.length == 6) {
@@ -31,6 +30,7 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
         setState(() => isButtonActive = false);
       }
     });
+    super.initState();
   }
 
   _login() async {
@@ -44,62 +44,11 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
               password: password.text)
           .then((UserCredential userCredential) {
         context.read<AuthService>().user = userCredential.user;
-        Navigator.of(context).pushNamed(AppRoutes.HOMEUSER);
       });
     } on FirebaseAuthException catch (_) {
       _showModal();
     }
   }
-
-  _showModal() => showModalBottomSheet(
-      isDismissible: false,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-      ),
-      context: context,
-      builder: (context) => SizedBox(
-            height: 250,
-            child: Column(children: [
-              Expanded(
-                  child: Column(
-                children: const [
-                  Text(
-                    'Senha incorreta!',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    'a senha que você inseriu está incorreta. Tente novamente.',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ],
-              )),
-              Container(
-                width: double.infinity,
-                height: 50,
-                margin: const EdgeInsets.all(20),
-                child: ElevatedButton(
-                    onPressed: () => {
-                          setState(() => {
-                                password.clear(),
-                                password.clearComposing(),
-                                isLoading = false,
-                              }),
-                          Navigator.of(context).pop(),
-                          myFocusNode.requestFocus(),
-                        },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red[600],
-                      foregroundColor: Colors.white,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                    ),
-                    child: const Text('Tentar novamente')),
-              )
-            ]),
-          ));
 
   @override
   Widget build(BuildContext context) {
@@ -157,4 +106,46 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
       ),
     );
   }
+
+  _showModal() => showModalBottomSheet(
+      isDismissible: false,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+      ),
+      context: context,
+      builder: (context) => SizedBox(
+            height: 250,
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                      child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: const [
+                      Text(
+                        'Senha incorreta!',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        'a senha que você inseriu está incorreta. Tente novamente.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  )),
+                  BottomButtom(
+                    onPress: () => {
+                      setState(() => {
+                            isLoading = false,
+                          }),
+                      Navigator.of(context).pop(),
+                      myFocusNode.requestFocus()
+                    },
+                    title: 'tentar novamente',
+                    color: Colors.redAccent,
+                  ),
+                ]),
+          ));
 }

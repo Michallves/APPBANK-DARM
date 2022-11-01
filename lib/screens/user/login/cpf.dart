@@ -78,40 +78,6 @@ class _LoginCpfUserState extends State<LoginCpfUser> {
     Navigator.of(context).pushNamed(AppRoutes.REGISTER_NAME_USER);
   }
 
-  void showModal() => showModalBottomSheet(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-      ),
-      context: context,
-      builder: (context) => SizedBox(
-            height: 300,
-            child: Column(children: [
-              Expanded(
-                  child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: const [
-                  Text(
-                    'CPF não encontrado',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    'crie um cadastro para você agora mesmo',
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                ],
-              )),
-              Column(
-                children: [
-                  BottomButtom(
-                      onPress: () => _notFindCpf(), title: 'criar cadastro'),
-                ],
-              )
-            ]),
-          ));
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -174,4 +140,43 @@ class _LoginCpfUserState extends State<LoginCpfUser> {
       ),
     );
   }
+
+  showModal() => showModalBottomSheet(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+      ),
+      context: context,
+      builder: (context) => SizedBox(
+            height: 300,
+            child: Column(children: [
+              Expanded(
+                  child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: const [
+                  Text(
+                    'CPF não encontrado',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    'crie um cadastro para você agora mesmo',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              )),
+              Column(
+                children: [
+                  BottomButtom(
+                      onPress: () => _notFindCpf(), title: 'criar cadastro'),
+                  BottomButtom(
+                    onPress: () => Navigator.of(context).pop(),
+                    title: 'agora não',
+                    color: Colors.grey[350],
+                  )
+                ],
+              )
+            ]),
+          ));
 }

@@ -30,8 +30,7 @@ class _HomeUserState extends State<HomeUser> {
   }
 
   _logout() async {
-    await FirebaseAuth.instance.signOut().then(
-        (_) => Navigator.of(context).pushReplacementNamed(AppRoutes.PRELOAD));
+    await FirebaseAuth.instance.signOut();
   }
 
   _deleteCard(card) async {

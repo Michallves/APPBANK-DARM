@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:appbankdarm/widgets/bottom_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -90,24 +89,6 @@ class _AccountUserState extends State<AccountUser> {
     }
   }
 
-  _deleteAccount() async {
-    setState(() {
-      isLoading = true;
-    });
-    await context
-        .read<AuthService>()
-        .user
-        ?.delete()
-        .then((_) => FirebaseFirestore.instance
-            .collection('users')
-            .doc(context.read<AuthService>().user?.uid)
-            .delete())
-        .then((value) => Navigator.of(context).pushNamed(AppRoutes.PRELOAD));
-    setState(() {
-      isLoading = false;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,54 +97,63 @@ class _AccountUserState extends State<AccountUser> {
           'conta',
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SizedBox(
-                height: 100,
-                child: Column(
-                  children: [
-                    GestureDetector(
-                      onTap: () => showModal(),
-                      child: CircleAvatar(
-                        radius: 80,
-                        backgroundImage:
-                            _image != null ? FileImage(_image!) : null,
-                        child: _image == null
-                            ? Text(
-                                name.toString().substring(0, 2).toUpperCase(),
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 80),
-                              )
-                            : null,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 40,
-                    ),
-                    Text(name.toString(), style: const TextStyle(fontSize: 25))
-                  ],
-                )),
-          ),
-          Container(
-            width: double.infinity,
-            height: 50,
-            margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-            child: ElevatedButton(
-              onPressed: () => _pressButton(),
-              child: const Text("alterar senha"),
+      body: isLoading == true
+          ? const Center(
+              child: CircularProgressIndicator(color: Colors.black),
+            )
+          : Column(
+              children: [
+                Expanded(
+                  child: SizedBox(
+                      height: 100,
+                      child: Column(
+                        children: [
+                          GestureDetector(
+                            onTap: () => _showModal(),
+                            child: CircleAvatar(
+                              radius: 80,
+                              backgroundImage:
+                                  _image != null ? FileImage(_image!) : null,
+                              child: _image == null
+                                  ? Text(
+                                      name
+                                          .toString()
+                                          .substring(0, 2)
+                                          .toUpperCase(),
+                                      style: const TextStyle(
+                                          color: Colors.white, fontSize: 80),
+                                    )
+                                  : null,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 40,
+                          ),
+                          Text(name.toString(),
+                              style: const TextStyle(fontSize: 25))
+                        ],
+                      )),
+                ),
+                Container(
+                  width: double.infinity,
+                  height: 50,
+                  margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                  child: ElevatedButton(
+                    onPressed: () => _pressButton(),
+                    child: const Text("alterar senha"),
+                  ),
+                ),
+                BottomButtom(
+                    onPress: () =>
+                        Navigator.of(context).pushNamed(AppRoutes.DELETE_USER),
+                    title: "excluir conta",
+                    color: Colors.redAccent),
+              ],
             ),
-          ),
-          BottomButtom(
-              onPress: () => _deleteAccount(),
-              title: "excluir conta",
-              color: Colors.redAccent),
-        ],
-      ),
     );
   }
 
-  void showModal() => showModalBottomSheet(
+  _showModal() => showModalBottomSheet(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(10), topRight: Radius.circular(10)),

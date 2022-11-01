@@ -108,6 +108,7 @@ class _RegisterEmailUserState extends State<RegisterEmailUser> {
         ),
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Expanded(
             child: Container(

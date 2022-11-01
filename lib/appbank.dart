@@ -18,7 +18,9 @@ import 'screens/user/register/password.dart';
 import 'screens/user/register/passwordAgain.dart';
 //Pages Home User
 import 'screens/user/home.dart';
-import 'screens/user/account.dart';
+//Pages Account User
+import 'screens/user/account/profile.dart';
+import 'screens/user/account/delete.dart';
 //Pages Create Card User
 import 'screens/user/create_card/name.dart';
 import 'screens/user/create_card/type.dart';
@@ -77,7 +79,9 @@ class AppBank extends StatelessWidget {
             const RegisterPasswordAgainUser(),
         //Home User
         AppRoutes.HOMEUSER: (ctx) => const HomeUser(),
+        //Account User
         AppRoutes.ACCOUNT_USER: (ctx) => const AccountUser(),
+         AppRoutes.DELETE_USER: (ctx) => const DeleteUser(),
         //Create Card User
         AppRoutes.CREATE_CARD_NAME: (ctx) => const CreateCardName(),
         AppRoutes.CREATE_CARD_TYPE: (ctx) => const CreateCardType(),

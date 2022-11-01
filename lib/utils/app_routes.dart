@@ -15,6 +15,7 @@ abstract class AppRoutes {
   static const REGISTER_PASSWORD_AGAIN_USER = '/RegisterPasswordAgainUser';
   static const HOMEUSER = '/home';
   static const ACCOUNT_USER = '/accountUser';
+  static const DELETE_USER = '/deleteUser';
   static const CREATE_CARD_NAME = '/createCardName';
   static const CREATE_CARD_TYPE = '/createCardType';
   static const CREATE_CARD_FLAG = '/createCardFLag';

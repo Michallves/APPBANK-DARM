@@ -60,11 +60,9 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
                     "street": context.read<AuthService>().address![3],
                     "number": context.read<AuthService>().address![4],
                   },
-                }).then((_) => {
-                          context.read<AuthService>(),
-                          Navigator.of(context)
-                              .pushReplacementNamed(AppRoutes.HOMEUSER),
-                        })
+                }),
+                context.read<AuthService>().user = userCredential.user,
+                Navigator.of(context).pushReplacementNamed(AppRoutes.HOMEUSER),
               });
     } on FirebaseAuthException catch (_) {
       showModal();
@@ -95,7 +93,6 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
               child: PinCodeTextField(
                 controller: passwordConfirm,
                 autofocus: true,
-                
                 focusNode: myFocusNode,
                 keyboardType: TextInputType.number,
                 errorBorderColor: Colors.red,

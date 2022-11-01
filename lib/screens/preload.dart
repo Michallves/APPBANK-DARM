@@ -1,13 +1,8 @@
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 
-class Preload extends StatefulWidget {
+class Preload extends StatelessWidget {
   const Preload({super.key});
-  @override
-  State<Preload> createState() => _PreloadState();
-}
-
-class _PreloadState extends State<Preload> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

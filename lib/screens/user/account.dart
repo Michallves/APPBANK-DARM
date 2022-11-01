@@ -1,10 +1,12 @@
 import 'dart:io';
 import 'package:appbankdarm/utils/app_routes.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-import '../../services/user_service.dart';
+import '../../services/auth_service.dart';
 
 class AccountUser extends StatefulWidget {
   const AccountUser({super.key});
@@ -14,7 +16,19 @@ class AccountUser extends StatefulWidget {
 }
 
 class _AccountUserState extends State<AccountUser> {
+  String? name;
   bool isButtonActive = false;
+
+  @override
+  void initState() {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(context.read<AuthService>().user?.uid)
+        .get()
+        .then((doc) => setState(() => name = doc.get('name')));
+
+    super.initState();
+  }
 
   _pressButton() {
     Navigator.of(context).pushNamed(AppRoutes.HOMEUSER);
@@ -54,6 +68,26 @@ class _AccountUserState extends State<AccountUser> {
     }
   }
 
+  Future<XFile?> getImageGallery() async {
+    final ImagePicker _picker = ImagePicker();
+    XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    return image;
+  }
+
+  Future<void> upload(String path) async {
+    File file = File(path);
+    await FirebaseStorage.instance
+        .ref('users/${context.read<AuthService>().user?.uid}/profile.jpeg')
+        .putFile(file);
+  }
+
+  pickAndUploadImage() async {
+    XFile? file = await getImageGallery();
+    if (file != null) {
+      await upload(file.path);
+    }
+  }
+
   void showModal() => showModalBottomSheet(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -86,7 +120,7 @@ class _AccountUserState extends State<AccountUser> {
                   leading: const Icon(
                     Icons.image_outlined,
                   ),
-                  onTap: _pickImageGallery,
+                  onTap: pickAndUploadImage(),
                 )
               ],
             ),
@@ -115,11 +149,7 @@ class _AccountUserState extends State<AccountUser> {
                             _image != null ? FileImage(_image!) : null,
                         child: _image == null
                             ? Text(
-                                context
-                                    .read<UserService>()
-                                    .name
-                                    .substring(0, 2)
-                                    .toUpperCase(),
+                                name.toString().substring(0, 2).toUpperCase(),
                                 style: const TextStyle(
                                     color: Colors.white, fontSize: 80),
                               )
@@ -129,8 +159,7 @@ class _AccountUserState extends State<AccountUser> {
                     const SizedBox(
                       height: 40,
                     ),
-                    Text(context.read<UserService>().name,
-                        style: const TextStyle(fontSize: 25))
+                    Text(name.toString(), style: const TextStyle(fontSize: 25))
                   ],
                 )),
           ),

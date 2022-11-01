@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:appbankdarm/services/auth_service.dart';
 import 'package:appbankdarm/widgets/bottom_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:appbankdarm/widgets/cartao.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:provider/provider.dart';
-import '../../services/user_service.dart';
 import 'package:flutter/material.dart';
 
 class HomeUser extends StatefulWidget {
@@ -18,14 +15,14 @@ class HomeUser extends StatefulWidget {
 }
 
 class _HomeUserState extends State<HomeUser> {
-  late String name = 'none';
+  String? name;
   bool isLoading = false;
 
   @override
   void initState() {
     FirebaseFirestore.instance
         .collection('users')
-        .doc(context.read<UserService>().user.uid)
+        .doc(context.read<AuthService>().user?.uid)
         .get()
         .then((doc) => setState(() => name = doc.get('name')));
 
@@ -43,7 +40,7 @@ class _HomeUserState extends State<HomeUser> {
     });
     await FirebaseFirestore.instance
         .collection('users')
-        .doc(context.read<UserService>().user.uid)
+        .doc(context.read<AuthService>().user?.uid)
         .collection('cards')
         .doc(card)
         .delete()
@@ -113,13 +110,13 @@ class _HomeUserState extends State<HomeUser> {
       body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection("users")
-              .doc(context.read<UserService>().user.uid)
+              .doc(context.read<AuthService>().user?.uid)
               .collection('cards')
               .snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(color: Colors.black),
               );
             } else {
               return ListView.separated(
@@ -147,15 +144,14 @@ class _HomeUserState extends State<HomeUser> {
   }
 
   void showModal(card) => showModalBottomSheet(
-        constraints:
-            BoxConstraints.expand(height: MediaQuery.of(context).size.height),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(10), topRight: Radius.circular(10)),
         ),
         context: context,
         builder: (context) => SizedBox(
-          child: Column(children: [
+          height: 200,
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             BottomButtom(
               onPress: () => _deleteCard(card?.id),
               title: 'excluir cartão',

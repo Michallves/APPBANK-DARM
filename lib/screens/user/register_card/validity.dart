@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-
+import '../../../services/auth_service.dart';
 import '../../../services/card_service.dart';
-import '../../../services/user_service.dart';
 import '../../../widgets/bottom_button.dart';
 
 class RegisterCardValidity extends StatefulWidget {
@@ -38,7 +37,7 @@ class _RegisterCardValidityState extends State<RegisterCardValidity> {
     setState(() => isLoading = true);
     await FirebaseFirestore.instance
         .collection("users")
-        .doc(context.read<UserService>().user.uid)
+        .doc(context.read<AuthService>().user?.uid)
         .collection('cards')
         .doc()
         .set({

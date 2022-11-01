@@ -18,6 +18,7 @@ class AccountUser extends StatefulWidget {
 
 class _AccountUserState extends State<AccountUser> {
   String? name;
+  String? image;
   bool isLoading = true;
 
   @override
@@ -26,8 +27,11 @@ class _AccountUserState extends State<AccountUser> {
         .collection('users')
         .doc(context.read<AuthService>().user?.uid)
         .get()
-        .then((doc) =>
-            setState(() => {name = doc.get('name'), isLoading = false}));
+        .then((doc) => setState(() => {
+              name = doc.get('name'),
+              image = doc.get('image'),
+              isLoading = false
+            }));
 
     super.initState();
   }
@@ -36,58 +40,37 @@ class _AccountUserState extends State<AccountUser> {
     Navigator.of(context).pushNamed(AppRoutes.HOMEUSER);
   }
 
-  File? _image;
-
-  Future<void> _pickImageCamera() async {
-    final picker = ImagePicker();
-    XFile? pickedImage = await picker.pickImage(
-      source: ImageSource.camera,
-      imageQuality: 50,
-      maxWidth: 150,
-    );
-
-    if (pickedImage != null) {
-      setState(() {
-        _image = File(pickedImage.path);
-      });
-      () => Navigator.of(context).pop();
-    }
-  }
-
-  Future<void> _pickImageGallery() async {
-    final picker = ImagePicker();
-    XFile? pickedImage = await picker.pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 50,
-      maxWidth: 150,
-    );
-
-    if (pickedImage != null) {
-      setState(() {
-        _image = File(pickedImage.path);
-      });
-      () => Navigator.of(context).pop();
-    }
-  }
-
-  Future<XFile?> getImageGallery() async {
-    final ImagePicker _picker = ImagePicker();
-    XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    return image;
+  _uploadUrl(image) async {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(context.read<AuthService>().user?.uid)
+        .update({'image': image});
   }
 
   Future<void> upload(String path) async {
     File file = File(path);
-    await FirebaseStorage.instance
-        .ref('users/${context.read<AuthService>().user?.uid}/profile.jpeg')
-        .putFile(file);
+    FirebaseStorage storage = FirebaseStorage.instance;
+    String ref = '/users/${context.read<AuthService>().user?.uid}/user.jpg';
+    await storage.ref(ref).putFile(file).then((_) =>
+        storage.ref(ref).getDownloadURL().then((url) => _uploadUrl(url)));
   }
 
-  pickAndUploadImage() async {
-    XFile? file = await getImageGallery();
+  Future<XFile?> getImageGallery() async {
+    final ImagePicker picker = ImagePicker();
+    XFile? file = await picker.pickImage(source: ImageSource.gallery);
     if (file != null) {
       await upload(file.path);
     }
+    return null;
+  }
+
+  Future<XFile?> getImageCamera() async {
+    final ImagePicker picker = ImagePicker();
+    XFile? file = await picker.pickImage(source: ImageSource.camera);
+    if (file != null) {
+      await upload(file.path);
+    }
+    return null;
   }
 
   @override
@@ -110,22 +93,21 @@ class _AccountUserState extends State<AccountUser> {
                       child: Column(
                         children: [
                           GestureDetector(
-                            onTap: () => pickAndUploadImage(),
+                            onTap: _showModal,
                             child: CircleAvatar(
-                              radius: 80,
-                              backgroundImage:
-                                  _image != null ? FileImage(_image!) : null,
-                              child: _image == null
-                                  ? Text(
-                                      name
-                                          .toString()
-                                          .substring(0, 2)
-                                          .toUpperCase(),
-                                      style: const TextStyle(
-                                          color: Colors.white, fontSize: 80),
-                                    )
-                                  : null,
-                            ),
+                                radius: 80,
+                                backgroundColor: Colors.black,
+                                backgroundImage: NetworkImage(image!),
+                                child: image == ''
+                                    ? Text(
+                                        name
+                                            .toString()
+                                            .substring(0, 2)
+                                            .toUpperCase(),
+                                        style: const TextStyle(
+                                            color: Colors.white, fontSize: 80),
+                                      )
+                                    : null),
                           ),
                           const SizedBox(
                             height: 40,
@@ -161,7 +143,7 @@ class _AccountUserState extends State<AccountUser> {
       ),
       context: context,
       builder: (context) => SizedBox(
-            height: 200,
+            height: 250,
             child: Column(
               children: <Widget>[
                 const SizedBox(
@@ -178,7 +160,7 @@ class _AccountUserState extends State<AccountUser> {
                   iconColor: Colors.black,
                   title: const Text('Camera'),
                   leading: const Icon(Icons.camera_alt_outlined),
-                  onTap: _pickImageCamera,
+                  onTap: getImageCamera,
                 ),
                 ListTile(
                   iconColor: Colors.black,
@@ -186,8 +168,19 @@ class _AccountUserState extends State<AccountUser> {
                   leading: const Icon(
                     Icons.image_outlined,
                   ),
-                  onTap: pickAndUploadImage(),
-                )
+                  onTap: getImageGallery,
+                ),
+                image != null
+                    ? const ListTile(
+                        iconColor: Colors.redAccent,
+                        textColor: Colors.redAccent,
+                        title: Text('Remover'),
+                        leading: Icon(
+                          Icons.delete_outline,
+                        ),
+                        onTap: null,
+                      )
+                    : Container()
               ],
             ),
           ));

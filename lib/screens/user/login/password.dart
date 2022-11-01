@@ -23,6 +23,7 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
   @override
   void initState() {
     myFocusNode = FocusNode();
+     myFocusNode.requestFocus();
     password.addListener(() {
       if (password.text.length == 6) {
         setState(() => isButtonActive = true);

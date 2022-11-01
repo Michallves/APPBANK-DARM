@@ -143,7 +143,7 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
                       ),
                       Text(
                         'a senha e a confirmação de senha precisam ser exatamentes iguais',
-                         textAlign: TextAlign.center,
+                        textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 16),
                       ),
                     ],

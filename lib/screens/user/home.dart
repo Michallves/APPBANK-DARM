@@ -16,6 +16,7 @@ class HomeUser extends StatefulWidget {
 
 class _HomeUserState extends State<HomeUser> {
   String? name;
+  String? image;
   bool isLoading = false;
 
   @override
@@ -24,7 +25,8 @@ class _HomeUserState extends State<HomeUser> {
         .collection('users')
         .doc(context.read<AuthService>().user?.uid)
         .get()
-        .then((doc) => setState(() => name = doc.get('name')));
+        .then((doc) =>
+            setState(() => {name = doc.get('name'), image = doc.get('image')}));
 
     super.initState();
   }
@@ -68,11 +70,14 @@ class _HomeUserState extends State<HomeUser> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   CircleAvatar(
+                    backgroundColor: Colors.black,
                     radius: 40,
-                    child: Text(
-                      name.toString().substring(0, 2).toUpperCase(),
-                      style: const TextStyle(color: Colors.white, fontSize: 30),
-                    ),
+                    backgroundImage: NetworkImage(image == null ? '' : image!),
+                    child: image == null
+                        ? Text(name.toString().substring(0, 2).toUpperCase(),
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 30))
+                        : null,
                   ),
                   Text(name.toString(), style: const TextStyle(fontSize: 18))
                 ],

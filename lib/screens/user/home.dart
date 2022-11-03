@@ -1,5 +1,8 @@
 import 'package:appbankdarm/services/auth_service.dart';
+import 'package:appbankdarm/services/card_service.dart';
+import 'package:appbankdarm/services/user_service.dart';
 import 'package:appbankdarm/widgets/bottom_button.dart';
+import 'package:appbankdarm/widgets/cartaoVertical.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:appbankdarm/widgets/cartao.dart';
@@ -21,36 +24,16 @@ class _HomeUserState extends State<HomeUser> {
 
   @override
   void initState() {
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(context.read<AuthService>().user?.uid)
-        .get()
-        .then((doc) =>
-            setState(() => {name = doc.get('name'), image = doc.get('image')}));
-
+    context.read<UserService>().readUser();
+    setState(() {
+      name = context.read<UserService>().name;
+      image = context.read<UserService>().image;
+    });
     super.initState();
   }
 
   _logout() async {
     await FirebaseAuth.instance.signOut();
-  }
-
-  _deleteCard(card) async {
-    setState(() {
-      isLoading = true;
-    });
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(context.read<AuthService>().user?.uid)
-        .collection('cards')
-        .doc(card)
-        .delete()
-        .then((_) {
-      setState(() {
-        isLoading = false;
-      });
-      Navigator.of(context).pop();
-    });
   }
 
   @override
@@ -79,7 +62,8 @@ class _HomeUserState extends State<HomeUser> {
                                 color: Colors.white, fontSize: 30))
                         : null,
                   ),
-                  Text(name.toString(), style: const TextStyle(fontSize: 18))
+                  Text(name == null ? '' : name!,
+                      style: const TextStyle(fontSize: 18))
                 ],
               )),
               ListTile(
@@ -131,42 +115,20 @@ class _HomeUserState extends State<HomeUser> {
                   itemBuilder: ((context, index) {
                     DocumentSnapshot card = snapshot.data!.docs[index];
                     return GestureDetector(
-                      onLongPress: () => showModal(card),
-                      child: Cartao(
-                          number: card['number'],
-                          flag: card['flag'],
-                          name: card['name'],
-                          type: card['type'] ?? '',
-                          validity: card['validity'],
-                          cvc: card['cvc'],
-                          obscure: true),
+                      onTap: () {
+                        context.read<CardService>().id = card.id;
+                        Navigator.of(context).pushNamed(AppRoutes.CARD_USER);
+                      },
+                      child: CartaoVertical(
+                        number: card['number'],
+                        flag: card['flag'],
+                        name: card['name'],
+                        validity: card['validity'],
+                      ),
                     );
                   }));
             }
           }),
     );
   }
-
-  void showModal(card) => showModalBottomSheet(
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-        ),
-        context: context,
-        builder: (context) => SizedBox(
-          height: 200,
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            BottomButtom(
-              onPress: () => _deleteCard(card?.id),
-              title: 'excluir cartão',
-              color: Colors.redAccent,
-              loading: isLoading,
-            ),
-            BottomButtom(
-                onPress: () => Navigator.of(context).pop(),
-                title: 'cancelar',
-                color: Colors.grey[350])
-          ]),
-        ),
-      );
 }

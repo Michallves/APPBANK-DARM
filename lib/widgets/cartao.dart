@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -37,6 +38,7 @@ class _CartaoState extends State<Cartao> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 500),
       vsync: this,
     );
+
     super.initState();
   }
 
@@ -52,11 +54,17 @@ class _CartaoState extends State<Cartao> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return GestureDetector(
         onHorizontalDragStart: (details) {
-          controller?.reset();
-          setState(() {
-            front = true;
-            horizontalDrag = 0;
-          });
+          if (front == true) {
+            controller?.reset();
+            setState(() {
+              horizontalDrag = 0;
+            });
+          } else {
+            controller?.reset();
+            setState(() {
+              horizontalDrag = 180;
+            });
+          }
         },
         onHorizontalDragEnd: (details) {
           final double end = 360 - horizontalDrag >= 180 ? 0 : 360;
@@ -87,228 +95,222 @@ class _CartaoState extends State<Cartao> with TickerProviderStateMixin {
                     decoration: BoxDecoration(
                         color: Colors.black,
                         borderRadius: BorderRadius.circular(10)),
-                    child: Expanded(
-                      child: Container(
-                        margin: EdgeInsets.all(
-                          MediaQuery.of(context).size.width * 0.04,
-                        ),
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: Row(children: [
-                                Expanded(
-                                  child: Container(
-                                    alignment: AlignmentDirectional.bottomStart,
-                                    child: Image.asset(
-                                      'assets/images/chip.png',
-                                      width: MediaQuery.of(context).size.width *
-                                          0.17,
-                                    ),
+                    child: Container(
+                      margin: EdgeInsets.all(
+                        MediaQuery.of(context).size.width * 0.04,
+                      ),
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: Row(children: [
+                              Expanded(
+                                child: Container(
+                                  alignment: AlignmentDirectional.bottomStart,
+                                  child: Image.asset(
+                                    'assets/images/chip.png',
+                                    width: MediaQuery.of(context).size.width *
+                                        0.17,
                                   ),
-                                ),
-                                Expanded(
-                                  child: Container(
-                                    alignment: AlignmentDirectional.topEnd,
-                                    child: widget.flag == 'visa'
-                                        ? Image.asset(
-                                            'assets/images/visa.png',
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.18,
-                                            fit: BoxFit.fitWidth,
-                                          )
-                                        : widget.flag == 'mastercard'
-                                            ? Image.asset(
-                                                'assets/images/mastercard2.png',
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.18,
-                                                fit: BoxFit.fitWidth,
-                                              )
-                                            : widget.flag == 'americanexpress'
-                                                ? Image.asset(
-                                                    'assets/images/americanexpress.png',
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.14,
-                                                    fit: BoxFit.fitWidth,
-                                                  )
-                                                : widget.flag == 'hipercard'
-                                                    ? Image.asset(
-                                                        'assets/images/hipercard.png',
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width *
-                                                            0.20,
-                                                        fit: BoxFit.fitWidth,
-                                                      )
-                                                    : widget.flag == 'elo'
-                                                        ? Image.asset(
-                                                            'assets/images/elo.png',
-                                                            width: MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width *
-                                                                0.22,
-                                                            fit:
-                                                                BoxFit.fitWidth,
-                                                          )
-                                                        : null,
-                                  ),
-                                ),
-                              ]),
-                            ),
-                            Expanded(
-                              child: Container(
-                                margin: EdgeInsetsDirectional.fromSTEB(
-                                    0,
-                                    0,
-                                    MediaQuery.of(context).size.width * 0.06,
-                                    0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      widget.number.substring(0, 4),
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 25 *
-                                            MediaQuery.of(context)
-                                                .textScaleFactor,
-                                      ),
-                                    ),
-                                    (widget.obscure == false
-                                        ? Text(widget.number.substring(4, 8),
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 25 *
-                                                  MediaQuery.of(context)
-                                                      .textScaleFactor,
-                                            ))
-                                        : Container(
-                                            margin: const EdgeInsets.fromLTRB(
-                                                0, 10, 0, 0),
-                                            child: Text(
-                                              '****',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 34 *
-                                                    MediaQuery.of(context)
-                                                        .textScaleFactor,
-                                              ),
-                                            ))),
-                                    (widget.obscure == false
-                                        ? Text(widget.number.substring(8, 12),
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 25 *
-                                                  MediaQuery.of(context)
-                                                      .textScaleFactor,
-                                            ))
-                                        : Container(
-                                            margin: const EdgeInsets.fromLTRB(
-                                                0, 10, 0, 0),
-                                            child: Text(
-                                              '****',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 34 *
-                                                    MediaQuery.of(context)
-                                                        .textScaleFactor,
-                                              ),
-                                            ))),
-                                    Text(
-                                      widget.number.substring(12, 16),
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 25 *
-                                            MediaQuery.of(context)
-                                                .textScaleFactor,
-                                      ),
-                                    ),
-                                  ],
                                 ),
                               ),
-                            ),
-                            Expanded(
+                              Expanded(
+                                child: Container(
+                                  alignment: AlignmentDirectional.topEnd,
+                                  child: widget.flag == 'visa'
+                                      ? Image.asset(
+                                          'assets/images/visa.png',
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.18,
+                                          fit: BoxFit.fitWidth,
+                                        )
+                                      : widget.flag == 'mastercard'
+                                          ? Image.asset(
+                                              'assets/images/mastercard2.png',
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.18,
+                                              fit: BoxFit.fitWidth,
+                                            )
+                                          : widget.flag == 'americanexpress'
+                                              ? Image.asset(
+                                                  'assets/images/americanexpress.png',
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.14,
+                                                  fit: BoxFit.fitWidth,
+                                                )
+                                              : widget.flag == 'hipercard'
+                                                  ? Image.asset(
+                                                      'assets/images/hipercard.png',
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.20,
+                                                      fit: BoxFit.fitWidth,
+                                                    )
+                                                  : widget.flag == 'elo'
+                                                      ? Image.asset(
+                                                          'assets/images/elo.png',
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.22,
+                                                          fit: BoxFit.fitWidth,
+                                                        )
+                                                      : null,
+                                ),
+                              ),
+                            ]),
+                          ),
+                          Expanded(
+                            child: Container(
+                              margin: EdgeInsetsDirectional.fromSTEB(0, 0,
+                                  MediaQuery.of(context).size.width * 0.06, 0),
                               child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Expanded(
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text('Titular do cartão',
-                                            maxLines: 1,
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.025,
-                                            )),
-                                        Text(widget.name,
-                                            maxLines: 1,
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.04,
-                                            ))
-                                      ],
+                                  Text(
+                                    widget.number.substring(0, 4),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 25 *
+                                          MediaQuery.of(context)
+                                              .textScaleFactor,
                                     ),
                                   ),
-                                  Expanded(
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        Text('Validade:',
-                                            maxLines: 1,
+                                  (widget.obscure == false
+                                      ? Text(widget.number.substring(4, 8),
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 25 *
+                                                MediaQuery.of(context)
+                                                    .textScaleFactor,
+                                          ))
+                                      : Container(
+                                          margin: const EdgeInsets.fromLTRB(
+                                              0, 10, 0, 0),
+                                          child: Text(
+                                            '****',
                                             style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.025,
-                                            )),
-                                        Text(widget.validity,
-                                            maxLines: 1,
+                                              fontSize: 34 *
+                                                  MediaQuery.of(context)
+                                                      .textScaleFactor,
+                                            ),
+                                          ))),
+                                  (widget.obscure == false
+                                      ? Text(widget.number.substring(8, 12),
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 25 *
+                                                MediaQuery.of(context)
+                                                    .textScaleFactor,
+                                          ))
+                                      : Container(
+                                          margin: const EdgeInsets.fromLTRB(
+                                              0, 10, 0, 0),
+                                          child: Text(
+                                            '****',
                                             style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.04,
-                                                fontWeight: FontWeight.bold))
-                                      ],
+                                              color: Colors.white,
+                                              fontSize: 34 *
+                                                  MediaQuery.of(context)
+                                                      .textScaleFactor,
+                                            ),
+                                          ))),
+                                  Text(
+                                    widget.number.substring(12, 16),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 25 *
+                                          MediaQuery.of(context)
+                                              .textScaleFactor,
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text('Titular do cartão',
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.025,
+                                          )),
+                                      Text(widget.name,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.04,
+                                          ))
+                                    ],
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Text('Validade:',
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.025,
+                                          )),
+                                      Text(widget.validity,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.04,
+                                              fontWeight: FontWeight.bold))
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   )
-                : Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: (MediaQuery.of(context).size.width - 40) * 0.60,
-                    decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Expanded(
+                : Transform(
+                    alignment: Alignment.center,
+                    transform: Matrix4.rotationY(pi),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: (MediaQuery.of(context).size.width - 40) * 0.60,
+                      decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(10)),
                       child: Column(children: [
                         Container(
                           color: Colors.white70,
@@ -395,6 +397,8 @@ class _CartaoState extends State<Cartao> with TickerProviderStateMixin {
                                               )),
                                           Text(widget.cvc,
                                               maxLines: 1,
+                                              textAlign: TextAlign.right,
+                                              textDirection: TextDirection.rtl,
                                               style: TextStyle(
                                                   color: Colors.black,
                                                   fontSize:
@@ -413,7 +417,6 @@ class _CartaoState extends State<Cartao> with TickerProviderStateMixin {
                           ),
                         )
                       ]),
-                    ),
-                  )));
+                    ))));
   }
 }

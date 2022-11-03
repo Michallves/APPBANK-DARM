@@ -1,3 +1,4 @@
+import 'package:appbankdarm/screens/card.dart';
 import 'package:appbankdarm/widgets/auth_check.dart';
 import 'package:flutter/material.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
@@ -79,6 +80,7 @@ class AppBank extends StatelessWidget {
             const RegisterPasswordAgainUser(),
         //Home User
         AppRoutes.HOMEUSER: (ctx) => const HomeUser(),
+         AppRoutes.CARD_USER: (ctx) => const CardUser(),
         //Account User
         AppRoutes.ACCOUNT_USER: (ctx) => const AccountUser(),
          AppRoutes.DELETE_USER: (ctx) => const DeleteUser(),

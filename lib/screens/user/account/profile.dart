@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../../services/auth_service.dart';
+import '../../../services/user_service.dart';
 
 class AccountUser extends StatefulWidget {
   const AccountUser({super.key});
@@ -23,21 +24,20 @@ class _AccountUserState extends State<AccountUser> {
 
   @override
   void initState() {
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(context.read<AuthService>().user?.uid)
-        .get()
-        .then((doc) => setState(() => {
-              name = doc.get('name'),
-              image = doc.get('image'),
-              isLoading = false
-            }));
-
+    setState(() {
+      name = context.read<UserService>().name;
+      image = context.read<UserService>().image;
+      isLoading = false;
+    });
     super.initState();
   }
 
   _pressButton() {
     Navigator.of(context).pushNamed(AppRoutes.HOMEUSER);
+  }
+
+  removeImage() async {
+    await FirebaseStorage.instance.refFromURL(image!).delete();
   }
 
   _uploadUrl(image) async {
@@ -171,14 +171,14 @@ class _AccountUserState extends State<AccountUser> {
                   onTap: getImageGallery,
                 ),
                 image != null
-                    ? const ListTile(
+                    ? ListTile(
                         iconColor: Colors.redAccent,
                         textColor: Colors.redAccent,
-                        title: Text('Remover'),
-                        leading: Icon(
+                        title: const Text('Remover'),
+                        leading: const Icon(
                           Icons.delete_outline,
                         ),
-                        onTap: null,
+                        onTap: removeImage,
                       )
                     : Container()
               ],

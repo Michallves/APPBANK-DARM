@@ -13,6 +13,4 @@ class AuthService extends ChangeNotifier {
   String? accountType;
   String? password;
 
-  
-  
 }

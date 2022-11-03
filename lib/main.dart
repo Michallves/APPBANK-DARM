@@ -1,5 +1,6 @@
 import 'package:appbankdarm/services/auth_service.dart';
 import 'package:appbankdarm/services/card_service.dart';
+import 'package:appbankdarm/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +16,7 @@ Future<void> main() async {
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => AuthService()),
+    ChangeNotifierProvider(create: (context) => UserService(user: context.read<AuthService>().user)),
     ChangeNotifierProvider(create: (context) => CardService()),
   ], child: const AppBank()));
 }

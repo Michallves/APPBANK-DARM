@@ -44,8 +44,10 @@ class _CartaoState extends State<Cartao> with TickerProviderStateMixin {
 
   void setCardSide() {
     if (horizontalDrag <= 90 || horizontalDrag >= 270) {
+ 
       front = true;
     } else {
+
       front = false;
     }
   }
@@ -83,6 +85,17 @@ class _CartaoState extends State<Cartao> with TickerProviderStateMixin {
             setCardSide();
           });
         },
+        onTap: () {
+          while (horizontalDrag <= 180) {
+            Timer.periodic(const Duration(seconds: 1), (timer) {
+              setState(() {
+                controller?.reset();
+                horizontalDrag++;
+                setCardSide();
+              });
+            });
+          }
+        },
         child: Transform(
             alignment: Alignment.center,
             transform: Matrix4.identity()
@@ -94,6 +107,13 @@ class _CartaoState extends State<Cartao> with TickerProviderStateMixin {
                     height: (MediaQuery.of(context).size.width - 40) * 0.60,
                     decoration: BoxDecoration(
                         color: Colors.black,
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(.05),
+                              offset: Offset(0, 0),
+                              blurRadius: 20,
+                              spreadRadius: 3)
+                        ],
                         borderRadius: BorderRadius.circular(10)),
                     child: Container(
                       margin: EdgeInsets.all(

@@ -29,6 +29,7 @@ class Cartao extends StatefulWidget {
 class _CartaoState extends State<Cartao> with TickerProviderStateMixin {
   AnimationController? controller;
   Animation<double>? animation;
+
   bool front = true;
   double horizontalDrag = 0;
 
@@ -38,36 +39,68 @@ class _CartaoState extends State<Cartao> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 500),
       vsync: this,
     );
-
     super.initState();
   }
 
   void setCardSide() {
     if (horizontalDrag <= 90 || horizontalDrag >= 270) {
- 
       front = true;
     } else {
-
       front = false;
     }
+    if (horizontalDrag > 360) {
+      setState(() {
+        horizontalDrag = 0;
+      });
+    }
+  }
+
+  bool isAnimation = false;
+  
+  animationCartaoUp() {
+    Timer.periodic(const Duration(milliseconds: 1), (timer) {
+      if (isAnimation == true) {
+        if (horizontalDrag >= 0 && horizontalDrag < 180) {
+          setState(() {
+            horizontalDrag++;
+            setCardSide();
+          });
+        } 
+        if (horizontalDrag == 180) {
+          timer.cancel();
+               setState(() {
+            horizontalDrag = horizontalDrag + 1; 
+               });          
+        }
+        if (horizontalDrag > 180 && horizontalDrag < 360) {
+          setState(() {
+            horizontalDrag++;
+            setCardSide();
+          });
+        } else if (horizontalDrag == 360) {
+          timer.cancel();
+          horizontalDrag = horizontalDrag + 5;
+          setCardSide();
+        }
+      } else {
+        timer.cancel();
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onHorizontalDragStart: (details) {
-          if (front == true) {
-            controller?.reset();
-            setState(() {
-              horizontalDrag = 0;
-            });
-          } else {
-            controller?.reset();
-            setState(() {
-              horizontalDrag = 180;
-            });
-          }
+        onTap: () {
+          setState(() {
+            isAnimation = !isAnimation;
+            animationCartaoUp();
+          });
         },
+        onHorizontalDragStart: (details) => setState(() {
+              isAnimation = false;
+              animationCartaoUp();
+            }),
         onHorizontalDragEnd: (details) {
           final double end = 360 - horizontalDrag >= 180 ? 0 : 360;
           animation = Tween<double>(begin: horizontalDrag, end: end)
@@ -84,17 +117,6 @@ class _CartaoState extends State<Cartao> with TickerProviderStateMixin {
             horizontalDrag %= 360;
             setCardSide();
           });
-        },
-        onTap: () {
-          while (horizontalDrag <= 180) {
-            Timer.periodic(const Duration(seconds: 1), (timer) {
-              setState(() {
-                controller?.reset();
-                horizontalDrag++;
-                setCardSide();
-              });
-            });
-          }
         },
         child: Transform(
             alignment: Alignment.center,

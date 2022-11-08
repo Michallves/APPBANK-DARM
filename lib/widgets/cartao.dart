@@ -57,49 +57,14 @@ class _CartaoState extends State<Cartao> with TickerProviderStateMixin {
 
   bool isAnimation = false;
   
-  animationCartaoUp() {
-    Timer.periodic(const Duration(milliseconds: 1), (timer) {
-      if (isAnimation == true) {
-        if (horizontalDrag >= 0 && horizontalDrag < 180) {
-          setState(() {
-            horizontalDrag++;
-            setCardSide();
-          });
-        } 
-        if (horizontalDrag == 180) {
-          timer.cancel();
-               setState(() {
-            horizontalDrag = horizontalDrag + 1; 
-               });          
-        }
-        if (horizontalDrag > 180 && horizontalDrag < 360) {
-          setState(() {
-            horizontalDrag++;
-            setCardSide();
-          });
-        } else if (horizontalDrag == 360) {
-          timer.cancel();
-          horizontalDrag = horizontalDrag + 5;
-          setCardSide();
-        }
-      } else {
-        timer.cancel();
-      }
-    });
-  }
+  
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () {
-          setState(() {
-            isAnimation = !isAnimation;
-            animationCartaoUp();
-          });
-        },
         onHorizontalDragStart: (details) => setState(() {
               isAnimation = false;
-              animationCartaoUp();
+              
             }),
         onHorizontalDragEnd: (details) {
           final double end = 360 - horizontalDrag >= 180 ? 0 : 360;

@@ -1,11 +1,10 @@
 import 'package:appbankdarm/services/auth_service.dart';
 import 'package:appbankdarm/services/card_service.dart';
 import 'package:appbankdarm/services/user_service.dart';
-import 'package:appbankdarm/widgets/bottom_button.dart';
 import 'package:appbankdarm/widgets/cartaoVertical.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:appbankdarm/widgets/cartao.dart';
+
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +32,7 @@ class _HomeUserState extends State<HomeUser> {
   }
 
   _logout() async {
-    await FirebaseAuth.instance.signOut();
+    await context.read<AuthService>().logout();
   }
 
   @override
@@ -98,7 +97,7 @@ class _HomeUserState extends State<HomeUser> {
       body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection("users")
-              .doc(context.read<AuthService>().user?.uid)
+              .doc(context.read<AuthService>().usuario?.uid)
               .collection('cards')
               .snapshots(),
           builder: (context, snapshot) {

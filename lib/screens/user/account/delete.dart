@@ -42,7 +42,7 @@ class _DeleteUserState extends State<DeleteUser> {
 
     await FirebaseAuth.instance
         .signInWithEmailAndPassword(
-            email: (context.read<AuthService>().user?.email).toString(),
+            email: (context.read<AuthService>().usuario?.email).toString(),
             password: password.text)
         .catchError((_) => _showModal())
         .then(

@@ -90,7 +90,7 @@ class _RegisterCardNumberState extends State<RegisterCardNumber> {
     });
     await FirebaseFirestore.instance
         .collection("users")
-        .doc(context.read<AuthService>().user?.uid)
+        .doc(context.read<AuthService>().usuario?.uid)
         .collection('cards')
         .where("number",
             isEqualTo: UtilBrasilFields.removeCaracteres(number.text))

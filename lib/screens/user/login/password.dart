@@ -23,7 +23,7 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
   @override
   void initState() {
     myFocusNode = FocusNode();
-     myFocusNode.requestFocus();
+    myFocusNode.requestFocus();
     password.addListener(() {
       if (password.text.length == 6) {
         setState(() => isButtonActive = true);
@@ -35,19 +35,17 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
   }
 
   _login() async {
-    setState(() {
-      isLoading = true;
-    });
+   setState(() =>
+      isLoading = true
+    );
     try {
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(
-              email: context.read<AuthService>().email!,
-              password: password.text)
-          .then((UserCredential userCredential) {
-        context.read<AuthService>().user = userCredential.user;
-      });
-    } on FirebaseAuthException catch (_) {
+      await context.read<AuthService>().login(password.text);
+    } on AuthExecption catch (_) {
+      
       _showModal();
+       setState(() =>
+      isLoading = false
+    );
     }
   }
 
@@ -138,9 +136,7 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
                   )),
                   BottomButtom(
                     onPress: () => {
-                      setState(() => {
-                            isLoading = false,
-                          }),
+                
                       Navigator.of(context).pop(),
                       myFocusNode.requestFocus()
                     },

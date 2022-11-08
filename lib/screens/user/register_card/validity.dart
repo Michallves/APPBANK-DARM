@@ -37,7 +37,7 @@ class _RegisterCardValidityState extends State<RegisterCardValidity> {
     setState(() => isLoading = true);
     await FirebaseFirestore.instance
         .collection("users")
-        .doc(context.read<AuthService>().user?.uid)
+        .doc(context.read<AuthService>().usuario?.uid)
         .collection('cards')
         .doc()
         .set({

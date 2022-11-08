@@ -17,6 +17,7 @@ class RegisterPasswordAgainUser extends StatefulWidget {
 class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
   bool isButtonActive = false;
   bool isLoading = false;
+  String type = 'user';
   final passwordConfirm = TextEditingController();
   late FocusNode myFocusNode;
   @override
@@ -34,37 +35,12 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
   }
 
   _register() async {
-    setState(() {
-      isLoading = true;
-    });
+    setState(() => isLoading = true);
     try {
-      await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-            email: context.read<AuthService>().email!,
-            password: passwordConfirm.text,
-          )
-          .then((UserCredential userCredential) async => {
-                await FirebaseFirestore.instance
-                    .collection("users")
-                    .doc(userCredential.user?.uid)
-                    .set({
-                  "cpf": context.read<AuthService>().cpf!,
-                  'name': context.read<AuthService>().name!,
-                  "email": context.read<AuthService>().email!,
-                  "telephone": context.read<AuthService>().telephone!,
-                  "accountType": context.read<AuthService>().accountType!,
-                  "address": {
-                    'state': context.read<AuthService>().address![0],
-                    "city": context.read<AuthService>().address![1],
-                    "neighborhood": context.read<AuthService>().address![2],
-                    "street": context.read<AuthService>().address![3],
-                    "number": context.read<AuthService>().address![4],
-                  },
-                }),
-                context.read<AuthService>().user = userCredential.user,
-              });
-    } on FirebaseAuthException catch (_) {
+      await context.read<AuthService>().register(passwordConfirm.text, type);
+    } on AuthExecption catch (_) {
       showModal();
+      setState(() => isLoading = false);
     }
   }
 
@@ -150,9 +126,6 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
                   )),
                   BottomButtom(
                     onPress: () => {
-                      setState(() => {
-                            isLoading = false,
-                          }),
                       Navigator.of(context).pop(),
                       myFocusNode.requestFocus(),
                     },

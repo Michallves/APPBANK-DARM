@@ -96,7 +96,7 @@ class _HomeUserState extends State<HomeUser> {
       body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection("users")
-              .doc(context.read<UserService>().user?.uid)
+              .doc(context.read<UserService>().auth.usuario?.uid)
               .collection('cards')
               .snapshots(),
           builder: (context, snapshot) {

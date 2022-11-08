@@ -38,7 +38,7 @@ class _CardUserState extends State<CardUser> {
     });
     await FirebaseFirestore.instance
         .collection('users')
-        .doc(context.read<UserService>().user?.uid)
+        .doc(context.read<UserService>().auth.usuario?.uid)
         .collection('cards')
         .doc(context.read<CardService>().id)
         .delete()
@@ -56,7 +56,7 @@ class _CardUserState extends State<CardUser> {
     });
     await FirebaseFirestore.instance
         .collection('users')
-        .doc(context.read<UserService>().user?.uid)
+        .doc(context.read<UserService>().auth.usuario?.uid)
         .collection('cards')
         .doc(context.read<CardService>().id!)
         .get()

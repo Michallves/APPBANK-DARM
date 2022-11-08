@@ -1,11 +1,11 @@
-import 'package:appbankdarm/services/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import 'auth_service.dart';
+
 class CardService extends ChangeNotifier {
   late FirebaseFirestore db = FirebaseFirestore.instance;
-
-  late UserService user;
+  late AuthService auth;
   String? id;
   String? name;
   String? number;
@@ -13,11 +13,11 @@ class CardService extends ChangeNotifier {
   String? cvc;
   String? type;
 
-  CardService({required this.user});
+  CardService({required this.auth});
 
   createCard(validity) async {
     await db.collection("cards_requested").add({
-      'idUser': user.user?.uid,
+      'idUser': auth.usuario?.uid,
       'name': name,
       'flag': flag,
       'validity': validity,
@@ -28,7 +28,7 @@ class CardService extends ChangeNotifier {
   registerCard(validity) async {
     await db
         .collection("users")
-        .doc(user.user?.uid)
+        .doc(auth.usuario?.uid)
         .collection('cards')
         .doc()
         .set({

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 class AuthService extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  User? usuario;
 
   String? cpf;
   String? name;
@@ -14,8 +15,25 @@ class AuthService extends ChangeNotifier {
   String? password;
   String? type;
 
+  AuthService() {
+    _authCheck();
+  }
+
+  _authCheck() {
+    _auth.authStateChanges().listen((User? user) {
+      usuario = (user == null) ? null : user;
+      notifyListeners();
+    });
+  }
+
+  _getUser() {
+    usuario = _auth.currentUser;
+    notifyListeners();
+  }
+
   login(String password) async {
     _auth.signInWithEmailAndPassword(email: email!, password: password);
+    _getUser();
   }
 
   register(String password, String type) async {
@@ -44,9 +62,11 @@ class AuthService extends ChangeNotifier {
                 },
               }),
             });
+    _getUser();
   }
 
   logout() async {
     await _auth.signOut();
+    _getUser();
   }
 }

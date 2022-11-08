@@ -44,14 +44,15 @@ class _AccountUserState extends State<AccountUser> {
   _uploadUrl(image) async {
     FirebaseFirestore.instance
         .collection('users')
-        .doc(context.read<UserService>().user?.uid)
+        .doc(context.read<UserService>().auth.usuario?.uid)
         .update({'image': image});
   }
 
   Future<void> upload(String path) async {
     File file = File(path);
     FirebaseStorage storage = FirebaseStorage.instance;
-    String ref = '/users/${context.read<UserService>().user?.uid}/user.jpg';
+    String ref =
+        '/users/${context.read<UserService>().auth.usuario?.uid}/user.jpg';
     await storage.ref(ref).putFile(file).then((_) =>
         storage.ref(ref).getDownloadURL().then((url) => _uploadUrl(url)));
   }

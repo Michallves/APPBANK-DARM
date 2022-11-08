@@ -16,8 +16,8 @@ Future<void> main() async {
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => AuthService()),
-    ChangeNotifierProvider(create: (context) => UserService()),
+    ChangeNotifierProvider(create: (context) => UserService(auth: context.read<AuthService>())),
     ChangeNotifierProvider(
-        create: (context) => CardService(user: context.read<UserService>())),
+        create: (context) => CardService(auth: context.read<AuthService>())),
   ], child: const AppBank()));
 }

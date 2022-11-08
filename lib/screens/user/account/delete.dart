@@ -42,7 +42,7 @@ class _DeleteUserState extends State<DeleteUser> {
 
     await FirebaseAuth.instance
         .signInWithEmailAndPassword(
-            email: (context.read<UserService>().user?.email).toString(),
+            email: (context.read<UserService>().auth.usuario?.email).toString(),
             password: password.text)
         .catchError((_) => _showModal())
         .then(
@@ -50,7 +50,8 @@ class _DeleteUserState extends State<DeleteUser> {
   }
 
   _deleteAccount(UserCredential userCredential) async {
-    await userCredential.user?.delete().then((_) => FirebaseFirestore.instance
+    await userCredential.user?.delete().then((_) => FirebaseFirestore
+        .instance
         .collection('users')
         .doc(userCredential.user?.uid)
         .delete());

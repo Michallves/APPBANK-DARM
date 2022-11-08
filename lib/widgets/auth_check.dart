@@ -22,7 +22,6 @@ class _AuthCheckState extends State<AuthCheck> {
       if (user == null) {
         Navigator.of(context).pushNamed(AppRoutes.PRELOAD);
       } else {
-        context.read<UserService>().user = user;
         Navigator.of(context).pushNamed(AppRoutes.HOMEUSER);
       }
     });

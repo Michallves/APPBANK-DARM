@@ -1,11 +1,11 @@
 import 'package:appbankdarm/services/auth_service.dart';
-import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
 import 'package:provider/provider.dart';
 
+import '../../../services/user_service.dart';
 import '../../../widgets/bottom_button.dart';
 
 class DeleteUser extends StatefulWidget {
@@ -42,7 +42,7 @@ class _DeleteUserState extends State<DeleteUser> {
 
     await FirebaseAuth.instance
         .signInWithEmailAndPassword(
-            email: (context.read<AuthService>().usuario?.email).toString(),
+            email: (context.read<UserService>().user?.email).toString(),
             password: password.text)
         .catchError((_) => _showModal())
         .then(

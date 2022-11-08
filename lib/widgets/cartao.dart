@@ -1,26 +1,28 @@
-import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 
 class Cartao extends StatefulWidget {
-  const Cartao(
-      {super.key,
-      required this.number,
-      required this.flag,
-      required this.name,
-      required this.validity,
-      required this.cvc,
-      this.type,
-      this.obscure});
+  const Cartao({
+    super.key,
+    required this.number,
+    required this.flag,
+    required this.name,
+    required this.validity,
+    this.cvc,
+    this.type,
+    this.obscure,
+    this.animation,
+  });
 
   final String number;
   final String flag;
   final String name;
   final String validity;
-  final String cvc;
+  final String? cvc;
   final String? type;
   final bool? obscure;
+  final bool? animation;
 
   @override
   State<Cartao> createState() => _CartaoState();
@@ -56,33 +58,36 @@ class _CartaoState extends State<Cartao> with TickerProviderStateMixin {
   }
 
   bool isAnimation = false;
-  
-  
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onHorizontalDragStart: (details) => setState(() {
-              isAnimation = false;
-              
-            }),
-        onHorizontalDragEnd: (details) {
-          final double end = 360 - horizontalDrag >= 180 ? 0 : 360;
-          animation = Tween<double>(begin: horizontalDrag, end: end)
-              .animate(controller!)
-            ..addListener(() {
-              setState(() {
-                horizontalDrag = animation!.value;
-              });
-            });
-        },
-        onHorizontalDragUpdate: (details) {
-          setState(() {
-            horizontalDrag -= details.delta.dx;
-            horizontalDrag %= 360;
-            setCardSide();
-          });
-        },
+        onHorizontalDragStart: widget.animation == true
+            ? (details) => setState(() {
+                  isAnimation = false;
+                })
+            : null,
+        onHorizontalDragEnd: widget.animation == true
+            ? (details) {
+                final double end = 360 - horizontalDrag >= 180 ? 0 : 360;
+                animation = Tween<double>(begin: horizontalDrag, end: end)
+                    .animate(controller!)
+                  ..addListener(() {
+                    setState(() {
+                      horizontalDrag = animation!.value;
+                    });
+                  });
+              }
+            : null,
+        onHorizontalDragUpdate: widget.animation == true
+            ? (details) {
+                setState(() {
+                  horizontalDrag -= details.delta.dx;
+                  horizontalDrag %= 360;
+                  setCardSide();
+                });
+              }
+            : null,
         child: Transform(
             alignment: Alignment.center,
             transform: Matrix4.identity()
@@ -402,7 +407,7 @@ class _CartaoState extends State<Cartao> with TickerProviderStateMixin {
                                                         .width *
                                                     0.025,
                                               )),
-                                          Text(widget.cvc,
+                                          Text(widget.cvc!,
                                               maxLines: 1,
                                               textAlign: TextAlign.right,
                                               textDirection: TextDirection.rtl,

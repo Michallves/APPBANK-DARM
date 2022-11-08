@@ -1,5 +1,8 @@
+import 'package:appbankdarm/services/card_service.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
+import 'package:appbankdarm/widgets/bottom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CreateCardName extends StatefulWidget {
   const CreateCardName({super.key});
@@ -25,7 +28,8 @@ class _CreateCardNameState extends State<CreateCardName> {
   }
 
   _pressButton() {
-    Navigator.of(context).pushNamed(AppRoutes.CREATE_CARD_TYPE);
+    context.read<CardService>().name = name.text;
+    Navigator.of(context).pushNamed(AppRoutes.CREATE_CARD_FLAG);
   }
 
   @override
@@ -58,15 +62,10 @@ class _CreateCardNameState extends State<CreateCardName> {
               ),
             ),
           ),
-          Container(
-            width: double.infinity,
-            height: 50,
-            margin: const EdgeInsets.all(20),
-            child: ElevatedButton(
-              onPressed: isButtonActive == true ? () => _pressButton() : null,
-              child: const Text("continuar"),
-            ),
-          ),
+          BottomButtom(
+              enabled: isButtonActive,
+              onPress: () => _pressButton(),
+              title: 'continuar'),
         ],
       ),
     );

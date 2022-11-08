@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 
 class UserService extends ChangeNotifier {
   User? user;
-  UserService({required this.user});
-
   String? name;
   String? image;
+
+  UserService() {
+    readUser();
+  }
 
   readUser() async {
     await FirebaseFirestore.instance
@@ -15,12 +17,40 @@ class UserService extends ChangeNotifier {
         .doc(user?.uid)
         .get()
         .then((doc) {
-      addListener(() {
-        name = doc.get('name');
-        image = doc.get('image');
-      });
-    
+      name = doc.get('name');
+      image = doc.get('image');
+      notifyListeners();
     });
-    notifyListeners();
+  }
+
+  
+  FirebaseFirestore db = FirebaseFirestore.instance;
+
+  String? id;
+  String? nameCard;
+  String? number;
+  String? flag;
+  String? cvc;
+  String? validity;
+  String? type;
+
+  createCard(validity) async {
+    await db.collection("cards_requested").add({
+      'idUser': user!.uid,
+      'name': name,
+      'flag': flag,
+      'validity': validity,
+      'type': type,
+    });
+  }
+
+  registerCard() async {
+    await db.collection("users").doc(user?.uid).collection('cards').doc().set({
+      'name': name,
+      'number': number,
+      'flag': flag,
+      'cvc': cvc,
+      'validity': validity,
+    });
   }
 }

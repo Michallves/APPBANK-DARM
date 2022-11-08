@@ -1,5 +1,9 @@
 import 'package:appbankdarm/utils/app_routes.dart';
+import 'package:appbankdarm/widgets/bottom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../../services/card_service.dart';
 
 class CreateCardType extends StatefulWidget {
   const CreateCardType({super.key});
@@ -9,19 +13,15 @@ class CreateCardType extends StatefulWidget {
 }
 
 class _CreateCardTypeState extends State<CreateCardType> {
-  bool isButtonActive = false;
   String type = '';
 
   _pressButton() {
+    context.read<CardService>().type = type;
     Navigator.of(context).pushNamed(AppRoutes.CREATE_CARD_VALIDITY);
   }
 
   @override
   Widget build(BuildContext context) {
-    if (type != '') {
-      isButtonActive = true;
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -128,15 +128,10 @@ class _CreateCardTypeState extends State<CreateCardType> {
               ),
             ),
           ),
-          Container(
-            width: double.infinity,
-            height: 50,
-            margin: const EdgeInsets.all(20),
-            child: ElevatedButton(
-              onPressed: isButtonActive == true ? () => _pressButton() : null,
-              child: const Text("continuar"),
-            ),
-          ),
+          BottomButtom(
+              enabled: type != '' ? true : false,
+              onPress: () => _pressButton(),
+              title: 'continuar')
         ],
       ),
     );

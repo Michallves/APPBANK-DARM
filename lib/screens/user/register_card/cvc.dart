@@ -16,9 +16,11 @@ class RegisterCardCvc extends StatefulWidget {
 class _RegisterCardCvcState extends State<RegisterCardCvc> {
   bool isButtonActive = false;
   final cvc = TextEditingController();
-
+  late FocusNode myFocusNode;
   @override
   void initState() {
+    myFocusNode = FocusNode();
+    myFocusNode.requestFocus();
     cvc.addListener(() {
       if (cvc.text.length == 3) {
         setState(() => isButtonActive = true);
@@ -48,7 +50,7 @@ class _RegisterCardCvcState extends State<RegisterCardCvc> {
             child: Container(
               margin: const EdgeInsets.symmetric(vertical: 40),
               child: PinCodeTextField(
-                autofocus: true,
+                focusNode: myFocusNode,
                 controller: cvc,
                 keyboardType: TextInputType.number,
                 errorBorderColor: Colors.red,

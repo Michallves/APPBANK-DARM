@@ -1,4 +1,3 @@
-import 'package:appbankdarm/services/auth_service.dart';
 import 'package:appbankdarm/services/card_service.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:appbankdarm/widgets/bottom_button.dart';
@@ -6,6 +5,8 @@ import 'package:appbankdarm/widgets/cartao.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../services/user_service.dart';
 
 class CardUser extends StatefulWidget {
   const CardUser({super.key});
@@ -37,7 +38,7 @@ class _CardUserState extends State<CardUser> {
     });
     await FirebaseFirestore.instance
         .collection('users')
-        .doc(context.read<AuthService>().usuario?.uid)
+        .doc(context.read<UserService>().user?.uid)
         .collection('cards')
         .doc(context.read<CardService>().id)
         .delete()
@@ -55,7 +56,7 @@ class _CardUserState extends State<CardUser> {
     });
     await FirebaseFirestore.instance
         .collection('users')
-        .doc(context.read<AuthService>().usuario?.uid)
+        .doc(context.read<UserService>().user?.uid)
         .collection('cards')
         .doc(context.read<CardService>().id!)
         .get()
@@ -67,9 +68,7 @@ class _CardUserState extends State<CardUser> {
         type = doc.get('type');
         cvc = doc.get('cvc');
         validity = doc.get('validity');
-        setState(() {
-          isLoading = false;
-        });
+        isLoading = false;
       });
     });
   }
@@ -94,6 +93,7 @@ class _CardUserState extends State<CardUser> {
                     cvc: cvc!,
                     type: type!,
                     obscure: false,
+                    animation: true,
                   ),
                 ),
                 const Spacer(

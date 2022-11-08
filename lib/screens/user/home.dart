@@ -1,10 +1,8 @@
 import 'package:appbankdarm/services/auth_service.dart';
 import 'package:appbankdarm/services/card_service.dart';
 import 'package:appbankdarm/services/user_service.dart';
-import 'package:appbankdarm/widgets/cartaoVertical.dart';
+import 'package:appbankdarm/widgets/cartao.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -26,8 +24,9 @@ class _HomeUserState extends State<HomeUser> {
     context.read<UserService>().readUser();
     setState(() {
       name = context.read<UserService>().name;
-      image = context.read<UserService>().image;
+      image = context.read<UserService>().image.toString();
     });
+
     super.initState();
   }
 
@@ -54,9 +53,9 @@ class _HomeUserState extends State<HomeUser> {
                   CircleAvatar(
                     backgroundColor: Colors.black,
                     radius: 40,
-                    backgroundImage: NetworkImage(image == null ? '' : image!),
+                    backgroundImage: NetworkImage(image!),
                     child: image == null
-                        ? Text(name.toString().substring(0, 2).toUpperCase(),
+                        ? Text(image.toString().substring(0, 2).toUpperCase(),
                             style: const TextStyle(
                                 color: Colors.white, fontSize: 30))
                         : null,
@@ -97,7 +96,7 @@ class _HomeUserState extends State<HomeUser> {
       body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection("users")
-              .doc(context.read<AuthService>().usuario?.uid)
+              .doc(context.read<UserService>().user?.uid)
               .collection('cards')
               .snapshots(),
           builder: (context, snapshot) {
@@ -118,7 +117,7 @@ class _HomeUserState extends State<HomeUser> {
                         context.read<CardService>().id = card.id;
                         Navigator.of(context).pushNamed(AppRoutes.CARD_USER);
                       },
-                      child: CartaoVertical(
+                      child: Cartao(
                         number: card['number'],
                         flag: card['flag'],
                         name: card['name'],

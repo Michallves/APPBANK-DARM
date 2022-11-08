@@ -1,5 +1,9 @@
 import 'package:appbankdarm/utils/app_routes.dart';
+import 'package:appbankdarm/widgets/bottom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../../services/card_service.dart';
 
 class CreateCardValidity extends StatefulWidget {
   const CreateCardValidity({super.key});
@@ -9,19 +13,21 @@ class CreateCardValidity extends StatefulWidget {
 }
 
 class _CreateCardValidityState extends State<CreateCardValidity> {
-  bool isButtonActive = false;
+  bool isLoading = false;
   String validity = '';
 
-  _pressButton() {
-    Navigator.of(context).pushNamed(AppRoutes.HOMEUSER);
+  _createCard() async {
+    setState(() => isLoading = true);
+    try {
+      await context.read<CardService>().createCard(validity);
+      return Navigator.of(context).pushNamed(AppRoutes.HOMEUSER);
+    } catch (_) {
+      setState(() => isLoading = false);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (validity != '') {
-      isButtonActive = true;
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -110,15 +116,11 @@ class _CreateCardValidityState extends State<CreateCardValidity> {
               ),
             ),
           ),
-          Container(
-            width: double.infinity,
-            height: 50,
-            margin: const EdgeInsets.all(20),
-            child: ElevatedButton(
-              onPressed: isButtonActive == true ? () => _pressButton() : null,
-              child: const Text("criar cartão"),
-            ),
-          ),
+          BottomButtom(
+              loading: isLoading,
+              enabled: validity != '' ? true : false,
+              onPress: () => _createCard(),
+              title: 'solicitar cartão')
         ],
       ),
     );

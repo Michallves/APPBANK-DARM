@@ -1,10 +1,9 @@
 import 'package:appbankdarm/services/auth_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
 import 'package:provider/provider.dart';
 
-import '../../../utils/app_routes.dart';
 import '../../../widgets/bottom_button.dart';
 
 class LoginPasswordUser extends StatefulWidget {
@@ -35,17 +34,12 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
   }
 
   _login() async {
-   setState(() =>
-      isLoading = true
-    );
+    setState(() => isLoading = true);
     try {
       await context.read<AuthService>().login(password.text);
-    } on AuthExecption catch (_) {
-      
+    } catch (_) {
       _showModal();
-       setState(() =>
-      isLoading = false
-    );
+      setState(() => isLoading = false);
     }
   }
 
@@ -136,7 +130,6 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
                   )),
                   BottomButtom(
                     onPress: () => {
-                
                       Navigator.of(context).pop(),
                       myFocusNode.requestFocus()
                     },

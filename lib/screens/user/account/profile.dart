@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:appbankdarm/widgets/bottom_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -43,14 +44,14 @@ class _AccountUserState extends State<AccountUser> {
   _uploadUrl(image) async {
     FirebaseFirestore.instance
         .collection('users')
-        .doc(context.read<AuthService>().usuario?.uid)
+        .doc(context.read<UserService>().user?.uid)
         .update({'image': image});
   }
 
   Future<void> upload(String path) async {
     File file = File(path);
     FirebaseStorage storage = FirebaseStorage.instance;
-    String ref = '/users/${context.read<AuthService>().usuario?.uid}/user.jpg';
+    String ref = '/users/${context.read<UserService>().user?.uid}/user.jpg';
     await storage.ref(ref).putFile(file).then((_) =>
         storage.ref(ref).getDownloadURL().then((url) => _uploadUrl(url)));
   }
@@ -97,8 +98,9 @@ class _AccountUserState extends State<AccountUser> {
                             child: CircleAvatar(
                                 radius: 80,
                                 backgroundColor: Colors.black,
-                                backgroundImage: NetworkImage(image!),
-                                child: image == ''
+                                backgroundImage:
+                                    NetworkImage(image == null ? '' : image!),
+                                child: image == null
                                     ? Text(
                                         name
                                             .toString()

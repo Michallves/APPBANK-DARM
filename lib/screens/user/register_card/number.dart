@@ -5,9 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-
-import '../../../services/auth_service.dart';
 import '../../../services/card_service.dart';
+import '../../../services/user_service.dart';
 
 class RegisterCardNumber extends StatefulWidget {
   const RegisterCardNumber({super.key});
@@ -90,7 +89,7 @@ class _RegisterCardNumberState extends State<RegisterCardNumber> {
     });
     await FirebaseFirestore.instance
         .collection("users")
-        .doc(context.read<AuthService>().usuario?.uid)
+        .doc(context.read<UserService>().user?.uid)
         .collection('cards')
         .where("number",
             isEqualTo: UtilBrasilFields.removeCaracteres(number.text))

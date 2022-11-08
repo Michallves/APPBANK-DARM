@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../../services/auth_service.dart';
 import '../../../services/card_service.dart';
+import '../../../services/user_service.dart';
 import '../../../widgets/bottom_button.dart';
 
 class RegisterCardValidity extends StatefulWidget {
@@ -35,22 +36,12 @@ class _RegisterCardValidityState extends State<RegisterCardValidity> {
 
   _registerCard() async {
     setState(() => isLoading = true);
-    await FirebaseFirestore.instance
-        .collection("users")
-        .doc(context.read<AuthService>().usuario?.uid)
-        .collection('cards')
-        .doc()
-        .set({
-      'name': context.read<CardService>().name,
-      'number': context.read<CardService>().number,
-      'flag': context.read<CardService>().flag,
-      'cvc': context.read<CardService>().cvc,
-      'validity': validity.text,
-      'type': '',
-    }).then((_) =>
-            Navigator.of(context).pushReplacementNamed(AppRoutes.HOMEUSER));
-
-    setState(() => isLoading = false);
+    try {
+      await context.read<CardService>().registerCard(validity.text);
+      return Navigator.of(context).pushNamed(AppRoutes.HOMEUSER);
+    } catch (_) {
+      setState(() => isLoading = false);
+    }
   }
 
   @override

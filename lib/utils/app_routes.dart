@@ -2,7 +2,6 @@
 abstract class AppRoutes {
   static const AUTHCHECK = '/';
   static const PRELOAD = '/Preload';
-  static const LOADING = '/Loading';
   static const LOGIN_CPF_USER = '/LoginCpfUser';
   static const LOGIN_PASSWORD_USER = '/LoginPasswordUser';
   static const REGISTER_CPF_USER = '/RegisterCpfUser';

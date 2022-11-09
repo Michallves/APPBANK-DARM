@@ -1,10 +1,12 @@
+import 'package:appbankdarm/widgets/cartao.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'auth_service.dart';
 
 class CardService extends ChangeNotifier {
-  late FirebaseFirestore db = FirebaseFirestore.instance;
+  List<Cartao> list = [];
+  late FirebaseFirestore db;
   late AuthService auth;
   String? id;
   String? name;
@@ -13,7 +15,33 @@ class CardService extends ChangeNotifier {
   String? cvc;
   String? type;
 
-  CardService({required this.auth});
+  CardService({required this.auth}) {
+    _startRepository();
+  }
+
+  _startRepository() async {
+    await _startFirestore();
+    await _readCards();
+  }
+
+  _startFirestore() {
+    db = FirebaseFirestore.instance;
+  }
+
+  _readCards() async {
+    if (auth.usuario != null && list.isEmpty) {
+      final snapshot = await db
+          .collection('users')
+          .doc(auth.usuario?.uid)
+          .collection('cards')
+          .get();
+      snapshot.docs.forEach((doc) {
+        Cartao card = doc.get('id');
+        list.add(card);
+        notifyListeners();
+      });
+    }
+  }
 
   createCard(validity) async {
     await db.collection("cards_requested").add({

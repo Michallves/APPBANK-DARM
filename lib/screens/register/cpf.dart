@@ -39,6 +39,9 @@ class _RegisterCpfUserState extends State<RegisterCpfUser> {
   }
 
   _pushCpf() async {
+    setState(() {
+      isLoading = true;
+    });
     UtilBrasilFields.isCPFValido(cpf.text) == true
         ? {
             await FirebaseFirestore.instance
@@ -67,13 +70,6 @@ class _RegisterCpfUserState extends State<RegisterCpfUser> {
     setState(() {
       isLoading = false;
     });
-  }
-
-  _pressButton() {
-    setState(() {
-      isLoading = true;
-    });
-    _pushCpf();
   }
 
   @override
@@ -146,7 +142,7 @@ class _RegisterCpfUserState extends State<RegisterCpfUser> {
                 : Container(),
           ),
           BottomButtom(
-            onPress: () => _pressButton(),
+            onPress: () => _pushCpf(),
             title: 'continuar',
             enabled: isButtonActive,
             loading: isLoading,

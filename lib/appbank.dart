@@ -1,11 +1,11 @@
-import 'package:appbankdarm/screens/card.dart';
+import 'package:appbankdarm/screens/card_admin.dart';
+import 'package:appbankdarm/screens/card_user.dart';
 import 'package:appbankdarm/screens/home_admin.dart';
 
 import 'package:appbankdarm/widgets/auth_check.dart';
 import 'package:flutter/material.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 //Routes
-import 'screens/loading.dart';
 import 'screens/preload.dart';
 //Pages Login User
 import 'screens/login/cpf.dart';
@@ -64,7 +64,6 @@ class AppBank extends StatelessWidget {
       routes: {
         AppRoutes.AUTHCHECK: (ctx) => const AuthCheck(),
         AppRoutes.PRELOAD: (ctx) => const Preload(),
-        AppRoutes.LOADING: (ctx) => const Loading(),
         //Login User
         AppRoutes.LOGIN_CPF: (ctx) => const LoginCpfUser(),
         AppRoutes.LOGIN_PASSWORD: (ctx) => const LoginPasswordUser(),
@@ -80,8 +79,8 @@ class AppBank extends StatelessWidget {
         AppRoutes.REGISTER_PASSWORD_AGAIN: (ctx) =>
             const RegisterPasswordAgainUser(),
         //Home User
-        AppRoutes.HOMEUSER: (ctx) => const HomeUser(),
-        AppRoutes.CARD: (ctx) => const CardUser(),
+        AppRoutes.HOME_USER: (ctx) => const HomeUser(),
+        AppRoutes.CARD_USER: (ctx) => const CardUser(),
         //Account User
         AppRoutes.ACCOUNT: (ctx) => const AccountUser(),
         AppRoutes.DELETE: (ctx) => const DeleteUser(),
@@ -95,7 +94,9 @@ class AppBank extends StatelessWidget {
         AppRoutes.REGISTER_CARD_NUMBER: (ctx) => const RegisterCardNumber(),
         AppRoutes.REGISTER_CARD_CVC: (ctx) => const RegisterCardCvc(),
         AppRoutes.REGISTER_CARD_VALIDITY: (ctx) => const RegisterCardValidity(),
-        AppRoutes.HOMEADMIN: (ctx) => const HomeAdmin(),
+        //Admin User
+        AppRoutes.HOME_ADMIN: (ctx) => const HomeAdmin(),
+        AppRoutes.CARD_ADMIN: (ctx) => const CardAdmin(),
       },
     );
   }

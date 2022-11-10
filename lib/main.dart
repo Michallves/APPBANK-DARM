@@ -1,3 +1,4 @@
+import 'package:appbankdarm/services/admin_service.dart';
 import 'package:appbankdarm/services/auth_service.dart';
 import 'package:appbankdarm/services/card_service.dart';
 import 'package:appbankdarm/services/user_service.dart';
@@ -16,8 +17,11 @@ Future<void> main() async {
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => AuthService()),
-    ChangeNotifierProvider(create: (context) => UserService(auth: context.read<AuthService>())),
+    ChangeNotifierProvider(
+        create: (context) => UserService(auth: context.read<AuthService>())),
     ChangeNotifierProvider(
         create: (context) => CardService(auth: context.read<AuthService>())),
+    ChangeNotifierProvider(
+        create: (context) => AdminService(auth: context.read<AuthService>())),
   ], child: const AppBank()));
 }

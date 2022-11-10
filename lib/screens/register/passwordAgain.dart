@@ -38,8 +38,6 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
     } catch (_) {
       showModal();
       setState(() => isLoading = false);
-    } finally {
-      Navigator.of(context).pushNamed(AppRoutes.HOME_USER);
     }
   }
 

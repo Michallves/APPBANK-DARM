@@ -5,7 +5,6 @@ import 'package:appbankdarm/widgets/cartao.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../services/user_service.dart';
 
 class CardUser extends StatefulWidget {
@@ -16,7 +15,7 @@ class CardUser extends StatefulWidget {
 }
 
 class _CardUserState extends State<CardUser> {
-  bool isLoading = false;
+  bool isLoading = true;
   bool isLoadingButton = false;
 
   String? name;
@@ -33,21 +32,13 @@ class _CardUserState extends State<CardUser> {
   }
 
   _deleteCard() async {
-    setState(() {
-      isLoadingButton = true;
-    });
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(context.read<UserService>().auth.usuario?.uid)
-        .collection('cards')
-        .doc(context.read<CardService>().id)
-        .delete()
-        .then((_) {
-      setState(() {
-        isLoadingButton = false;
-      });
-      Navigator.of(context).pushNamed(AppRoutes.HOMEUSER);
-    });
+    try {
+      context.read<CardService>().deleteCard();
+    } catch (_) {
+      setState(() => isLoadingButton = false);
+    } finally {
+      Navigator.of(context).pushNamed(AppRoutes.HOME_USER);
+    }
   }
 
   _readCard() async {
@@ -100,13 +91,50 @@ class _CardUserState extends State<CardUser> {
                   flex: 1,
                 ),
                 BottomButtom(
-                  onPress: () => _deleteCard(),
+                  onPress: () => showModal(),
                   title: 'excluir cartão',
                   color: Colors.redAccent,
-                  loading: isLoadingButton,
                 ),
               ],
             ),
     );
   }
+
+  void showModal() => showModalBottomSheet(
+      isDismissible: false,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+      ),
+      context: context,
+      builder: (context) => SizedBox(
+          height: 250,
+          child: isLoading == false
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                      const Expanded(
+                          child: Center(
+                        child: Text(
+                          'Tem certeza que deseja excluir o cartão?',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                      )),
+                      BottomButtom(
+                        onPress: () => _deleteCard(),
+                        title: 'excluir',
+                        color: Colors.redAccent,
+                      ),
+                      BottomButtom(
+                        onPress: () => Navigator.of(context).pop(),
+                        title: 'cancelar',
+                        color: Colors.grey[250],
+                      )
+                    ])
+              : const Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.black,
+                  ),
+                )));
 }

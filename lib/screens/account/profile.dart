@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-import '../../services/auth_service.dart';
 import '../../services/user_service.dart';
 
 class AccountUser extends StatefulWidget {
@@ -19,26 +18,30 @@ class AccountUser extends StatefulWidget {
 }
 
 class _AccountUserState extends State<AccountUser> {
-  String? name;
-  String? image;
   bool isLoading = true;
 
   @override
   void initState() {
-    setState(() {
-      name = context.read<UserService>().name;
-      image = context.read<UserService>().image;
-      isLoading = false;
-    });
+    _readUser();
     super.initState();
   }
 
+  _readUser() async {
+    try {
+      context.read<UserService>().readUser();
+    } finally {
+      setState(() => isLoading = false);
+    }
+  }
+
   _pressButton() {
-    Navigator.of(context).pushNamed(AppRoutes.HOMEUSER);
+    Navigator.of(context).pushNamed(AppRoutes.HOME_USER);
   }
 
   removeImage() async {
-    await FirebaseStorage.instance.refFromURL(image!).delete();
+    await FirebaseStorage.instance
+        .refFromURL(context.read<UserService>().image.toString())
+        .delete();
   }
 
   _uploadUrl(image) async {
@@ -99,11 +102,15 @@ class _AccountUserState extends State<AccountUser> {
                             child: CircleAvatar(
                                 radius: 80,
                                 backgroundColor: Colors.black,
-                                backgroundImage:
-                                    NetworkImage(image == null ? '' : image!),
-                                child: image == null
+                                backgroundImage: NetworkImage(context
+                                    .read<UserService>()
+                                    .image
+                                    .toString()),
+                                child: context.read<UserService>().image == null
                                     ? Text(
-                                        name
+                                        context
+                                            .read<UserService>()
+                                            .name
                                             .toString()
                                             .substring(0, 2)
                                             .toUpperCase(),
@@ -115,7 +122,7 @@ class _AccountUserState extends State<AccountUser> {
                           const SizedBox(
                             height: 40,
                           ),
-                          Text(name.toString(),
+                          Text(context.read<UserService>().name.toString(),
                               style: const TextStyle(fontSize: 25))
                         ],
                       )),
@@ -173,7 +180,7 @@ class _AccountUserState extends State<AccountUser> {
                   ),
                   onTap: getImageGallery,
                 ),
-                image != null
+                context.read<UserService>().image != null
                     ? ListTile(
                         iconColor: Colors.redAccent,
                         textColor: Colors.redAccent,

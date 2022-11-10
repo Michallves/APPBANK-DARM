@@ -1,10 +1,7 @@
- import 'package:appbankdarm/utils/app_routes.dart';
+import 'package:appbankdarm/utils/app_routes.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:provider/provider.dart';
-
-import '../screens/preload.dart';
-import '../screens/user/home.dart';
+import 'package:flutter/material.dart';
 
 class AuthCheck extends StatefulWidget {
   const AuthCheck({super.key});
@@ -16,21 +13,44 @@ class AuthCheck extends StatefulWidget {
 class _AuthCheckState extends State<AuthCheck> {
   @override
   void initState() {
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+    _authChange();
+    super.initState();
+  }
+
+  _authMode(user) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .get()
+        .then((doc) => doc.get('type') == 'user'
+            ? Navigator.of(context).pushNamed(AppRoutes.HOME_USER)
+            : Navigator.of(context).pushNamed(AppRoutes.HOME_ADMIN));
+  }
+
+  _authChange() async {
+    await FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user == null) {
         Navigator.of(context).pushNamed(AppRoutes.PRELOAD);
       } else {
-        FirebaseFirestore.instance.collection('users').doc(user.uid).get().then(
-            (doc) => doc.get('mode') == 'user'
-                ? Navigator.of(context).pushNamed(AppRoutes.HOMEUSER)
-                : Navigator.of(context).pushNamed(AppRoutes.HOMEADMIN));
+        _authMode(user);
       }
     });
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Loading();
+    return Scaffold(
+      body: Center(
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const [
+          CircularProgressIndicator(
+            color: Colors.white,
+          ),
+          SizedBox(height: 20),
+          Text('Carregando...')
+        ],
+      )),
+    );
   }
 }

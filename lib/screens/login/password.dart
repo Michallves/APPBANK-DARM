@@ -40,8 +40,6 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
     } catch (_) {
       _showModal();
       setState(() => isLoading = false);
-    } finally {
-      Navigator.of(context).pushNamed(AppRoutes.HOMEUSER);
     }
   }
 

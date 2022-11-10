@@ -20,9 +20,10 @@ class _CreateCardValidityState extends State<CreateCardValidity> {
     setState(() => isLoading = true);
     try {
       await context.read<CardService>().createCard(validity);
-      return Navigator.of(context).pushNamed(AppRoutes.HOMEUSER);
     } catch (_) {
       setState(() => isLoading = false);
+    } finally {
+      Navigator.of(context).pushNamed(AppRoutes.HOME_USER);
     }
   }
 

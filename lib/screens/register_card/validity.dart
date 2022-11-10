@@ -1,12 +1,10 @@
 import 'package:appbankdarm/utils/app_routes.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/material.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import '../../services/auth_service.dart';
 import '../../services/card_service.dart';
-import '../../services/user_service.dart';
 import '../../widgets/bottom_button.dart';
 
 class RegisterCardValidity extends StatefulWidget {
@@ -38,9 +36,10 @@ class _RegisterCardValidityState extends State<RegisterCardValidity> {
     setState(() => isLoading = true);
     try {
       await context.read<CardService>().registerCard(validity.text);
-      return Navigator.of(context).pushNamed(AppRoutes.HOMEUSER);
     } catch (_) {
       setState(() => isLoading = false);
+    } finally {
+      Navigator.of(context).pushNamed(AppRoutes.HOME_USER);
     }
   }
 

@@ -38,7 +38,7 @@ class AuthService extends ChangeNotifier {
     _getUser();
   }
 
-  register(String password, String type) async {
+  register(String password) async {
     await _auth
         .createUserWithEmailAndPassword(
           email: email!,
@@ -65,7 +65,7 @@ class AuthService extends ChangeNotifier {
                       },
                     })
                   : await FirebaseFirestore.instance
-                      .collection("admins")
+                      .collection("users")
                       .doc(userCredential.user?.uid)
                       .set({
                       "cpf": cpf,

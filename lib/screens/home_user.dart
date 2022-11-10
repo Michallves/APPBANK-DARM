@@ -15,19 +15,16 @@ class HomeUser extends StatefulWidget {
 }
 
 class _HomeUserState extends State<HomeUser> {
-  String? name;
-  String? image;
   bool isLoading = false;
 
   @override
   void initState() {
-    context.read<UserService>().readUser();
-    setState(() {
-      name = context.read<UserService>().name;
-      image = context.read<UserService>().image.toString();
-    });
-
+    _readUser();
     super.initState();
+  }
+
+  _readUser() async {
+    await context.read<UserService>().readUser();
   }
 
   _logout() async {
@@ -41,68 +38,6 @@ class _HomeUserState extends State<HomeUser> {
         title: const Text(
           'Cartões',
         ),
-<<<<<<< HEAD:lib/screens/home_user.dart
-        drawer: Drawer(
-            backgroundColor: Colors.white,
-            child: ListView(
-              children: [
-                DrawerHeader(
-                    child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: Colors.black,
-                      radius: 40,
-                      backgroundImage: NetworkImage(image!),
-                      child: image == null
-                          ? Text(image.toString().substring(0, 2).toUpperCase(),
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 30))
-                          : null,
-                    ),
-                    Text(name == null ? '' : name!,
-                        style: const TextStyle(fontSize: 18))
-                  ],
-                )),
-                ListTile(
-                  title: const Text('Conta'),
-                  onTap: () =>
-                      Navigator.of(context).pushNamed(AppRoutes.ACCOUNT),
-                  leading: const Icon(Icons.account_circle_outlined, size: 30),
-                  iconColor: Colors.black,
-                ),
-                ListTile(
-                  title: const Text('Criar cartão'),
-                  onTap: () => Navigator.of(context)
-                      .pushNamed(AppRoutes.CREATE_CARD_NAME),
-                  leading: const Icon(Icons.add_card, size: 30),
-                  iconColor: Colors.black,
-                ),
-                ListTile(
-                  title: const Text('Cadastrar cartão'),
-                  onTap: () => Navigator.of(context)
-                      .pushNamed(AppRoutes.REGISTER_CARD_NAME),
-                  leading: const Icon(Icons.credit_card, size: 30),
-                  iconColor: Colors.black,
-                ),
-                ListTile(
-                  title:
-                      const Text('Sair', style: TextStyle(color: Colors.red)),
-                  onTap: () => _logout(),
-                  leading: const Icon(Icons.logout, size: 30),
-                  iconColor: Colors.red,
-                )
-              ],
-            )),
-        body: Container(
-          padding: const EdgeInsets.all(20),
-          child: Consumer<CardService>(
-            builder: (context, card, child) {
-              return ListView.separated(
-                  itemBuilder: (_, index) {
-                    return Container();
-                  },
-=======
       ),
       drawer: Drawer(
           backgroundColor: Colors.white,
@@ -115,21 +50,30 @@ class _HomeUserState extends State<HomeUser> {
                   CircleAvatar(
                     backgroundColor: Colors.black,
                     radius: 40,
-                    backgroundImage: NetworkImage(image!),
-                    child: image == null
-                        ? Text(image.toString().substring(0, 2).toUpperCase(),
+                    backgroundImage: NetworkImage(
+                        context.read<UserService>().image.toString()),
+                    child: context.read<UserService>().image == null
+                        ? Text(
+                            context
+                                .read<UserService>()
+                                .name
+                                .toString()
+                                .substring(0, 2)
+                                .toUpperCase(),
                             style: const TextStyle(
                                 color: Colors.white, fontSize: 30))
                         : null,
                   ),
-                  Text(name == null ? '' : name!,
+                  Text(
+                      context.read<UserService>().name == null
+                          ? ''
+                          : context.read<UserService>().name.toString(),
                       style: const TextStyle(fontSize: 18))
                 ],
               )),
               ListTile(
                 title: const Text('Conta'),
-                onTap: () =>
-                    Navigator.of(context).pushNamed(AppRoutes.ACCOUNT_USER),
+                onTap: () => Navigator.of(context).pushNamed(AppRoutes.ACCOUNT),
                 leading: const Icon(Icons.account_circle_outlined, size: 30),
                 iconColor: Colors.black,
               ),
@@ -156,11 +100,7 @@ class _HomeUserState extends State<HomeUser> {
             ],
           )),
       body: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection("users")
-              .doc(context.read<UserService>().auth.usuario?.uid)
-              .collection('cards')
-              .snapshots(),
+          stream: context.read<CardService>().readCards(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const Center(
@@ -169,7 +109,6 @@ class _HomeUserState extends State<HomeUser> {
             } else {
               return ListView.separated(
                   padding: const EdgeInsets.all(20),
->>>>>>> parent of cbc14e7 (1.0):lib/screens/user/home.dart
                   separatorBuilder: (_, ___) =>
                       const Padding(padding: EdgeInsets.all(10)),
                   itemCount: snapshot.data!.docs.length,

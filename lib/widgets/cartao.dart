@@ -339,7 +339,7 @@ class _CartaoState extends State<Cartao> with TickerProviderStateMixin {
                             child: Row(
                               children: [
                                 Expanded(
-                                    child: (widget.type != ''
+                                    child: (widget.type != null
                                         ? Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.end,
@@ -384,45 +384,55 @@ class _CartaoState extends State<Cartao> with TickerProviderStateMixin {
                                           )
                                         : Container())),
                                 Expanded(
-                                  child: Container(
-                                    alignment: AlignmentDirectional.bottomEnd,
-                                    child: Container(
-                                      color: Colors.white,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.18,
-                                      height:
-                                          MediaQuery.of(context).size.width *
-                                              0.13,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text('CVC',
-                                              maxLines: 1,
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.025,
-                                              )),
-                                          Text(widget.cvc!,
-                                              maxLines: 1,
-                                              textAlign: TextAlign.right,
-                                              textDirection: TextDirection.rtl,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize:
-                                                      MediaQuery.of(context)
-                                                              .size
-                                                              .width *
-                                                          0.04,
-                                                  fontWeight: FontWeight.bold))
-                                        ],
-                                      ),
-                                    ),
-                                  ),
+                                  child: widget.cvc != null
+                                      ? Container(
+                                          alignment:
+                                              AlignmentDirectional.bottomEnd,
+                                          child: Container(
+                                            color: Colors.white,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.18,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.13,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Text('CVC',
+                                                    maxLines: 1,
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.025,
+                                                    )),
+                                                Text(widget.cvc!,
+                                                    maxLines: 1,
+                                                    textAlign: TextAlign.right,
+                                                    textDirection:
+                                                        TextDirection.rtl,
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.04,
+                                                        fontWeight:
+                                                            FontWeight.bold))
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                      : Container(),
                                 ),
                               ],
                             ),

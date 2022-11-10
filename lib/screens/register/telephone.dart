@@ -5,7 +5,7 @@ import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import '../../../widgets/bottom_button.dart';
+import '../../widgets/bottom_button.dart';
 
 class RegisterTelephoneUser extends StatefulWidget {
   const RegisterTelephoneUser({super.key});
@@ -32,7 +32,7 @@ class _RegisterTelephoneUserState extends State<RegisterTelephoneUser> {
 
   _pressButton() {
     context.read<AuthService>().telephone = telephone.text;
-    Navigator.of(context).pushNamed(AppRoutes.REGISTER_ADDRESS_USER);
+    Navigator.of(context).pushNamed(AppRoutes.REGISTER_ADDRESS);
   }
 
   @override

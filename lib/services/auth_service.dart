@@ -6,6 +6,8 @@ class AuthService extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   User? usuario;
 
+  bool admin = false;
+
   String? cpf;
   String? name;
   String? email;
@@ -43,6 +45,52 @@ class AuthService extends ChangeNotifier {
           password: password,
         )
         .then((UserCredential userCredential) async => {
+              admin == false
+                  ? await FirebaseFirestore.instance
+                      .collection("users")
+                      .doc(userCredential.user?.uid)
+                      .set({
+                      "cpf": cpf,
+                      'name': name,
+                      "email": email,
+                      "telephone": telephone,
+                      "accountType": accountType,
+                      "type": 'user',
+                      "address": {
+                        'state': address![0],
+                        "city": address![1],
+                        "neighborhood": address![2],
+                        "street": address![3],
+                        "number": address![4],
+                      },
+                    })
+                  : await FirebaseFirestore.instance
+                      .collection("admins")
+                      .doc(userCredential.user?.uid)
+                      .set({
+                      "cpf": cpf,
+                      'name': name,
+                      "email": email,
+                      "type": 'admin',
+                      "address": {
+                        'state': address![0],
+                        "city": address![1],
+                        "neighborhood": address![2],
+                        "street": address![3],
+                        "number": address![4],
+                      },
+                    })
+            });
+    _getUser();
+  }
+
+  registerAdmin(String password, String type) async {
+    await _auth
+        .createUserWithEmailAndPassword(
+          email: email!,
+          password: password,
+        )
+        .then((UserCredential userCredential) async => {
               await FirebaseFirestore.instance
                   .collection("users")
                   .doc(userCredential.user?.uid)
@@ -53,13 +101,6 @@ class AuthService extends ChangeNotifier {
                 "telephone": telephone,
                 "accountType": accountType,
                 "type": type,
-                "address": {
-                  'state': address![0],
-                  "city": address![1],
-                  "neighborhood": address![2],
-                  "street": address![3],
-                  "number": address![4],
-                },
               }),
             });
     _getUser();

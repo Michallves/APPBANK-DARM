@@ -1,29 +1,30 @@
 import 'package:appbankdarm/services/auth_service.dart';
+import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
 import 'package:provider/provider.dart';
-import '../../../widgets/bottom_button.dart';
 
-class RegisterPasswordAgainUser extends StatefulWidget {
-  const RegisterPasswordAgainUser({super.key});
+import '../../widgets/bottom_button.dart';
+
+class LoginPasswordUser extends StatefulWidget {
+  const LoginPasswordUser({super.key});
 
   @override
-  State<RegisterPasswordAgainUser> createState() =>
-      _RegisterPasswordAgainUserState();
+  State<LoginPasswordUser> createState() => _LoginPasswordUserState();
 }
 
-class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
+class _LoginPasswordUserState extends State<LoginPasswordUser> {
   bool isButtonActive = false;
   bool isLoading = false;
-  String type = 'user';
-  final passwordConfirm = TextEditingController();
+  final password = TextEditingController();
   late FocusNode myFocusNode;
+
   @override
   void initState() {
     myFocusNode = FocusNode();
     myFocusNode.requestFocus();
-    passwordConfirm.addListener(() {
-      if (passwordConfirm.text.length == 6) {
+    password.addListener(() {
+      if (password.text.length == 6) {
         setState(() => isButtonActive = true);
       } else {
         setState(() => isButtonActive = false);
@@ -32,21 +33,15 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
     super.initState();
   }
 
-  _register() async {
+  _login() async {
     setState(() => isLoading = true);
     try {
-      await context.read<AuthService>().register(passwordConfirm.text, type);
+      await context.read<AuthService>().login(password.text);
     } catch (_) {
-      showModal();
+      _showModal();
       setState(() => isLoading = false);
-    }
-  }
-
-  _pressButton() {
-    if (context.read<AuthService>().password == passwordConfirm.text) {
-      _register();
-    } else {
-      showModal();
+    } finally {
+      Navigator.of(context).pushNamed(AppRoutes.HOMEUSER);
     }
   }
 
@@ -55,7 +50,7 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'senha novamente',
+          'senha',
         ),
       ),
       body: Column(
@@ -64,7 +59,8 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
             child: Container(
               margin: const EdgeInsets.symmetric(vertical: 40),
               child: PinCodeTextField(
-                controller: passwordConfirm,
+                autofocus: true,
+                controller: password,
                 focusNode: myFocusNode,
                 keyboardType: TextInputType.number,
                 errorBorderColor: Colors.red,
@@ -83,18 +79,30 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
               ),
             ),
           ),
-          BottomButtom(
-            onPress: () => _pressButton(),
-            title: 'criar conta',
-            enabled: isButtonActive,
-            loading: isLoading,
-          )
+          Column(
+            children: [
+              const TextButton(
+                onPressed: null,
+                child: Text('recuperar senha',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold)),
+              ),
+              BottomButtom(
+                onPress: () => _login(),
+                title: 'entrar',
+                enabled: isButtonActive,
+                loading: isLoading,
+              )
+            ],
+          ),
         ],
       ),
     );
   }
 
-  void showModal() => showModalBottomSheet(
+  _showModal() => showModalBottomSheet(
       isDismissible: false,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -111,12 +119,12 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: const [
                       Text(
-                        'as senhas são diferentes',
+                        'Senha incorreta!',
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        'a senha e a confirmação de senha precisam ser exatamentes iguais',
+                        'a senha que você inseriu está incorreta. Tente novamente.',
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 16),
                       ),
@@ -125,11 +133,11 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
                   BottomButtom(
                     onPress: () => {
                       Navigator.of(context).pop(),
-                      myFocusNode.requestFocus(),
+                      myFocusNode.requestFocus()
                     },
                     title: 'tentar novamente',
                     color: Colors.redAccent,
-                  )
+                  ),
                 ]),
           ));
 }

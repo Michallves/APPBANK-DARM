@@ -1,4 +1,5 @@
 // ignore_for_file: constant_identifier_names
+
 abstract class AppRoutes {
   static const AUTHCHECK = '/';
   static const PRELOAD = '/Preload';
@@ -24,4 +25,5 @@ abstract class AppRoutes {
   static const REGISTER_CARD_NUMBER = '/registerCardNumber';
   static const REGISTER_CARD_CVC = '/registerCardCvc';
   static const REGISTER_CARD_VALIDITY = '/registerCardValidity';
+  static const HOME_ADMIN = '/homeAdmin';
 }

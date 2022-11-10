@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import '../../../widgets/bottom_button.dart';
+import '../../widgets/bottom_button.dart';
 
 class RegisterAddressUser extends StatefulWidget {
   const RegisterAddressUser({super.key});
@@ -48,7 +48,9 @@ class _RegisterAddressUserState extends State<RegisterAddressUser> {
       street.text,
       number.text,
     ];
-    Navigator.of(context).pushNamed(AppRoutes.REGISTER_ACCOUNT_TYPE_USER);
+    context.read<AuthService>().admin == false
+        ? Navigator.of(context).pushNamed(AppRoutes.REGISTER_ACCOUNT_TYPE)
+        : Navigator.of(context).pushNamed(AppRoutes.REGISTER_PASSWORD);
   }
 
   @override

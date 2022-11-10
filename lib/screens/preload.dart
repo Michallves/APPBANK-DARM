@@ -1,5 +1,7 @@
+import 'package:appbankdarm/services/auth_service.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Preload extends StatelessWidget {
   const Preload({super.key});
@@ -44,10 +46,10 @@ class Preload extends StatelessWidget {
                         margin: const EdgeInsets.symmetric(horizontal: 20),
                         child: ElevatedButton(
                           onPressed: () => {
-                            Navigator.of(context)
-                                .pushNamed(AppRoutes.LOGIN_CPF_USER)
+                            context.read<AuthService>().admin = false,
+                            Navigator.of(context).pushNamed(AppRoutes.LOGIN_CPF)
                           },
-                          child: const Text("Entrar"),
+                          child: const Text("entrar"),
                         ),
                       ),
                       Container(
@@ -55,8 +57,11 @@ class Preload extends StatelessWidget {
                         height: 50,
                         margin: const EdgeInsets.symmetric(horizontal: 20),
                         child: OutlinedButton(
-                          onPressed: () => Navigator.of(context)
-                              .pushNamed(AppRoutes.REGISTER_CPF_USER),
+                          onPressed: () {
+                            context.read<AuthService>().admin = false;
+                            Navigator.of(context)
+                                .pushNamed(AppRoutes.REGISTER_CPF);
+                          },
                           style: ButtonStyle(
                             shape: MaterialStateProperty.all<
                                 RoundedRectangleBorder>(
@@ -74,19 +79,23 @@ class Preload extends StatelessWidget {
                                 MaterialStateProperty.all<Color>(Colors.black),
                           ),
                           child: const Text(
-                            "Criar conta",
+                            "criar conta",
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
                       TextButton(
-                        onPressed: () => {},
+                        onPressed: () => {
+                          context.read<AuthService>().admin = true,
+                          Navigator.of(context)
+                              .pushNamed(AppRoutes.REGISTER_CPF)
+                        },
                         style: const ButtonStyle(
                           foregroundColor:
                               MaterialStatePropertyAll(Colors.black),
                         ),
                         child: const Text(
-                          'Entrar como admin',
+                          'criar conta admin',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 15),
                         ),

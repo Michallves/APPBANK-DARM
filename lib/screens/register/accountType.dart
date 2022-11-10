@@ -3,7 +3,7 @@ import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../widgets/bottom_button.dart';
+import '../../widgets/bottom_button.dart';
 
 class RegisterAccountTypeUser extends StatefulWidget {
   const RegisterAccountTypeUser({super.key});
@@ -19,7 +19,7 @@ class _RegisterAccountTypeUserState extends State<RegisterAccountTypeUser> {
 
   _pressButton() {
     context.read<AuthService>().accountType = accountType;
-    Navigator.of(context).pushNamed(AppRoutes.REGISTER_PASSWORD_USER);
+    Navigator.of(context).pushNamed(AppRoutes.REGISTER_PASSWORD);
   }
 
   @override

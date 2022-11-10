@@ -1,34 +1,40 @@
-import 'package:appbankdarm/services/auth_service.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:appbankdarm/widgets/bottom_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/services.dart';
+import 'package:appbankdarm/services/auth_service.dart';
 import 'package:provider/provider.dart';
 
-class RegisterCpfUser extends StatefulWidget {
-  const RegisterCpfUser({super.key});
+class LoginCpfUser extends StatefulWidget {
+  const LoginCpfUser({super.key});
 
   @override
-  State<RegisterCpfUser> createState() => _RegisterCpfUserState();
+  State<LoginCpfUser> createState() => _LoginCpfUserState();
 }
 
-class _RegisterCpfUserState extends State<RegisterCpfUser> {
+class _LoginCpfUserState extends State<LoginCpfUser> {
   bool isButtonActive = false;
   bool isLoading = false;
   bool labelErr = false;
-  final cpf = TextEditingController();
+
   final formFieldKey = GlobalKey<FormFieldState>();
+  final cpf = TextEditingController();
+  String? email;
 
   @override
   void initState() {
     super.initState();
+    setState(() {
+      isLoading = false;
+    });
     cpf.addListener(() {
       if (cpf.text.length == 14) {
         setState(() => isButtonActive = true);
       } else {
         setState(() => isButtonActive = false);
+        formFieldKey.currentState?.validate();
       }
     });
   }
@@ -38,52 +44,45 @@ class _RegisterCpfUserState extends State<RegisterCpfUser> {
     setState(() => isLoading = false);
   }
 
-  _pushCpf() async {
-    UtilBrasilFields.isCPFValido(cpf.text) == true
-        ? {
-            await FirebaseFirestore.instance
-                .collection("users")
-                .where("cpf", isEqualTo: cpf.text)
-                .get()
-                .then(
-                  (snapshot) => {
-                    if (snapshot.docs.isNotEmpty)
-                      {
-                        snapshot.docs.forEach((doc) => {
-                              context.read<AuthService>().email =
-                                  doc.data()["email"],
-                              showModal()
-                            })
-                      }
-                    else
-                      {
-                        context.read<AuthService>().cpf = cpf.text,
+  _pushEmail() async {
+    await FirebaseFirestore.instance
+        .collection("users")
+        .where("cpf", isEqualTo: cpf.text)
+        .get()
+        .then((snapshot) => {
+              if (snapshot.docs.isNotEmpty)
+                {
+                  snapshot.docs.forEach((doc) => {
+                        context.read<AuthService>().email = doc.data()["email"],
                         Navigator.of(context)
-                            .pushNamed(AppRoutes.REGISTER_NAME_USER)
-                      }
-                  },
-                )
-          }
-        : _validate();
-    setState(() {
-      isLoading = false;
-    });
+                            .pushNamed(AppRoutes.LOGIN_PASSWORD)
+                      })
+                }
+              else
+                {showModal()}
+            });
+    setState(() => isLoading = false);
   }
 
-  _pressButton() {
+  _pressButton() async {
     setState(() {
       isLoading = true;
     });
-    _pushCpf();
+    UtilBrasilFields.isCPFValido(cpf.text) == true
+        ? {_pushEmail()}
+        : {_validate()};
+  }
+
+  _notFindCpf() {
+    context.read<AuthService>().cpf = cpf.text;
+    Navigator.of(context).pushNamed(AppRoutes.REGISTER_NAME);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'seus dados',
-        ),
+        title: const Text('entrar'),
       ),
       body: Column(
         children: [
@@ -94,6 +93,8 @@ class _RegisterCpfUserState extends State<RegisterCpfUser> {
                 key: formFieldKey,
                 controller: cpf,
                 keyboardType: TextInputType.number,
+                textInputAction: TextInputAction.none,
+                keyboardAppearance: Brightness.dark,
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
                   CpfInputFormatter()
@@ -113,7 +114,7 @@ class _RegisterCpfUserState extends State<RegisterCpfUser> {
                 },
                 decoration: InputDecoration(
                   hintText: '000.000.000-00',
-                  labelText: 'qual seu CPF?',
+                  labelText: 'digite seu CPF',
                   labelStyle: TextStyle(
                     color: labelErr == true ? Colors.red : Colors.black,
                     fontSize: 20,
@@ -129,17 +130,16 @@ class _RegisterCpfUserState extends State<RegisterCpfUser> {
             ),
           ),
           BottomButtom(
-            onPress: () => _pressButton(),
-            title: 'continuar',
-            enabled: isButtonActive,
-            loading: isLoading,
-          )
+              loading: isLoading,
+              enabled: isButtonActive,
+              onPress: () => _pressButton(),
+              title: 'continuar')
         ],
       ),
     );
   }
 
-  void showModal() => showModalBottomSheet(
+  showModal() => showModalBottomSheet(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(10), topRight: Radius.circular(10)),
@@ -153,25 +153,27 @@ class _RegisterCpfUserState extends State<RegisterCpfUser> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: const [
                   Text(
-                    'CPF já cadastrado',
+                    'CPF não encontrado',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    'toque em "entrar" para acessar sua conta.',
+                    'crie um cadastro para você agora mesmo',
                     style: TextStyle(
                       fontSize: 16,
                     ),
                   ),
                 ],
               )),
-              BottomButtom(
-                  onPress: () => Navigator.of(context)
-                      .pushNamed(AppRoutes.LOGIN_PASSWORD_USER),
-                  title: 'entrar'),
-              BottomButtom(
-                onPress: () => Navigator.of(context).pop(),
-                title: 'agora não',
-                color: Colors.grey[350],
+              Column(
+                children: [
+                  BottomButtom(
+                      onPress: () => _notFindCpf(), title: 'criar cadastro'),
+                  BottomButtom(
+                    onPress: () => Navigator.of(context).pop(),
+                    title: 'agora não',
+                    color: Colors.grey[350],
+                  )
+                ],
               )
             ]),
           ));

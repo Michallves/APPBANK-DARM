@@ -1,22 +1,23 @@
+import 'package:appbankdarm/services/auth_service.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
+import 'package:appbankdarm/widgets/bottom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../services/card_service.dart';
-import '../../../widgets/bottom_button.dart';
 
-class RegisterCardName extends StatefulWidget {
-  const RegisterCardName({super.key});
+class RegisterNameUser extends StatefulWidget {
+  const RegisterNameUser({super.key});
 
   @override
-  State<RegisterCardName> createState() => _RegisterCardNameState();
+  State<RegisterNameUser> createState() => _RegisterNameUserState();
 }
 
-class _RegisterCardNameState extends State<RegisterCardName> {
+class _RegisterNameUserState extends State<RegisterNameUser> {
   bool isButtonActive = false;
   final name = TextEditingController();
 
   @override
   void initState() {
+    super.initState();
     name.addListener(() {
       if (name.text.length > 10) {
         setState(() => isButtonActive = true);
@@ -24,12 +25,11 @@ class _RegisterCardNameState extends State<RegisterCardName> {
         setState(() => isButtonActive = false);
       }
     });
-    super.initState();
   }
 
   _pressButton() {
-    context.read<CardService>().name = name.text;
-    Navigator.of(context).pushNamed(AppRoutes.REGISTER_CARD_NUMBER);
+    context.read<AuthService>().name = name.text;
+    Navigator.of(context).pushNamed(AppRoutes.REGISTER_EMAIL);
   }
 
   @override
@@ -37,7 +37,7 @@ class _RegisterCardNameState extends State<RegisterCardName> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'cadastrar cartão',
+          'nome',
         ),
       ),
       body: Column(
@@ -45,9 +45,10 @@ class _RegisterCardNameState extends State<RegisterCardName> {
           Expanded(
             child: Container(
               margin: const EdgeInsets.all(20),
-              child: TextFormField(
+              child: TextField(
                 controller: name,
                 autofocus: true,
+                keyboardType: TextInputType.name,
                 style: const TextStyle(fontSize: 26),
                 decoration: const InputDecoration(
                   labelText: 'nome completo',
@@ -64,8 +65,8 @@ class _RegisterCardNameState extends State<RegisterCardName> {
           ),
           BottomButtom(
               enabled: isButtonActive,
-              onPress: () => isButtonActive == true ? _pressButton() : null,
-              title: "continuar")
+              onPress: () => _pressButton(),
+              title: "Continuar")
         ],
       ),
     );

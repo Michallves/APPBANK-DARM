@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-import '../../../services/auth_service.dart';
-import '../../../services/user_service.dart';
+import '../../services/auth_service.dart';
+import '../../services/user_service.dart';
 
 class AccountUser extends StatefulWidget {
   const AccountUser({super.key});
@@ -131,7 +131,7 @@ class _AccountUserState extends State<AccountUser> {
                 ),
                 BottomButtom(
                     onPress: () =>
-                        Navigator.of(context).pushNamed(AppRoutes.DELETE_USER),
+                        Navigator.of(context).pushNamed(AppRoutes.DELETE),
                     title: "excluir conta",
                     color: Colors.redAccent),
               ],

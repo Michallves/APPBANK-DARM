@@ -1,19 +1,21 @@
 import 'package:appbankdarm/services/auth_service.dart';
-import 'package:appbankdarm/utils/app_routes.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
 import 'package:provider/provider.dart';
 
-import '../../../widgets/bottom_button.dart';
+import '../../services/user_service.dart';
+import '../../widgets/bottom_button.dart';
 
-class LoginPasswordUser extends StatefulWidget {
-  const LoginPasswordUser({super.key});
+class DeleteUser extends StatefulWidget {
+  const DeleteUser({super.key});
 
   @override
-  State<LoginPasswordUser> createState() => _LoginPasswordUserState();
+  State<DeleteUser> createState() => _DeleteUserState();
 }
 
-class _LoginPasswordUserState extends State<LoginPasswordUser> {
+class _DeleteUserState extends State<DeleteUser> {
   bool isButtonActive = false;
   bool isLoading = false;
   final password = TextEditingController();
@@ -33,14 +35,29 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
     super.initState();
   }
 
-  _login() async {
-    setState(() => isLoading = true);
-    try {
-      await context.read<AuthService>().login(password.text);
-    } catch (_) {
-      _showModal();
-      setState(() => isLoading = false);
-    }
+  _reAuth() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    await FirebaseAuth.instance
+        .signInWithEmailAndPassword(
+            email: (context.read<UserService>().auth.usuario?.email).toString(),
+            password: password.text)
+        .catchError((_) => _showModal())
+        .then(
+            (UserCredential userCredential) => _deleteAccount(userCredential));
+  }
+
+  _deleteAccount(UserCredential userCredential) async {
+    await userCredential.user?.delete().then((_) => FirebaseFirestore
+        .instance
+        .collection('users')
+        .doc(userCredential.user?.uid)
+        .delete());
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -48,7 +65,7 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'senha',
+          'excluir conta',
         ),
       ),
       body: Column(
@@ -57,7 +74,6 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
             child: Container(
               margin: const EdgeInsets.symmetric(vertical: 40),
               child: PinCodeTextField(
-                autofocus: true,
                 controller: password,
                 focusNode: myFocusNode,
                 keyboardType: TextInputType.number,
@@ -77,24 +93,12 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
               ),
             ),
           ),
-          Column(
-            children: [
-              const TextButton(
-                onPressed: null,
-                child: Text('recuperar senha',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold)),
-              ),
-              BottomButtom(
-                onPress: () => _login(),
-                title: 'entrar',
-                enabled: isButtonActive,
-                loading: isLoading,
-              )
-            ],
-          ),
+          BottomButtom(
+            loading: isLoading,
+            onPress: () => _reAuth(),
+            title: 'excluir',
+            enabled: isButtonActive,
+          )
         ],
       ),
     );
@@ -109,33 +113,33 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
       context: context,
       builder: (context) => SizedBox(
             height: 250,
-            child: Column(
+            child: Column(children: [
+              Expanded(
+                  child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Expanded(
-                      child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: const [
-                      Text(
-                        'Senha incorreta!',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        'a senha que você inseriu está incorreta. Tente novamente.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ],
-                  )),
-                  BottomButtom(
-                    onPress: () => {
-                      Navigator.of(context).pop(),
-                      myFocusNode.requestFocus()
-                    },
-                    title: 'tentar novamente',
-                    color: Colors.redAccent,
+                children: const [
+                  Text(
+                    'Senha incorreta!',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                ]),
+                  Text(
+                    'a senha que você inseriu está incorreta. Tente novamente.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ],
+              )),
+              BottomButtom(
+                onPress: () => {
+                  setState(() => {
+                        isLoading = false,
+                      }),
+                  Navigator.of(context).pop(),
+                  myFocusNode.requestFocus(),
+                },
+                title: 'tentar novamente',
+                color: Colors.redAccent,
+              )
+            ]),
           ));
 }

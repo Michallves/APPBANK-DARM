@@ -3,7 +3,7 @@ import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../widgets/bottom_button.dart';
+import '../../widgets/bottom_button.dart';
 
 class RegisterEmailUser extends StatefulWidget {
   const RegisterEmailUser({super.key});
@@ -43,8 +43,7 @@ class _RegisterEmailUserState extends State<RegisterEmailUser> {
             else
               {
                 context.read<AuthService>().email = email.text,
-                Navigator.of(context)
-                    .pushNamed(AppRoutes.REGISTER_TELEPHONE_USER)
+                Navigator.of(context).pushNamed(AppRoutes.REGISTER_TELEPHONE)
               }
           },
         );

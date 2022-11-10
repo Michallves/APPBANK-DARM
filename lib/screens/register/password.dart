@@ -1,28 +1,29 @@
-import 'package:appbankdarm/services/card_service.dart';
+import 'package:appbankdarm/services/auth_service.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
 import 'package:provider/provider.dart';
 
-import '../../../widgets/bottom_button.dart';
+import '../../widgets/bottom_button.dart';
 
-class RegisterCardCvc extends StatefulWidget {
-  const RegisterCardCvc({super.key});
+class RegisterPasswordUser extends StatefulWidget {
+  const RegisterPasswordUser({super.key});
 
   @override
-  State<RegisterCardCvc> createState() => _RegisterCardCvcState();
+  State<RegisterPasswordUser> createState() => _RegisterPasswordUserState();
 }
 
-class _RegisterCardCvcState extends State<RegisterCardCvc> {
+class _RegisterPasswordUserState extends State<RegisterPasswordUser> {
   bool isButtonActive = false;
-  final cvc = TextEditingController();
+  final password = TextEditingController();
   late FocusNode myFocusNode;
+
   @override
   void initState() {
     myFocusNode = FocusNode();
     myFocusNode.requestFocus();
-    cvc.addListener(() {
-      if (cvc.text.length == 3) {
+    password.addListener(() {
+      if (password.text.length == 6) {
         setState(() => isButtonActive = true);
       } else {
         setState(() => isButtonActive = false);
@@ -32,8 +33,8 @@ class _RegisterCardCvcState extends State<RegisterCardCvc> {
   }
 
   _pressButton() {
-    context.read<CardService>().cvc = cvc.text;
-    Navigator.of(context).pushNamed(AppRoutes.REGISTER_CARD_VALIDITY);
+    context.read<AuthService>().password = password.text;
+    Navigator.of(context).pushNamed(AppRoutes.REGISTER_PASSWORD_AGAIN);
   }
 
   @override
@@ -41,7 +42,7 @@ class _RegisterCardCvcState extends State<RegisterCardCvc> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'CVC',
+          'senha',
         ),
       ),
       body: Column(
@@ -50,16 +51,18 @@ class _RegisterCardCvcState extends State<RegisterCardCvc> {
             child: Container(
               margin: const EdgeInsets.symmetric(vertical: 40),
               child: PinCodeTextField(
-                focusNode: myFocusNode,
-                controller: cvc,
+                controller: password,
                 keyboardType: TextInputType.number,
                 errorBorderColor: Colors.red,
+                focusNode: myFocusNode,
                 pinBoxWidth: 35,
                 pinBoxHeight: 50,
                 pinBoxRadius: 10,
                 pinBoxOuterPadding: const EdgeInsets.symmetric(horizontal: 10),
                 wrapAlignment: WrapAlignment.spaceAround,
-                maxLength: 3,
+                maxLength: 6,
+                hideCharacter: true,
+                maskCharacter: '•',
                 pinTextStyle: const TextStyle(fontSize: 20),
                 highlight: true,
                 defaultBorderColor: Colors.black38,
@@ -68,9 +71,10 @@ class _RegisterCardCvcState extends State<RegisterCardCvc> {
             ),
           ),
           BottomButtom(
-              enabled: isButtonActive,
-              onPress: () => isButtonActive == true ? _pressButton() : null,
-              title: "continuar")
+            onPress: () => _pressButton(),
+            title: 'continuar',
+            enabled: isButtonActive,
+          )
         ],
       ),
     );

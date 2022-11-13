@@ -1,5 +1,6 @@
 import 'package:appbankdarm/services/auth_service.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
 import 'package:provider/provider.dart';
@@ -35,11 +36,27 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
 
   _login() async {
     setState(() => isLoading = true);
+    AuthService auth = context.read<AuthService>();
     try {
-      await context.read<AuthService>().login(password.text);
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: auth.email!, password: password.text)
+          .then((_) {
+        if (auth.rool == 'user') {
+          setState(() {
+            Navigator.of(context).pushReplacementNamed(AppRoutes.HOME_USER);
+          });
+        } else if (auth.rool == 'admin') {
+          setState(() {
+            Navigator.of(context).pushReplacementNamed(AppRoutes.HOME_ADMIN);
+          });
+        }
+      });
     } catch (_) {
       _showModal();
       setState(() => isLoading = false);
+    } finally {
+      auth.getUser();
     }
   }
 

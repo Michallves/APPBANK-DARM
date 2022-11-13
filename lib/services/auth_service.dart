@@ -3,11 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AuthService extends ChangeNotifier {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   User? usuario;
 
-  bool admin = false;
-
+  String rool = 'user';
   String? cpf;
   String? name;
   String? email;
@@ -18,96 +16,11 @@ class AuthService extends ChangeNotifier {
   String? type;
 
   AuthService() {
-    _authCheck();
+    getUser();
   }
 
-  _authCheck() {
-    _auth.authStateChanges().listen((User? user) {
-      usuario = (user == null) ? null : user;
-      notifyListeners();
-    });
-  }
-
-  _getUser() {
-    usuario = _auth.currentUser;
+  getUser() {
+    usuario = FirebaseAuth.instance.currentUser;
     notifyListeners();
-  }
-
-  login(String password) async {
-    _auth.signInWithEmailAndPassword(email: email!, password: password);
-    _getUser();
-  }
-
-  register(String password) async {
-    await _auth
-        .createUserWithEmailAndPassword(
-          email: email!,
-          password: password,
-        )
-        .then((UserCredential userCredential) async => {
-              admin == false
-                  ? await FirebaseFirestore.instance
-                      .collection("users")
-                      .doc(userCredential.user?.uid)
-                      .set({
-                      "cpf": cpf,
-                      'name': name,
-                      "email": email,
-                      "telephone": telephone,
-                      "accountType": accountType,
-                      "type": 'user',
-                      "address": {
-                        'state': address![0],
-                        "city": address![1],
-                        "neighborhood": address![2],
-                        "street": address![3],
-                        "number": address![4],
-                      },
-                    })
-                  : await FirebaseFirestore.instance
-                      .collection("users")
-                      .doc(userCredential.user?.uid)
-                      .set({
-                      "cpf": cpf,
-                      'name': name,
-                      "email": email,
-                      "type": 'admin',
-                      "address": {
-                        'state': address![0],
-                        "city": address![1],
-                        "neighborhood": address![2],
-                        "street": address![3],
-                        "number": address![4],
-                      },
-                    })
-            });
-    _getUser();
-  }
-
-  registerAdmin(String password, String type) async {
-    await _auth
-        .createUserWithEmailAndPassword(
-          email: email!,
-          password: password,
-        )
-        .then((UserCredential userCredential) async => {
-              await FirebaseFirestore.instance
-                  .collection("users")
-                  .doc(userCredential.user?.uid)
-                  .set({
-                "cpf": cpf,
-                'name': name,
-                "email": email,
-                "telephone": telephone,
-                "accountType": accountType,
-                "type": type,
-              }),
-            });
-    _getUser();
-  }
-
-  logout() async {
-    await _auth.signOut();
-    _getUser();
   }
 }

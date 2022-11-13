@@ -1,8 +1,12 @@
+import 'dart:math';
+
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:appbankdarm/widgets/bottom_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../services/auth_service.dart';
 import '../../services/card_service.dart';
 
 class CreateCardValidity extends StatefulWidget {
@@ -15,15 +19,61 @@ class CreateCardValidity extends StatefulWidget {
 class _CreateCardValidityState extends State<CreateCardValidity> {
   bool isLoading = false;
   String validity = '';
+  String? number;
+  String? cvc;
+
+  _createNumber() {
+    String? flag = context.read<CardService>().flag;
+    int min = 5100000000000000;
+    int max = 5500000000000000;
+
+    print((min + Random().nextInt(max - min)).toString());
+    if (flag == "mastercard") {
+      min = 5100000000000000;
+      max = 5500000000000000;
+      number = (min + Random().nextInt(max - min)).toString();
+    } else if (flag == "visa") {
+      min = 4000000000000000;
+      max = 4999999999999999;
+      number = (min + Random().nextInt(max - min)).toString();
+    } else if (flag == "americanexpress") {
+      min = 3400000000000000;
+      max = 3700000000000000;
+      number = (min + Random().nextInt(max - min)).toString();
+    } else if (flag == "hipercard") {
+      min = 3841000000000000;
+      max = 3841009999999999;
+      number = (min + Random().nextInt(max - min)).toString();
+    } else if (flag == "elo") {
+      min = 6504050000000000;
+      max = 6504399999999999;
+      number = (min + Random().nextInt(max - min)).toString();
+    }
+  }
 
   _createCard() async {
+    CardService card = context.read<CardService>();
     setState(() => isLoading = true);
     try {
-      await context.read<CardService>().createCard(validity);
-    } catch (_) {
-      setState(() => isLoading = false);
+      _createNumber();
     } finally {
-      Navigator.of(context).pushNamed(AppRoutes.HOME_USER);
+      await FirebaseFirestore.instance
+          .collection("cards_requested")
+          .add({
+            'idUser': context.read<AuthService>().usuario?.uid,
+            'number': number,
+            'cvc': Random().nextInt(300).toString().padLeft(3, '0'),
+            'name': card.name,
+            'flag': card.flag,
+            'validity':
+                "${DateTime.now().month.toString().padLeft(2, '0')}/${(DateTime.now().year.toInt() + int.parse(validity)).toString().substring(2, 4)}",
+            'type': card.type,
+            'state': 'waiting'
+          })
+          .then((_) => Navigator.of(context).pushNamed(AppRoutes.HOME_USER))
+          .catchError((_) {
+            setState(() => isLoading = false);
+          });
     }
   }
 
@@ -119,8 +169,8 @@ class _CreateCardValidityState extends State<CreateCardValidity> {
           ),
           BottomButtom(
               loading: isLoading,
-              enabled: validity != '' ? true : false,
-              onPress: () => _createCard(),
+              enabled: true,
+              onPress: () => _createNumber(),
               title: 'solicitar cartão')
         ],
       ),

@@ -4,6 +4,7 @@ import 'package:appbankdarm/services/user_service.dart';
 import 'package:appbankdarm/widgets/cartao.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -28,7 +29,8 @@ class _HomeUserState extends State<HomeUser> {
   }
 
   _logout() async {
-    await context.read<AuthService>().logout();
+    await FirebaseAuth.instance.signOut().then(
+        (_) => Navigator.of(context).pushReplacementNamed(AppRoutes.PRELOAD));
   }
 
   @override

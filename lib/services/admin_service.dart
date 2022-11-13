@@ -7,6 +7,8 @@ class AdminService extends ChangeNotifier {
   late AuthService auth;
 
   String? idUser;
+  String? idCard;
+  String? idUserCard;
   String? name;
   String? number;
   String? flag;
@@ -20,27 +22,18 @@ class AdminService extends ChangeNotifier {
 
   _startRepository() async {
     await readCards();
-  }
-
-  readCard(idCard) async {
-    await FirebaseFirestore.instance
-        .collection('cards_requested')
-        .doc(idCard)
-        .get()
-        .then((doc) {
-      name = doc.get('name');
-      number = doc.get('number');
-      flag = doc.get('flag');
-      type = doc.get('type');
-      validity = doc.get('validity');
-      idUser = doc.get('idUser');
-    });
-    notifyListeners();
+    await readUsers();
   }
 
   readCards() {
     Stream<QuerySnapshot<Object?>>? data =
         db.collection("cards_requested").snapshots();
+    return data;
+  }
+
+  readUsers() {
+    Stream<QuerySnapshot<Object?>>? data =
+        db.collection("users").where("type", isEqualTo: "user").snapshots();
     return data;
   }
 }

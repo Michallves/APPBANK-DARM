@@ -1,8 +1,6 @@
 import 'package:appbankdarm/screens/card_admin.dart';
 import 'package:appbankdarm/screens/card_user.dart';
 import 'package:appbankdarm/screens/home_admin.dart';
-
-import 'package:appbankdarm/widgets/auth_check.dart';
 import 'package:flutter/material.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 //Routes
@@ -62,7 +60,6 @@ class AppBank extends StatelessWidget {
         ),
       ),
       routes: {
-        AppRoutes.AUTHCHECK: (ctx) => const AuthCheck(),
         AppRoutes.PRELOAD: (ctx) => const Preload(),
         //Login User
         AppRoutes.LOGIN_CPF: (ctx) => const LoginCpfUser(),

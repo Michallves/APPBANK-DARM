@@ -53,7 +53,7 @@ class _LoginCpfUserState extends State<LoginCpfUser> {
               if (snapshot.docs.isNotEmpty)
                 {
                   snapshot.docs.forEach((doc) => {
-                        context.read<AuthService>().email = doc.data()["email"],
+                        context.read<AuthService>().email = doc.get('email'),
                         Navigator.of(context)
                             .pushNamed(AppRoutes.LOGIN_PASSWORD)
                       })
@@ -82,7 +82,9 @@ class _LoginCpfUserState extends State<LoginCpfUser> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('entrar'),
+        title: Text(context.read<AuthService>().rool == 'user'
+            ? 'entrar'
+            : 'entrar admin'),
       ),
       body: Column(
         children: [
@@ -129,6 +131,21 @@ class _LoginCpfUserState extends State<LoginCpfUser> {
               ),
             ),
           ),
+          context.read<AuthService>().rool == 'admin'
+              ? Container(
+                  margin: const EdgeInsets.all(20),
+                  child: TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(AppRoutes.REGISTER_CPF);
+                      },
+                      child: const Text(
+                        'criar conta admin',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                      )))
+              : Container(),
           BottomButtom(
               loading: isLoading,
               enabled: isButtonActive,

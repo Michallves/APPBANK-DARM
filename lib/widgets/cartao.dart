@@ -365,7 +365,7 @@ class _CartaoState extends State<Cartao> with TickerProviderStateMixin {
                                                                   'savings'
                                                               ? 'Poupança'
                                                               : widget.type ==
-                                                                      'debit&credit'
+                                                                      'credit&debit'
                                                                   ? 'Débito e Crédito'
                                                                   : widget.type ==
                                                                           'debit&savings'

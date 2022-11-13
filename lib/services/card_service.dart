@@ -34,16 +34,6 @@ class CardService extends ChangeNotifier {
         .get();
   }
 
-  createCard(validity) async {
-    await db.collection("cards_requested").add({
-      'idUser': auth.usuario?.uid,
-      'name': name,
-      'flag': flag,
-      'validity': validity,
-      'type': type,
-    });
-  }
-
   registerCard(validity) async {
     await db
         .collection("users")

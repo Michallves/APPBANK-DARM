@@ -3,6 +3,7 @@ import 'package:appbankdarm/services/card_service.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:appbankdarm/widgets/bottom_button.dart';
 import 'package:appbankdarm/widgets/cartao.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,22 +18,11 @@ class _CardAdminState extends State<CardAdmin> {
   bool isLoading = true;
   bool isLoadingButton = false;
 
+  FirebaseFirestore db = FirebaseFirestore.instance;
+
   @override
   void initState() {
-    _readCard();
     super.initState();
-  }
-
-  _readCard() async {
-    try {
-      await context
-          .read<AdminService>()
-          .readCard(ModalRoute.of(context)!.settings.arguments);
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
   }
 
   _deleteCard() async {
@@ -45,39 +35,61 @@ class _CardAdminState extends State<CardAdmin> {
     }
   }
 
+  _acceptCard() async {
+    AdminService card = context.read<AdminService>();
+    await db
+        .collection('users')
+        .doc(context.read<AdminService>().idUserCard)
+        .collection('cards')
+        .add({
+      "name": card.name,
+      "number": card.name,
+      "flag": card.flag,
+      "validity": card.validity,
+      "cvc": card.cvc,
+      "type": card.type,
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: isLoading == true
-          ? const Center(
-              child: CircularProgressIndicator(color: Colors.black),
-            )
-          : Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.all(20),
-                  child: Cartao(
-                    number: '00000000000000000',
-                    flag: 'flag!',
-                    name: context.read<AdminService>().name.toString(),
-                    validity: 'validity!',
-                    cvc: null,
-                    type: 'type!',
-                    obscure: false,
-                    animation: false,
-                  ),
-                ),
-                const Spacer(
-                  flex: 1,
-                ),
-                BottomButtom(
-                  onPress: () => showModal(),
-                  title: 'excluir cartão',
-                  color: Colors.redAccent,
-                ),
-              ],
+      body: Column(
+        children: [
+          Container(
+            margin: const EdgeInsets.all(20),
+            child: Cartao(
+              number: '00000000000000000',
+              flag: context.read<AdminService>().flag!,
+              name: context.read<AdminService>().name!,
+              validity:
+                  '${DateTime.now().month.toString().padLeft(2, '0')}/${(DateTime.now().year.toInt() + int.parse(context.read<AdminService>().validity!)).toString().substring(2, 4)}',
+              cvc: null,
+              type: context.read<AdminService>().type!,
+              obscure: false,
+              animation: true,
             ),
+          ),
+          const Spacer(
+            flex: 1,
+          ),
+          Row(
+            children: [
+              BottomButtom(
+                onPress: () => showModal(),
+                title: 'recusar',
+                color: Colors.redAccent,
+              ),
+              BottomButtom(
+                onPress: () => _acceptCard(),
+                title: 'aceitar',
+                color: Colors.greenAccent,
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 

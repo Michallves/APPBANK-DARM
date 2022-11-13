@@ -48,7 +48,7 @@ class _RegisterAddressUserState extends State<RegisterAddressUser> {
       street.text,
       number.text,
     ];
-    context.read<AuthService>().admin == false
+    context.read<AuthService>().rool == 'user'
         ? Navigator.of(context).pushNamed(AppRoutes.REGISTER_ACCOUNT_TYPE)
         : Navigator.of(context).pushNamed(AppRoutes.REGISTER_PASSWORD);
   }

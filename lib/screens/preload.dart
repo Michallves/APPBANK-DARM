@@ -46,7 +46,7 @@ class Preload extends StatelessWidget {
                         margin: const EdgeInsets.symmetric(horizontal: 20),
                         child: ElevatedButton(
                           onPressed: () => {
-                            context.read<AuthService>().admin = false,
+                            context.read<AuthService>().rool = 'user',
                             Navigator.of(context).pushNamed(AppRoutes.LOGIN_CPF)
                           },
                           child: const Text("entrar"),
@@ -58,7 +58,7 @@ class Preload extends StatelessWidget {
                         margin: const EdgeInsets.symmetric(horizontal: 20),
                         child: OutlinedButton(
                           onPressed: () {
-                            context.read<AuthService>().admin = false;
+                            context.read<AuthService>().rool = 'user';
                             Navigator.of(context)
                                 .pushNamed(AppRoutes.REGISTER_CPF);
                           },
@@ -86,16 +86,15 @@ class Preload extends StatelessWidget {
                       ),
                       TextButton(
                         onPressed: () => {
-                          context.read<AuthService>().admin = true,
-                          Navigator.of(context)
-                              .pushNamed(AppRoutes.REGISTER_CPF)
+                          context.read<AuthService>().rool = 'admin',
+                          Navigator.of(context).pushNamed(AppRoutes.LOGIN_CPF)
                         },
                         style: const ButtonStyle(
                           foregroundColor:
                               MaterialStatePropertyAll(Colors.black),
                         ),
                         child: const Text(
-                          'criar conta admin',
+                          'entrar admin',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 15),
                         ),

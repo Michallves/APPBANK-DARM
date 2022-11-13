@@ -1,7 +1,10 @@
 import 'package:appbankdarm/services/auth_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
 import 'package:provider/provider.dart';
+import '../../utils/app_routes.dart';
 import '../../widgets/bottom_button.dart';
 
 class RegisterPasswordAgainUser extends StatefulWidget {
@@ -33,12 +36,60 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
 
   _register() async {
     setState(() => isLoading = true);
-    try {
-      await context.read<AuthService>().register(passwordConfirm.text);
-    } catch (_) {
+    AuthService auth = context.read<AuthService>();
+    await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(
+          email: auth.email!,
+          password: passwordConfirm.text,
+        )
+        .then((UserCredential userCredential) async => {
+              auth.rool == 'user'
+                  ? await FirebaseFirestore.instance
+                      .collection("users")
+                      .doc(userCredential.user?.uid)
+                      .set({
+                      "cpf": auth.cpf,
+                      'name': auth.name,
+                      "email": auth.email,
+                      "telephone": auth.telephone,
+                      "accountType": auth.accountType,
+                      "rool": 'user',
+                      "address": {
+                        'state': auth.address![0],
+                        "city": auth.address![1],
+                        "neighborhood": auth.address![2],
+                        "street": auth.address![3],
+                        "number": auth.address![4],
+                      },
+                    })
+                  : await FirebaseFirestore.instance
+                      .collection("users")
+                      .doc(userCredential.user?.uid)
+                      .set({
+                      "cpf": auth.cpf,
+                      'name': auth.name,
+                      "email": auth.email,
+                      "rool": 'admin',
+                      "address": {
+                        'state': auth.address![0],
+                        "city": auth.address![1],
+                        "neighborhood": auth.address![2],
+                        "street": auth.address![3],
+                        "number": auth.address![4],
+                      },
+                    })
+            })
+        .then((_) {
+      auth.getUser();
+      if (auth.rool == 'user') {
+        Navigator.of(context).pushReplacementNamed(AppRoutes.HOME_USER);
+      } else {
+        Navigator.of(context).pushReplacementNamed(AppRoutes.HOME_ADMIN);
+      }
+    }).catchError((_) {
       showModal();
       setState(() => isLoading = false);
-    }
+    });
   }
 
   _pressButton() {

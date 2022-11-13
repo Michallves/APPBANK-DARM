@@ -1,5 +1,5 @@
-import 'package:appbankdarm/services/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +22,8 @@ class _HomeAdminState extends State<HomeAdmin> {
   }
 
   _logout() async {
-    await context.read<AuthService>().logout();
+    await FirebaseAuth.instance.signOut().then(
+        (_) => Navigator.of(context).pushReplacementNamed(AppRoutes.PRELOAD));
   }
 
   @override
@@ -59,15 +60,22 @@ class _HomeAdminState extends State<HomeAdmin> {
                     DocumentSnapshot card = snapshot.data!.docs[index];
                     return GestureDetector(
                       onTap: () {
-                        context.read<AdminService>().readCard(card.id);
+                        AdminService admservice = context.read<AdminService>();
+                        admservice.idCard = card.id;
+                        admservice.idUserCard = card['idUser'];
+                        admservice.name = card['name'];
+                        admservice.flag = card['flag'];
+                        admservice.type = card['type'];
+                        admservice.validity = card['validity'];
                         Navigator.of(context).pushNamed(AppRoutes.CARD_ADMIN);
                       },
                       child: Cartao(
-                        number: '0000000000000000',
+                        obscure: false,
+                        number: card['number'],
                         flag: card['flag'],
                         name: card['name'],
-                        validity:
-                            DateTime.utc(2).year.toString() + card['validity'],
+                        validity: card['validity'],
+                        cvc: null,
                       ),
                     );
                   }));

@@ -77,7 +77,7 @@ class _RegisterCpfUserState extends State<RegisterCpfUser> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          context.read<AuthService>().admin == false
+          context.read<AuthService>().rool == 'user'
               ? 'seus dados'
               : 'criar admin',
         ),
@@ -124,22 +124,6 @@ class _RegisterCpfUserState extends State<RegisterCpfUser> {
                 cursorColor: Colors.black,
               ),
             ),
-          ),
-          Container(
-            margin: const EdgeInsets.all(20),
-            child: context.read<AuthService>().admin == true
-                ? TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(AppRoutes.LOGIN_CPF);
-                    },
-                    child: const Text(
-                      'entrar admin',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold),
-                    ))
-                : Container(),
           ),
           BottomButtom(
             onPress: () => _pushCpf(),

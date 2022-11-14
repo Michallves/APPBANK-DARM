@@ -1,4 +1,5 @@
 import 'package:appbankdarm/utils/app_routes.dart';
+import 'package:credit_card_validator/credit_card_validator.dart';
 
 import 'package:flutter/material.dart';
 import 'package:brasil_fields/brasil_fields.dart';
@@ -22,8 +23,7 @@ class _RegisterCardValidityState extends State<RegisterCardValidity> {
   @override
   void initState() {
     validity.addListener(() {
-      if (validity.text.length == 5 &&
-          int.parse(UtilBrasilFields.removeCaracteres(validity.text)) < 1230) {
+      if (CreditCardValidator().validateExpDate(validity.text).isValid) {
         setState(() => isButtonActive = true);
       } else {
         setState(() => isButtonActive = false);
@@ -39,7 +39,7 @@ class _RegisterCardValidityState extends State<RegisterCardValidity> {
     } catch (_) {
       setState(() => isLoading = false);
     } finally {
-      Navigator.of(context).pushNamed(AppRoutes.HOME_USER);
+      Navigator.of(context).pushReplacementNamed(AppRoutes.HOME_USER);
     }
   }
 

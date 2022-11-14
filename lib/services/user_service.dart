@@ -4,25 +4,24 @@ import 'package:flutter/material.dart';
 
 class UserService extends ChangeNotifier {
   late AuthService auth;
-
-  String? name;
-  String? image;
-
+  DocumentSnapshot<Object?>? user;
   UserService({required this.auth}) {
     readUser();
   }
+  String? image;
+  String? name;
 
-  readUser() {
-    FirebaseFirestore.instance
+  readUser() async {
+    await FirebaseFirestore.instance
         .collection('users')
         .doc(auth.usuario?.uid)
         .get()
         .then((doc) {
       addListener(() {
-        name = doc.get('name');
-        image = doc.get('image');
+        user = doc;
       });
-      notifyListeners();
+          notifyListeners();
     });
+
   }
 }

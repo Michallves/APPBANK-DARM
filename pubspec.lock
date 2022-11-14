@@ -71,6 +71,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.16.0"
+  credit_card_type_detector:
+    dependency: transitive
+    description:
+      name: credit_card_type_detector
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
+  credit_card_validator:
+    dependency: "direct main"
+    description:
+      name: credit_card_validator
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.1"
   cross_file:
     dependency: transitive
     description:
@@ -268,6 +282,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.5"
+  material_design_icons_flutter:
+    dependency: "direct main"
+    description:
+      name: material_design_icons_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.0.6996"
   meta:
     dependency: transitive
     description:
@@ -372,5 +393,5 @@ packages:
     source: hosted
     version: "2.1.2"
 sdks:
-  dart: "2.18.2"
+  dart: "2.18.4"
   flutter: ">=2.10.0"

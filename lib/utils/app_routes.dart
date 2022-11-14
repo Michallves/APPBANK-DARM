@@ -16,6 +16,8 @@ abstract class AppRoutes {
   static const CARD_USER = '/cardUser';
   static const ACCOUNT = '/accountUser';
   static const DELETE = '/deleteUser';
+  static const REQUESTED_CARDS = '/requestedCards';
+  static const REQUESTED_CARD = '/requestedCard';
   static const CREATE_CARD_NAME = '/createCardName';
   static const CREATE_CARD_TYPE = '/createCardType';
   static const CREATE_CARD_FLAG = '/createCardFLag';
@@ -24,6 +26,8 @@ abstract class AppRoutes {
   static const REGISTER_CARD_NUMBER = '/registerCardNumber';
   static const REGISTER_CARD_CVC = '/registerCardCvc';
   static const REGISTER_CARD_VALIDITY = '/registerCardValidity';
+
   static const HOME_ADMIN = '/homeAdmin';
   static const CARD_ADMIN = '/cardAdmin';
+  static const LIST_USERS = '/listUsers';
 }

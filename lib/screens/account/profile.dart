@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:appbankdarm/widgets/bottom_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -19,17 +18,18 @@ class AccountUser extends StatefulWidget {
 
 class _AccountUserState extends State<AccountUser> {
   bool isLoading = true;
-
+  DocumentSnapshot<Object?>? user;
   @override
   void initState() {
-    _readUser();
     super.initState();
+    _readUser();
   }
 
   _readUser() async {
     try {
-      context.read<UserService>().readUser();
+      await context.read<UserService>().readUser();
     } finally {
+      user = context.read<UserService>().user;
       setState(() => isLoading = false);
     }
   }
@@ -102,15 +102,11 @@ class _AccountUserState extends State<AccountUser> {
                             child: CircleAvatar(
                                 radius: 80,
                                 backgroundColor: Colors.black,
-                                backgroundImage: NetworkImage(context
-                                    .read<UserService>()
-                                    .image
-                                    .toString()),
-                                child: context.read<UserService>().image == null
+                                backgroundImage:
+                                    NetworkImage((user?['image']).toString()),
+                                child: user?['image'] == ''
                                     ? Text(
-                                        context
-                                            .read<UserService>()
-                                            .name
+                                        (user?['name'])
                                             .toString()
                                             .substring(0, 2)
                                             .toUpperCase(),
@@ -122,7 +118,7 @@ class _AccountUserState extends State<AccountUser> {
                           const SizedBox(
                             height: 40,
                           ),
-                          Text(context.read<UserService>().name.toString(),
+                          Text((user?['name']).toString(),
                               style: const TextStyle(fontSize: 25))
                         ],
                       )),

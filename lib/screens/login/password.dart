@@ -42,6 +42,8 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
           .signInWithEmailAndPassword(
               email: auth.email!, password: password.text)
           .then((_) {
+        auth.getUser();
+
         if (auth.rool == 'user') {
           setState(() {
             Navigator.of(context).pushReplacementNamed(AppRoutes.HOME_USER);
@@ -55,8 +57,6 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
     } catch (_) {
       _showModal();
       setState(() => isLoading = false);
-    } finally {
-      auth.getUser();
     }
   }
 

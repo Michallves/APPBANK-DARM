@@ -1,5 +1,4 @@
 import 'package:appbankdarm/services/admin_service.dart';
-import 'package:appbankdarm/services/card_service.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:appbankdarm/widgets/bottom_button.dart';
 import 'package:appbankdarm/widgets/cartao.dart';
@@ -15,82 +14,117 @@ class CardAdmin extends StatefulWidget {
 }
 
 class _CardAdminState extends State<CardAdmin> {
-  bool isLoading = true;
+  bool isLoading = false;
   bool isLoadingButton = false;
 
   FirebaseFirestore db = FirebaseFirestore.instance;
+  DocumentSnapshot<Object?>? card;
 
   @override
   void initState() {
     super.initState();
+    card = context.read<AdminService>().card;
   }
 
-  _deleteCard() async {
-    try {
-      await context.read<CardService>().deleteCard();
-    } catch (_) {
-      setState(() => isLoadingButton = false);
-    } finally {
-      Navigator.of(context).pushNamed(AppRoutes.HOME_USER);
-    }
+  _recusedCard() async {
+    setState(() {
+      isLoading = true;
+    });
+    await db.collection('requested_cards').doc(card?.id).update({
+      "state": 'recused',
+    }).then((_) =>
+        Navigator.of(context).pushReplacementNamed(AppRoutes.HOME_ADMIN));
   }
 
-  _acceptCard() async {
-    AdminService card = context.read<AdminService>();
-    await db
-        .collection('users')
-        .doc(context.read<AdminService>().idUserCard)
-        .collection('cards')
-        .add({
-      "name": card.name,
-      "number": card.name,
-      "flag": card.flag,
-      "validity": card.validity,
-      "cvc": card.cvc,
-      "type": card.type,
+  _approvedCard() async {
+    setState(() {
+      isLoading = true;
+    });
+    await db.collection('users').doc(card?['idUser']).collection('cards').add({
+      "name": card?['name'],
+      "number": card?['number'],
+      "flag": card?['flag'],
+      "validity": card?['validity'],
+      "cvc": card?['cvc'],
+      "type": card?['type'],
+    }).then((_) {
+      db.collection('requested_cards').doc(card?.id).update({
+        "state": 'approved',
+      }).then((_) =>
+          Navigator.of(context).pushReplacementNamed(AppRoutes.HOME_ADMIN));
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Column(
-        children: [
-          Container(
-            margin: const EdgeInsets.all(20),
-            child: Cartao(
-              number: '00000000000000000',
-              flag: context.read<AdminService>().flag!,
-              name: context.read<AdminService>().name!,
-              validity:
-                  '${DateTime.now().month.toString().padLeft(2, '0')}/${(DateTime.now().year.toInt() + int.parse(context.read<AdminService>().validity!)).toString().substring(2, 4)}',
-              cvc: null,
-              type: context.read<AdminService>().type!,
-              obscure: false,
-              animation: true,
+    return isLoading == true
+        ? const Scaffold(
+            body: Center(
+                child: CircularProgressIndicator(
+            color: Colors.black,
+          )))
+        : Scaffold(
+            appBar: AppBar(),
+            body: Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.all(20),
+                  child: Cartao(
+                    number: card?['number'],
+                    flag: card?['flag'],
+                    name: card?['name'],
+                    validity: card?['validity'],
+                    cvc: card?['cvc'],
+                    type: card?['type'],
+                    obscure: false,
+                    animation: true,
+                  ),
+                ),
+                const Spacer(
+                  flex: 1,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                        width: MediaQuery.of(context).size.width / 2.3,
+                        height: 50,
+                        margin: const EdgeInsets.fromLTRB(20, 0, 10, 20),
+                        child: ElevatedButton(
+                          onPressed: () => showModal(),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.redAccent,
+                            foregroundColor: Colors.white,
+                            elevation: 0,
+                            shadowColor: Colors.transparent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                          ),
+                          child: const Text('recusar'),
+                        )),
+                    Container(
+                        width: MediaQuery.of(context).size.width / 2.3,
+                        height: 50,
+                        margin: const EdgeInsets.fromLTRB(10, 0, 20, 20),
+                        child: ElevatedButton(
+                          onPressed: () => _approvedCard(),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.greenAccent,
+                            foregroundColor: Colors.white,
+                            elevation: 0,
+                            shadowColor: Colors.transparent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                          ),
+                          child: const Text('aceitar'),
+                        )),
+                  ],
+                ),
+              ],
             ),
-          ),
-          const Spacer(
-            flex: 1,
-          ),
-          Row(
-            children: [
-              BottomButtom(
-                onPress: () => showModal(),
-                title: 'recusar',
-                color: Colors.redAccent,
-              ),
-              BottomButtom(
-                onPress: () => _acceptCard(),
-                title: 'aceitar',
-                color: Colors.greenAccent,
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
+          );
   }
 
   void showModal() => showModalBottomSheet(
@@ -109,20 +143,20 @@ class _CardAdminState extends State<CardAdmin> {
                       const Expanded(
                           child: Center(
                         child: Text(
-                          'Tem certeza que deseja excluir o cartão?',
+                          'Tem certeza que deseja recusar o cartão?',
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                       )),
                       BottomButtom(
-                        onPress: () => _deleteCard(),
-                        title: 'excluir',
+                        onPress: () => _recusedCard(),
+                        title: 'recusar',
                         color: Colors.redAccent,
                       ),
                       BottomButtom(
                         onPress: () => Navigator.of(context).pop(),
                         title: 'cancelar',
-                        color: Colors.grey[250],
+                        color: Colors.grey[350],
                       )
                     ])
               : const Center(

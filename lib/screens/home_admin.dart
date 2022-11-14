@@ -15,10 +15,24 @@ class HomeAdmin extends StatefulWidget {
 }
 
 class _HomeAdminState extends State<HomeAdmin> {
+  bool isLoading = true;
+  DocumentSnapshot<Object?>? user;
+
   @override
   void initState() {
-    context.read<AdminService>().readCards();
     super.initState();
+    _readUser();
+  }
+
+  _readUser() async {
+    try {
+      await context.read<AdminService>().readUser();
+    } finally {
+      user = context.read<AdminService>().user;
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   _logout() async {
@@ -36,13 +50,53 @@ class _HomeAdminState extends State<HomeAdmin> {
       ),
       drawer: Drawer(
           backgroundColor: Colors.white,
-          child: DrawerHeader(
-              child: ListTile(
-            title: const Text('Sair', style: TextStyle(color: Colors.red)),
-            onTap: () => _logout(),
-            leading: const Icon(Icons.logout, size: 30),
-            iconColor: Colors.red,
-          ))),
+          child: ListView(
+            children: [
+              DrawerHeader(
+                  child: isLoading == true
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.black,
+                          ),
+                        )
+                      : Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: Colors.black,
+                              radius: 40,
+                              backgroundImage:
+                                  NetworkImage((user?['image']).toString()),
+                              child: user?['image'] == ''
+                                  ? Text(
+                                      (user?['name'])
+                                          .toString()
+                                          .substring(0, 2)
+                                          .toUpperCase(),
+                                      style: const TextStyle(
+                                          color: Colors.white, fontSize: 30))
+                                  : null,
+                            ),
+                            Text((user?['name']).toString(),
+                                style: const TextStyle(fontSize: 18))
+                          ],
+                        )),
+              ListTile(
+                title: const Text('Usuários'),
+                onTap: () =>
+                    Navigator.of(context).pushNamed(AppRoutes.LIST_USERS),
+                leading:
+                    const Icon(Icons.supervisor_account_outlined, size: 30),
+                iconColor: Colors.black,
+              ),
+              ListTile(
+                title: const Text('Sair', style: TextStyle(color: Colors.red)),
+                onTap: () => _logout(),
+                leading: const Icon(Icons.logout, size: 30),
+                iconColor: Colors.red,
+              )
+            ],
+          )),
       body: StreamBuilder<QuerySnapshot>(
           stream: context.read<AdminService>().readCards(),
           builder: (context, snapshot) {
@@ -60,13 +114,7 @@ class _HomeAdminState extends State<HomeAdmin> {
                     DocumentSnapshot card = snapshot.data!.docs[index];
                     return GestureDetector(
                       onTap: () {
-                        AdminService admservice = context.read<AdminService>();
-                        admservice.idCard = card.id;
-                        admservice.idUserCard = card['idUser'];
-                        admservice.name = card['name'];
-                        admservice.flag = card['flag'];
-                        admservice.type = card['type'];
-                        admservice.validity = card['validity'];
+                        context.read<AdminService>().card = card;
                         Navigator.of(context).pushNamed(AppRoutes.CARD_ADMIN);
                       },
                       child: Cartao(

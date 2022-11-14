@@ -1,6 +1,7 @@
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:appbankdarm/widgets/bottom_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:credit_card_validator/credit_card_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/services.dart';
@@ -20,70 +21,43 @@ class _RegisterCardNumberState extends State<RegisterCardNumber> {
   bool isLoading = false;
   String flag = '';
   final number = TextEditingController();
+  final formFieldKey = GlobalKey<FormFieldState>();
   late FocusNode myFocusNode;
+  bool labelErr = false;
 
   @override
   void initState() {
     myFocusNode = FocusNode();
     number.addListener(() {
-      var numberText = UtilBrasilFields.removeCaracteres(number.text);
-      var oneDig = numberText.substring(0, 1);
-      var twoDig = numberText.substring(0, 2);
-      var sixDig = numberText.substring(0, 6);
-      if (numberText.length == 16 &&
-          int.parse(twoDig) >= 51 &&
-          int.parse(twoDig) <= 55) {
-        setState(() => {flag = "mastercard", isButtonActive = true});
-      } else if (numberText.length == 16 && oneDig == "4") {
-        setState(() => {flag = "visa", isButtonActive = true});
-      } else if (numberText.length == 16 &&
-          int.parse(twoDig) >= 34 &&
-          int.parse(twoDig) <= 37) {
-        setState(() => {flag = "americanexpress", isButtonActive = true});
-      } else if (numberText.length == 16 && sixDig == "384100" ||
-          sixDig == "384140" ||
-          sixDig == "384160" ||
-          sixDig == "606282" ||
-          sixDig == "637095" ||
-          sixDig == "637568" ||
-          sixDig == "637599" ||
-          sixDig == "637609" ||
-          sixDig == "637612") {
-        setState(() => {flag = "hipercard", isButtonActive = true});
-      } else if (numberText.length == 16 && sixDig == "401178" ||
-          sixDig == "401179" ||
-          sixDig == "431274" ||
-          sixDig == "438935" ||
-          sixDig == "451416" ||
-          sixDig == "457393" ||
-          sixDig == "457631" ||
-          sixDig == "457632" ||
-          sixDig == "504175" ||
-          (int.parse(sixDig) >= 506699 && int.parse(sixDig) <= 506778) ||
-          (int.parse(sixDig) >= 509000 && int.parse(sixDig) <= 509999) ||
-          sixDig == "627780" ||
-          sixDig == "636297" ||
-          sixDig == "636368" ||
-          (int.parse(sixDig) >= 650035 && int.parse(sixDig) <= 650051) ||
-          (int.parse(sixDig) >= 650405 && int.parse(sixDig) <= 650439) ||
-          (int.parse(sixDig) >= 650485 && int.parse(sixDig) <= 650538) ||
-          (int.parse(sixDig) >= 650541 && int.parse(sixDig) <= 650598) ||
-          (int.parse(sixDig) >= 650700 && int.parse(sixDig) <= 650718) ||
-          (int.parse(sixDig) >= 650720 && int.parse(sixDig) <= 650727) ||
-          (int.parse(sixDig) >= 650901 && int.parse(sixDig) <= 650978) ||
-          (int.parse(sixDig) >= 651652 && int.parse(sixDig) <= 651679) ||
-          (int.parse(sixDig) >= 655000 && int.parse(sixDig) <= 655019) ||
-          (int.parse(sixDig) >= 655021 && int.parse(sixDig) <= 655058) ||
-          (int.parse(sixDig) >= 650031 && int.parse(sixDig) <= 650033)) {
-        setState(() => {flag = "elo", isButtonActive = true});
+      if (number.text.length >= 18) {
+        _validateFlag();
+        setState(() {
+          isButtonActive = true;
+        });
       } else {
-        setState(() => {isButtonActive = false, flag = ""});
+        setState(() {
+          isButtonActive = false;
+          formFieldKey.currentState?.validate();
+        });
       }
     });
     super.initState();
   }
 
-  _pressButton() async {
+  _validateFlag() {
+    setState(() {
+      flag = CreditCardValidator().validateCCNum(number.text).ccType.name;
+    });
+  }
+
+  _navigator() {
+    context.read<CardService>().number =
+        UtilBrasilFields.removeCaracteres(number.text);
+    context.read<CardService>().flag = flag;
+    Navigator.of(context).pushNamed(AppRoutes.REGISTER_CARD_CVC);
+  }
+
+  _getNumber() async {
     setState(() {
       isLoading = true;
     });
@@ -101,17 +75,26 @@ class _RegisterCardNumberState extends State<RegisterCardNumber> {
                 showModal(),
               }
             else
-              {
-                context.read<CardService>().number =
-                    UtilBrasilFields.removeCaracteres(number.text),
-                context.read<CardService>().flag = flag,
-                Navigator.of(context).pushNamed(AppRoutes.REGISTER_CARD_CVC),
-              }
+              {_navigator()}
           },
         );
     setState(() {
       isLoading = false;
     });
+  }
+
+  _validateNumber() {
+    formFieldKey.currentState?.validate();
+    setState(() => isLoading = false);
+  }
+
+  _pressButton() async {
+    setState(() {
+      isLoading = true;
+    });
+    CreditCardValidator().validateCCNum(number.text).isValid == true
+        ? {_getNumber()}
+        : {_validateNumber()};
   }
 
   @override
@@ -132,7 +115,8 @@ class _RegisterCardNumberState extends State<RegisterCardNumber> {
                   children: [
                     SizedBox(
                         width: MediaQuery.of(context).size.width - 140,
-                        child: TextField(
+                        child: TextFormField(
+                          key: formFieldKey,
                           controller: number,
                           keyboardType: TextInputType.number,
                           focusNode: myFocusNode,
@@ -140,10 +124,36 @@ class _RegisterCardNumberState extends State<RegisterCardNumber> {
                             FilteringTextInputFormatter.digitsOnly,
                             CartaoBancarioInputFormatter(),
                           ],
+                          validator: (String? value) {
+                            if (CreditCardValidator()
+                                        .validateCCNum(number.text)
+                                        .isValid ==
+                                    false &&
+                                number.text.length >= 18) {
+                              setState(() {
+                                labelErr = true;
+                              });
+                              return 'Número inválido. confira e tente novamente';
+                            } else {
+                              labelErr = false;
+                            }
+                          },
                           autofocus: true,
-                          style: const TextStyle(fontSize: 26),
-                          decoration: const InputDecoration(
+                          style: TextStyle(
+                            fontSize: 26,
+                            color: labelErr == true ? Colors.red : Colors.black,
+                          ),
+                          decoration: InputDecoration(
                             hintText: '0000 0000 0000 0000',
+                            labelStyle: TextStyle(
+                              color:
+                                  labelErr == true ? Colors.red : Colors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            errorStyle: const TextStyle(
+                              color: Colors.red,
+                            ),
                             border: InputBorder.none,
                           ),
                           cursorColor: Colors.black,
@@ -176,7 +186,7 @@ class _RegisterCardNumberState extends State<RegisterCardNumber> {
                                           width: 90,
                                           fit: BoxFit.fitWidth,
                                         )
-                                      : flag == 'americanexpress'
+                                      : flag == 'amex'
                                           ? Image.asset(
                                               'assets/images/americanexpress.png',
                                               width: 60,
@@ -189,7 +199,7 @@ class _RegisterCardNumberState extends State<RegisterCardNumber> {
           ),
           BottomButtom(
               enabled: isButtonActive,
-              onPress: () => isButtonActive == true ? _pressButton() : null,
+              onPress: () => _pressButton(),
               title: "continuar")
         ],
       ),

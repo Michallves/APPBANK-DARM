@@ -1,4 +1,3 @@
-import 'package:appbankdarm/services/auth_service.dart';
 import 'package:appbankdarm/services/card_service.dart';
 import 'package:appbankdarm/services/user_service.dart';
 import 'package:appbankdarm/widgets/cartao.dart';
@@ -7,6 +6,7 @@ import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class HomeUser extends StatefulWidget {
   const HomeUser({super.key});
@@ -16,16 +16,24 @@ class HomeUser extends StatefulWidget {
 }
 
 class _HomeUserState extends State<HomeUser> {
-  bool isLoading = false;
+  bool isLoading = true;
+  DocumentSnapshot<Object?>? user;
 
   @override
   void initState() {
-    _readUser();
     super.initState();
+    _readUser();
   }
 
   _readUser() async {
-    await context.read<UserService>().readUser();
+    try {
+      await context.read<UserService>().readUser();
+    } finally {
+      user = context.read<UserService>().user;
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   _logout() async {
@@ -46,33 +54,34 @@ class _HomeUserState extends State<HomeUser> {
           child: ListView(
             children: [
               DrawerHeader(
-                  child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  CircleAvatar(
-                    backgroundColor: Colors.black,
-                    radius: 40,
-                    backgroundImage: NetworkImage(
-                        context.read<UserService>().image.toString()),
-                    child: context.read<UserService>().image == null
-                        ? Text(
-                            context
-                                .read<UserService>()
-                                .name
-                                .toString()
-                                .substring(0, 2)
-                                .toUpperCase(),
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 30))
-                        : null,
-                  ),
-                  Text(
-                      context.read<UserService>().name == null
-                          ? ''
-                          : context.read<UserService>().name.toString(),
-                      style: const TextStyle(fontSize: 18))
-                ],
-              )),
+                  child: isLoading == true
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.black,
+                          ),
+                        )
+                      : Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: Colors.black,
+                              radius: 40,
+                              backgroundImage:
+                                  NetworkImage((user?['image']).toString()),
+                              child: user?['image'] == ''
+                                  ? Text(
+                                      (user?['name'])
+                                          .toString()
+                                          .substring(0, 2)
+                                          .toUpperCase(),
+                                      style: const TextStyle(
+                                          color: Colors.white, fontSize: 30))
+                                  : null,
+                            ),
+                            Text((user?['name']).toString(),
+                                style: const TextStyle(fontSize: 18))
+                          ],
+                        )),
               ListTile(
                 title: const Text('Conta'),
                 onTap: () => Navigator.of(context).pushNamed(AppRoutes.ACCOUNT),
@@ -80,17 +89,24 @@ class _HomeUserState extends State<HomeUser> {
                 iconColor: Colors.black,
               ),
               ListTile(
-                title: const Text('Criar cartão'),
+                title: const Text('Cadastrar cartão'),
+                onTap: () => Navigator.of(context)
+                    .pushNamed(AppRoutes.REGISTER_CARD_NAME),
+                leading: const Icon(Icons.credit_card, size: 30),
+                iconColor: Colors.black,
+              ),
+              ListTile(
+                title: const Text('Solicitar cartão'),
                 onTap: () =>
                     Navigator.of(context).pushNamed(AppRoutes.CREATE_CARD_NAME),
                 leading: const Icon(Icons.add_card, size: 30),
                 iconColor: Colors.black,
               ),
               ListTile(
-                title: const Text('Cadastrar cartão'),
-                onTap: () => Navigator.of(context)
-                    .pushNamed(AppRoutes.REGISTER_CARD_NAME),
-                leading: const Icon(Icons.credit_card, size: 30),
+                title: const Text('Cartões solicitados'),
+                onTap: () =>
+                    Navigator.of(context).pushNamed(AppRoutes.REQUESTED_CARDS),
+                leading: const Icon(MdiIcons.creditCardClockOutline, size: 30),
                 iconColor: Colors.black,
               ),
               ListTile(
@@ -118,7 +134,7 @@ class _HomeUserState extends State<HomeUser> {
                     DocumentSnapshot card = snapshot.data!.docs[index];
                     return GestureDetector(
                       onTap: () {
-                        context.read<CardService>().id = card.id;
+                        context.read<CardService>().card = card;
                         Navigator.of(context).pushNamed(AppRoutes.CARD_USER);
                       },
                       child: Cartao(

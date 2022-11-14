@@ -5,35 +5,43 @@ import 'package:flutter/material.dart';
 class AdminService extends ChangeNotifier {
   late FirebaseFirestore db = FirebaseFirestore.instance;
   late AuthService auth;
-
-  String? idUser;
-  String? idCard;
-  String? idUserCard;
-  String? name;
-  String? number;
-  String? flag;
-  String? type;
-  String? cvc;
-  String? validity;
+  DocumentSnapshot<Object?>? user;
+  DocumentSnapshot<Object?>? card;
 
   AdminService({required this.auth}) {
     _startRepository();
   }
 
   _startRepository() async {
+    await readUser();
     await readCards();
     await readUsers();
   }
 
+  readUser() async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(auth.usuario?.uid)
+        .get()
+        .then((doc) {
+      addListener(() {
+        user = doc;
+      });
+      notifyListeners();
+    });
+  }
+
   readCards() {
-    Stream<QuerySnapshot<Object?>>? data =
-        db.collection("cards_requested").snapshots();
+    Stream<QuerySnapshot<Object?>>? data = db
+        .collection("requested_cards")
+        .where('state', isEqualTo: 'waiting')
+        .snapshots();
     return data;
   }
 
   readUsers() {
     Stream<QuerySnapshot<Object?>>? data =
-        db.collection("users").where("type", isEqualTo: "user").snapshots();
+        db.collection("users").where("rool", isEqualTo: "user").snapshots();
     return data;
   }
 }

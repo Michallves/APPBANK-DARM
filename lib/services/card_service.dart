@@ -1,3 +1,4 @@
+import 'package:appbankdarm/widgets/cartao.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -6,6 +7,8 @@ import 'auth_service.dart';
 class CardService extends ChangeNotifier {
   late FirebaseFirestore db = FirebaseFirestore.instance;
   late AuthService auth;
+
+  DocumentSnapshot<Object?>? card;
   String? id;
   String? name;
   String? number;
@@ -14,7 +17,10 @@ class CardService extends ChangeNotifier {
   String? cvc;
   String? type;
 
-  CardService({required this.auth});
+  CardService({required this.auth}) {
+    readCards();
+    readRequestedCards();
+  }
 
   readCards() {
     Stream<QuerySnapshot<Object?>>? data = db
@@ -25,13 +31,12 @@ class CardService extends ChangeNotifier {
     return data;
   }
 
-  readCard() async {
-    return await FirebaseFirestore.instance
-        .collection('users')
-        .doc(auth.usuario?.uid)
-        .collection('cards')
-        .doc(id!)
-        .get();
+  readRequestedCards() {
+    Stream<QuerySnapshot<Object?>>? data = db
+        .collection("requested_cards")
+        .where('idUser', isEqualTo: auth.usuario?.uid)
+        .snapshots();
+    return data;
   }
 
   registerCard(validity) async {
@@ -48,14 +53,5 @@ class CardService extends ChangeNotifier {
       'type': '',
       'validity': validity,
     });
-  }
-
-  deleteCard() async {
-    await db
-        .collection('users')
-        .doc(auth.usuario?.uid)
-        .collection('cards')
-        .doc(id)
-        .delete();
   }
 }

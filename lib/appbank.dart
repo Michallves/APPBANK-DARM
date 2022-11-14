@@ -1,6 +1,9 @@
 import 'package:appbankdarm/screens/card_admin.dart';
 import 'package:appbankdarm/screens/card_user.dart';
 import 'package:appbankdarm/screens/home_admin.dart';
+import 'package:appbankdarm/screens/list_users.dart';
+import 'package:appbankdarm/screens/requested_card.dart';
+import 'package:appbankdarm/screens/requested_cards.dart';
 import 'package:flutter/material.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 //Routes
@@ -23,10 +26,10 @@ import 'package:appbankdarm/screens/home_user.dart';
 import 'screens/account/profile.dart';
 import 'screens/account/delete.dart';
 //Pages Create Card User
-import 'screens/create_card/name.dart';
-import 'screens/create_card/type.dart';
-import 'screens/create_card/flag.dart';
-import 'screens/create_card/validity.dart';
+import 'screens/request_card/name.dart';
+import 'screens/request_card/type.dart';
+import 'screens/request_card/flag.dart';
+import 'screens/request_card/validity.dart';
 //Pages Register Card User
 import 'screens/register_card/name.dart';
 import 'screens/register_card/number.dart';
@@ -78,6 +81,8 @@ class AppBank extends StatelessWidget {
         //Home User
         AppRoutes.HOME_USER: (ctx) => const HomeUser(),
         AppRoutes.CARD_USER: (ctx) => const CardUser(),
+        AppRoutes.REQUESTED_CARDS: (ctx) => const RequestedCards(),
+        AppRoutes.REQUESTED_CARD: (ctx) => const RequestedCard(),
         //Account User
         AppRoutes.ACCOUNT: (ctx) => const AccountUser(),
         AppRoutes.DELETE: (ctx) => const DeleteUser(),
@@ -94,6 +99,7 @@ class AppBank extends StatelessWidget {
         //Admin User
         AppRoutes.HOME_ADMIN: (ctx) => const HomeAdmin(),
         AppRoutes.CARD_ADMIN: (ctx) => const CardAdmin(),
+        AppRoutes.LIST_USERS: (ctx) => const ListUsers(),
       },
     );
   }

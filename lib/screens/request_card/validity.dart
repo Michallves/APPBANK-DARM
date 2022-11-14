@@ -19,62 +19,71 @@ class CreateCardValidity extends StatefulWidget {
 class _CreateCardValidityState extends State<CreateCardValidity> {
   bool isLoading = false;
   String validity = '';
-  String? number;
-  String? cvc;
-
+  Random random = Random();
   _createNumber() {
+    String number;
     String? flag = context.read<CardService>().flag;
-    int min = 5100000000000000;
-    int max = 5500000000000000;
 
-    print((min + Random().nextInt(max - min)).toString());
-    if (flag == "mastercard") {
-      min = 5100000000000000;
-      max = 5500000000000000;
-      number = (min + Random().nextInt(max - min)).toString();
-    } else if (flag == "visa") {
-      min = 4000000000000000;
-      max = 4999999999999999;
-      number = (min + Random().nextInt(max - min)).toString();
-    } else if (flag == "americanexpress") {
-      min = 3400000000000000;
-      max = 3700000000000000;
-      number = (min + Random().nextInt(max - min)).toString();
-    } else if (flag == "hipercard") {
-      min = 3841000000000000;
-      max = 3841009999999999;
-      number = (min + Random().nextInt(max - min)).toString();
-    } else if (flag == "elo") {
-      min = 6504050000000000;
-      max = 6504399999999999;
-      number = (min + Random().nextInt(max - min)).toString();
+    int min = 0;
+    int max = 0;
+    int restMin = 10000000;
+    int restMax = 99999999;
+
+    String randomRest =
+        (restMin + random.nextInt(restMax - restMin)).toString();
+
+    try {
+      if (flag == "mastercard") {
+        min = 51000000;
+        max = 55000000;
+      } else if (flag == "visa") {
+        min = 40000000;
+        max = 49999999;
+      } else if (flag == "americanexpress") {
+        min = 34000000;
+        max = 37000000;
+      } else if (flag == "hipercard") {
+        min = 38410000;
+        max = 38410099;
+      } else if (flag == "elo") {
+        min = 65040500;
+        max = 65043999;
+      }
+    } finally {
+      number = ((min + random.nextInt(max - min)).toString() + randomRest);
     }
+    return number;
+  }
+
+  _createCvc() {
+    String cvc;
+    cvc = (100 + random.nextInt(999 - 100)).toString();
+    return cvc;
   }
 
   _createCard() async {
     CardService card = context.read<CardService>();
     setState(() => isLoading = true);
-    try {
-      _createNumber();
-    } finally {
-      await FirebaseFirestore.instance
-          .collection("cards_requested")
-          .add({
-            'idUser': context.read<AuthService>().usuario?.uid,
-            'number': number,
-            'cvc': Random().nextInt(300).toString().padLeft(3, '0'),
-            'name': card.name,
-            'flag': card.flag,
-            'validity':
-                "${DateTime.now().month.toString().padLeft(2, '0')}/${(DateTime.now().year.toInt() + int.parse(validity)).toString().substring(2, 4)}",
-            'type': card.type,
-            'state': 'waiting'
-          })
-          .then((_) => Navigator.of(context).pushNamed(AppRoutes.HOME_USER))
-          .catchError((_) {
-            setState(() => isLoading = false);
-          });
-    }
+
+    await FirebaseFirestore.instance
+        .collection("requested_cards")
+        .add({
+          'idUser': context.read<AuthService>().usuario?.uid,
+          'number': _createNumber(),
+          'cvc': _createCvc(),
+          'name': card.name,
+          'flag': card.flag,
+          'validity':
+              "${DateTime.now().month.toString().padLeft(2, '0')}/${(DateTime.now().year.toInt() + int.parse(validity)).toString().substring(2, 4)}",
+          'type': card.type,
+          'state': 'waiting',
+          'justification': '',
+        })
+        .then((_) => Navigator.of(context)
+            .pushReplacementNamed(AppRoutes.REQUESTED_CARDS))
+        .catchError((_) {
+          setState(() => isLoading = false);
+        });
   }
 
   @override
@@ -170,7 +179,7 @@ class _CreateCardValidityState extends State<CreateCardValidity> {
           BottomButtom(
               loading: isLoading,
               enabled: true,
-              onPress: () => _createNumber(),
+              onPress: () => _createCard(),
               title: 'solicitar cartão')
         ],
       ),

@@ -69,6 +69,7 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
                       "cpf": auth.cpf,
                       'name': auth.name,
                       "email": auth.email,
+                      "image": '',
                       "rool": 'admin',
                       "address": {
                         'state': auth.address![0],
@@ -82,7 +83,7 @@ class _RegisterPasswordAgainUserState extends State<RegisterPasswordAgainUser> {
         .then((_) {
       auth.getUser();
       if (auth.rool == 'user') {
-        Navigator.of(context).pushReplacementNamed(AppRoutes.HOME_USER);
+        Navigator.of(context).pushReplacementNamed(AppRoutes.CREATE_CARD_NAME);
       } else {
         Navigator.of(context).pushReplacementNamed(AppRoutes.HOME_ADMIN);
       }

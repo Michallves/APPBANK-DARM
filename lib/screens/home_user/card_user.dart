@@ -1,12 +1,12 @@
 import 'package:appbankdarm/services/auth_service.dart';
 import 'package:appbankdarm/services/card_service.dart';
+import 'package:appbankdarm/services/user_service.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:appbankdarm/widgets/bottom_button.dart';
 import 'package:appbankdarm/widgets/cartao.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../services/user_service.dart';
 
 class CardUser extends StatefulWidget {
   const CardUser({super.key});
@@ -27,13 +27,20 @@ class _CardUserState extends State<CardUser> {
   }
 
   _deleteCard() async {
-    await FirebaseFirestore.instance
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    await db
         .collection('users')
-        .doc(context.read<AuthService>().usuario?.uid.toString())
+        .doc(context.read<AuthService>().usuario?.uid)
         .collection('cards')
         .doc(card?.id)
         .delete()
-        .then((_) => Navigator.of(context).pushNamed(AppRoutes.HOME_USER))
+        .then((_) => db
+                .collection("users")
+                .doc(context.read<AuthService>().usuario?.uid)
+                .update({
+              "cards": FieldValue.increment(-1),
+            }).then((_) =>
+                    Navigator.of(context).pushNamed(AppRoutes.HOME_USER)))
         .catchError((_) {
       setState(() => isLoadingButton = false);
     });

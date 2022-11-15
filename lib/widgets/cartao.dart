@@ -64,9 +64,16 @@ class _CartaoState extends State<Cartao> with TickerProviderStateMixin {
     return GestureDetector(
         onHorizontalDragStart: widget.animation == true
             ? (details) {
-                if (horizontalDrag <= 90) {
+                if (horizontalDrag <= 90 || horizontalDrag >= 270) {
+                  controller?.reset();
                   setState(() {
                     horizontalDrag = 0;
+                    setCardSide();
+                  });
+                } else {
+                  setState(() {
+                    horizontalDrag = 180;
+                    setCardSide();
                   });
                 }
               }

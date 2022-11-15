@@ -34,16 +34,6 @@ class _AccountUserState extends State<AccountUser> {
     }
   }
 
-  _pressButton() {
-    Navigator.of(context).pushNamed(AppRoutes.HOME_USER);
-  }
-
-  removeImage() async {
-    await FirebaseStorage.instance
-        .refFromURL(context.read<UserService>().image.toString())
-        .delete();
-  }
-
   _uploadUrl(image) async {
     FirebaseFirestore.instance
         .collection('users')
@@ -128,7 +118,8 @@ class _AccountUserState extends State<AccountUser> {
                   height: 50,
                   margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
                   child: ElevatedButton(
-                    onPressed: () => _pressButton(),
+                    onPressed: () => Navigator.of(context)
+                        .pushNamed(AppRoutes.CURRENT_PASSWORD),
                     child: const Text("alterar senha"),
                   ),
                 ),
@@ -149,7 +140,7 @@ class _AccountUserState extends State<AccountUser> {
       ),
       context: context,
       builder: (context) => SizedBox(
-            height: 250,
+            height: 200,
             child: Column(
               children: <Widget>[
                 const SizedBox(
@@ -176,17 +167,6 @@ class _AccountUserState extends State<AccountUser> {
                   ),
                   onTap: getImageGallery,
                 ),
-                context.read<UserService>().image != null
-                    ? ListTile(
-                        iconColor: Colors.redAccent,
-                        textColor: Colors.redAccent,
-                        title: const Text('Remover'),
-                        leading: const Icon(
-                          Icons.delete_outline,
-                        ),
-                        onTap: removeImage,
-                      )
-                    : Container()
               ],
             ),
           ));

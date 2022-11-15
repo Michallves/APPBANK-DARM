@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 import '../services/admin_service.dart';
+import '../services/auth_service.dart';
 import '../utils/app_routes.dart';
 import '../widgets/cartao.dart';
 
@@ -36,16 +37,15 @@ class _HomeAdminState extends State<HomeAdmin> {
   }
 
   _logout() async {
-    await FirebaseAuth.instance.signOut().then(
+    context.read<AuthService>().logout().then(
         (_) => Navigator.of(context).pushReplacementNamed(AppRoutes.PRELOAD));
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Admin',
+          'Cartões solicitados',
         ),
       ),
       drawer: Drawer(

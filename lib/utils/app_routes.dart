@@ -11,12 +11,14 @@ abstract class AppRoutes {
   static const REGISTER_ADDRESS = '/RegisterAddressUser';
   static const REGISTER_ACCOUNT_TYPE = '/RegisterAccountTypeUser';
   static const REGISTER_PASSWORD = '/RegisterPasswordUser';
-  static const REGISTER_PASSWORD_AGAIN = '/RegisterPasswordAgainUser';
+  static const REGISTER_PASSWORD_CONFIRM = '/RegisterPasswordConfirm';
   static const HOME_USER = '/homeUser';
   static const CARD_USER = '/cardUser';
   static const ACCOUNT = '/accountUser';
   static const DELETE = '/deleteUser';
-  static const REQUESTED_CARDS = '/requestedCards';
+  static const CURRENT_PASSWORD = '/currentPassword';
+  static const NEW_PASSWORD = '/newPassword';
+  static const NEW_PASSWORD_CONFIRM = '/newPasswordConfirm';
   static const REQUESTED_CARD = '/requestedCard';
   static const CREATE_CARD_NAME = '/createCardName';
   static const CREATE_CARD_TYPE = '/createCardType';

@@ -53,5 +53,8 @@ class CardService extends ChangeNotifier {
       'type': '',
       'validity': validity,
     });
+    await db.collection("users").doc(auth.usuario?.uid).update({
+      "cards": FieldValue.increment(1),
+    });
   }
 }

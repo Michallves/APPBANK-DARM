@@ -1,21 +1,18 @@
-import 'package:appbankdarm/services/auth_service.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:pin_code_text_field/pin_code_text_field.dart';
 import 'package:provider/provider.dart';
+import '../../../services/auth_service.dart';
+import '../../../widgets/bottom_button.dart';
+import '../../../widgets/pin.dart';
 
-import '../../widgets/bottom_button.dart';
-import '../../widgets/pin.dart';
-
-class LoginPasswordUser extends StatefulWidget {
-  const LoginPasswordUser({super.key});
+class NewPasswordConfirm extends StatefulWidget {
+  const NewPasswordConfirm({super.key});
 
   @override
-  State<LoginPasswordUser> createState() => _LoginPasswordUserState();
+  State<NewPasswordConfirm> createState() => _NewPasswordConfirmState();
 }
 
-class _LoginPasswordUserState extends State<LoginPasswordUser> {
+class _NewPasswordConfirmState extends State<NewPasswordConfirm> {
   bool isButtonActive = false;
   bool isLoading = false;
   final password = TextEditingController();
@@ -34,24 +31,18 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
     super.initState();
   }
 
-  _login() async {
+  _changePassword() async {
     setState(() => isLoading = true);
-    AuthService auth = context.read<AuthService>();
+    await context.read<AuthService>().updatePassword(password.text).then(
+        (_) => Navigator.of(context).pushReplacementNamed(AppRoutes.HOME_USER));
+  }
 
-    await context.read<AuthService>().login(password.text).then((_) {
-      if (auth.rool == 'user') {
-        setState(() {
-          Navigator.of(context).pushReplacementNamed(AppRoutes.HOME_USER);
-        });
-      } else if (auth.rool == 'admin') {
-        setState(() {
-          Navigator.of(context).pushReplacementNamed(AppRoutes.HOME_ADMIN);
-        });
-      }
-    }).catchError((_) {
+  _pressButton() {
+    if (context.read<AuthService>().password == password.text) {
+      _changePassword();
+    } else {
       _showModal();
-      setState(() => isLoading = false);
-    });
+    }
   }
 
   @override
@@ -59,37 +50,25 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'senha',
+          'confirmar nova senha',
         ),
       ),
       body: Column(
         children: [
           Expanded(
             child: Container(
-                margin: const EdgeInsets.symmetric(vertical: 40),
+                margin: const EdgeInsets.symmetric(vertical: 20),
                 child: Pin(
                   textEditingController: password,
                   focusNode: myFocusNode,
                 )),
           ),
-          Column(
-            children: [
-              const TextButton(
-                onPressed: null,
-                child: Text('recuperar senha',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold)),
-              ),
-              BottomButtom(
-                onPress: () => _login(),
-                title: 'entrar',
-                enabled: isButtonActive,
-                loading: isLoading,
-              )
-            ],
-          ),
+          BottomButtom(
+            loading: isLoading,
+            onPress: () => _pressButton(),
+            title: 'alterar senha',
+            enabled: isButtonActive,
+          )
         ],
       ),
     );
@@ -112,12 +91,12 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: const [
                       Text(
-                        'Senha incorreta!',
+                        'as senhas são diferentes',
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        'a senha que você inseriu está incorreta. Tente novamente.',
+                        'a senha e a confirmação de senha precisam ser exatamentes iguais',
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 16),
                       ),
@@ -126,11 +105,11 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
                   BottomButtom(
                     onPress: () => {
                       Navigator.of(context).pop(),
-                      myFocusNode.requestFocus()
+                      myFocusNode.requestFocus(),
                     },
                     title: 'tentar novamente',
                     color: Colors.redAccent,
-                  ),
+                  )
                 ]),
           ));
 }

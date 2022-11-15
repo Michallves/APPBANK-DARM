@@ -8,6 +8,8 @@ class AdminService extends ChangeNotifier {
   DocumentSnapshot<Object?>? user;
   DocumentSnapshot<Object?>? card;
 
+  String filter = "name";
+
   AdminService({required this.auth}) {
     _startRepository();
   }
@@ -40,8 +42,10 @@ class AdminService extends ChangeNotifier {
   }
 
   readUsers() {
-    Stream<QuerySnapshot<Object?>>? data =
-        db.collection("users").where("rool", isEqualTo: "user").snapshots();
+    Stream<QuerySnapshot<Object?>>? data = db
+        .collection("users")
+        .orderBy(filter, descending: filter == 'cards' ? true : false)
+        .snapshots();
     return data;
   }
 }

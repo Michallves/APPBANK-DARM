@@ -1,9 +1,11 @@
+import 'package:appbankdarm/screens/account/changePassword/current_password.dart';
+import 'package:appbankdarm/screens/account/changePassword/new_password.dart';
+import 'package:appbankdarm/screens/account/changePassword/new_password_confirm.dart';
 import 'package:appbankdarm/screens/card_admin.dart';
-import 'package:appbankdarm/screens/card_user.dart';
+import 'package:appbankdarm/screens/home_user/card_user.dart';
 import 'package:appbankdarm/screens/home_admin.dart';
 import 'package:appbankdarm/screens/list_users.dart';
 import 'package:appbankdarm/screens/requested_card.dart';
-import 'package:appbankdarm/screens/requested_cards.dart';
 import 'package:flutter/material.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 //Routes
@@ -19,9 +21,9 @@ import 'screens/register/telephone.dart';
 import 'screens/register/address.dart';
 import 'screens/register/accountType.dart';
 import 'screens/register/password.dart';
-import 'screens/register/passwordAgain.dart';
+import 'screens/register/passwordConfirm.dart';
 //Pages Home User
-import 'package:appbankdarm/screens/home_user.dart';
+import 'package:appbankdarm/screens/home_user/home_user.dart';
 //Pages Account User
 import 'screens/account/profile.dart';
 import 'screens/account/delete.dart';
@@ -51,6 +53,12 @@ class AppBank extends StatelessWidget {
             elevation: 0),
         scaffoldBackgroundColor: Colors.white,
         indicatorColor: Colors.black,
+        inputDecorationTheme: const InputDecorationTheme(
+            floatingLabelStyle: TextStyle(
+          color: Colors.black,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        )),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.black,
@@ -75,17 +83,20 @@ class AppBank extends StatelessWidget {
         AppRoutes.REGISTER_ADDRESS: (ctx) => const RegisterAddressUser(),
         AppRoutes.REGISTER_ACCOUNT_TYPE: (ctx) =>
             const RegisterAccountTypeUser(),
-        AppRoutes.REGISTER_PASSWORD: (ctx) => const RegisterPasswordUser(),
-        AppRoutes.REGISTER_PASSWORD_AGAIN: (ctx) =>
-            const RegisterPasswordAgainUser(),
+        AppRoutes.REGISTER_PASSWORD: (ctx) => const RegisterPassword(),
+        AppRoutes.REGISTER_PASSWORD_CONFIRM: (ctx) =>
+            const RegisterPasswordConfirm(),
         //Home User
         AppRoutes.HOME_USER: (ctx) => const HomeUser(),
         AppRoutes.CARD_USER: (ctx) => const CardUser(),
-        AppRoutes.REQUESTED_CARDS: (ctx) => const RequestedCards(),
         AppRoutes.REQUESTED_CARD: (ctx) => const RequestedCard(),
         //Account User
         AppRoutes.ACCOUNT: (ctx) => const AccountUser(),
         AppRoutes.DELETE: (ctx) => const DeleteUser(),
+        //Change Password User
+        AppRoutes.CURRENT_PASSWORD: (ctx) => const CurrentPassword(),
+        AppRoutes.NEW_PASSWORD: (ctx) => const NewPassword(),
+        AppRoutes.NEW_PASSWORD_CONFIRM: (ctx) => const NewPasswordConfirm(),
         //Create Card User
         AppRoutes.CREATE_CARD_NAME: (ctx) => const CreateCardName(),
         AppRoutes.CREATE_CARD_TYPE: (ctx) => const CreateCardType(),

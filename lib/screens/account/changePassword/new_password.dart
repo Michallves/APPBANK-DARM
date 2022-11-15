@@ -1,19 +1,18 @@
 import 'package:appbankdarm/services/auth_service.dart';
-import 'package:appbankdarm/utils/app_routes.dart';
+import 'package:appbankdarm/widgets/pin.dart';
 import 'package:flutter/material.dart';
-import 'package:pin_code_text_field/pin_code_text_field.dart';
 import 'package:provider/provider.dart';
-import '../../widgets/bottom_button.dart';
-import '../../widgets/pin.dart';
+import '../../../utils/app_routes.dart';
+import '../../../widgets/bottom_button.dart';
 
-class RegisterPassword extends StatefulWidget {
-  const RegisterPassword({super.key});
+class NewPassword extends StatefulWidget {
+  const NewPassword({super.key});
 
   @override
-  State<RegisterPassword> createState() => _RegisterPasswordState();
+  State<NewPassword> createState() => _NewPasswordState();
 }
 
-class _RegisterPasswordState extends State<RegisterPassword> {
+class _NewPasswordState extends State<NewPassword> {
   bool isButtonActive = false;
   final password = TextEditingController();
   FocusNode myFocusNode = FocusNode();
@@ -33,7 +32,7 @@ class _RegisterPasswordState extends State<RegisterPassword> {
 
   _pressButton() {
     context.read<AuthService>().password = password.text;
-    Navigator.of(context).pushNamed(AppRoutes.REGISTER_PASSWORD_CONFIRM);
+    Navigator.of(context).pushNamed(AppRoutes.NEW_PASSWORD_CONFIRM);
   }
 
   @override
@@ -41,14 +40,14 @@ class _RegisterPasswordState extends State<RegisterPassword> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'senha',
+          'nova senha',
         ),
       ),
       body: Column(
         children: [
           Expanded(
             child: Container(
-                margin: const EdgeInsets.symmetric(vertical: 40),
+                margin: const EdgeInsets.symmetric(vertical: 20),
                 child: Pin(
                   textEditingController: password,
                   focusNode: myFocusNode,

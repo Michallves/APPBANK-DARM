@@ -30,8 +30,8 @@ class _RequestedCardState extends State<RequestedCard> {
         .collection('requested_cards')
         .doc(card?.id)
         .delete()
-        .then((_) => Navigator.of(context)
-            .pushReplacementNamed(AppRoutes.REQUESTED_CARDS))
+        .then((_) =>
+            Navigator.of(context).pushReplacementNamed(AppRoutes.HOME_USER))
         .catchError((_) {
       setState(() => isLoadingButton = false);
     });
@@ -79,7 +79,7 @@ class _RequestedCardState extends State<RequestedCard> {
                   ),
                 ),
                 const ListTile(
-                  title: Text('aguardando...'),
+                  title: Text('aguardando avaliação...'),
                   leading: Icon(
                     MdiIcons.creditCardClockOutline,
                     size: 30,
@@ -98,12 +98,13 @@ class _RequestedCardState extends State<RequestedCard> {
                           ),
                         ),
                         const ListTile(
-                          title: Text('cartão aprovado'),
+                          title: Text('cartão aprovado',
+                              style: TextStyle(color: Colors.greenAccent)),
                           leading: Icon(
                             MdiIcons.creditCardCheckOutline,
                             size: 30,
                           ),
-                          iconColor: Colors.black,
+                          iconColor: Colors.greenAccent,
                         )
                       ])
                     : Container(),
@@ -119,13 +120,14 @@ class _RequestedCardState extends State<RequestedCard> {
                           ),
                         ),
                         ListTile(
-                          title: const Text('cartão recusado'),
+                          title: const Text('cartão recusado',
+                              style: TextStyle(color: Colors.redAccent)),
                           subtitle: Text(card?['justification']),
                           leading: const Icon(
                             MdiIcons.creditCardRemoveOutline,
                             size: 30,
                           ),
-                          iconColor: Colors.black,
+                          iconColor: Colors.redAccent,
                         ),
                       ])
                     : Container(),

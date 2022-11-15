@@ -79,8 +79,8 @@ class _CreateCardValidityState extends State<CreateCardValidity> {
           'state': 'waiting',
           'justification': '',
         })
-        .then((_) => Navigator.of(context)
-            .pushReplacementNamed(AppRoutes.REQUESTED_CARDS))
+        .then((_) =>
+            Navigator.of(context).pushReplacementNamed(AppRoutes.HOME_USER))
         .catchError((_) {
           setState(() => isLoading = false);
         });

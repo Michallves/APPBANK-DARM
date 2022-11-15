@@ -16,6 +16,7 @@ class CardAdmin extends StatefulWidget {
 class _CardAdminState extends State<CardAdmin> {
   bool isLoading = false;
   bool isLoadingButton = false;
+  final justification = TextEditingController(text: ' ');
 
   FirebaseFirestore db = FirebaseFirestore.instance;
   DocumentSnapshot<Object?>? card;
@@ -32,6 +33,7 @@ class _CardAdminState extends State<CardAdmin> {
     });
     await db.collection('requested_cards').doc(card?.id).update({
       "state": 'recused',
+      "justification": justification.text,
     }).then((_) =>
         Navigator.of(context).pushReplacementNamed(AppRoutes.HOME_ADMIN));
   }
@@ -48,6 +50,9 @@ class _CardAdminState extends State<CardAdmin> {
       "cvc": card?['cvc'],
       "type": card?['type'],
     }).then((_) {
+      db.collection("users").doc(card?['idUser']).update({
+        "cards": FieldValue.increment(1),
+      });
       db.collection('requested_cards').doc(card?.id).update({
         "state": 'approved',
       }).then((_) =>
@@ -128,36 +133,60 @@ class _CardAdminState extends State<CardAdmin> {
   }
 
   void showModal() => showModalBottomSheet(
-      isDismissible: false,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(10), topRight: Radius.circular(10)),
       ),
       context: context,
       builder: (context) => SizedBox(
-          height: 250,
           child: isLoading == false
               ? Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                      const Expanded(
-                          child: Center(
-                        child: Text(
-                          'Tem certeza que deseja recusar o cartão?',
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                      )),
-                      BottomButtom(
-                        onPress: () => _recusedCard(),
-                        title: 'recusar',
-                        color: Colors.redAccent,
+                      Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Expanded(
+                              child: Column(
+                            children: [
+                              const Padding(padding: EdgeInsets.all(10)),
+                              const Text(
+                                'Tem certeza que deseja recusar o cartão?',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const Padding(padding: EdgeInsets.all(10)),
+                              TextField(
+                                maxLength: 160,
+                                maxLines: 3,
+                                controller: justification,
+                                cursorColor: Colors.black,
+                                decoration: const InputDecoration(
+                                  labelText: 'Justificativa',
+                                  border: OutlineInputBorder(),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.black)),
+                                ),
+                              )
+                            ],
+                          ))),
+                      Column(
+                        children: [
+                          BottomButtom(
+                            onPress: () => _recusedCard(),
+                            title: 'recusar',
+                            color: Colors.redAccent,
+                          ),
+                          BottomButtom(
+                            onPress: () => Navigator.of(context).pop(),
+                            title: 'cancelar',
+                            color: Colors.grey[350],
+                          )
+                        ],
                       ),
-                      BottomButtom(
-                        onPress: () => Navigator.of(context).pop(),
-                        title: 'cancelar',
-                        color: Colors.grey[350],
-                      )
                     ])
               : const Center(
                   child: CircularProgressIndicator(

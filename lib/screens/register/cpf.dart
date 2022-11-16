@@ -77,7 +77,7 @@ class _RegisterCpfUserState extends State<RegisterCpfUser> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          context.read<AuthService>().rool == 'user'
+          context.read<AuthService>().role == 'user'
               ? 'seus dados'
               : 'criar admin',
         ),

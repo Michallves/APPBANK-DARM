@@ -82,7 +82,7 @@ class _LoginCpfUserState extends State<LoginCpfUser> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.read<AuthService>().rool == 'user'
+        title: Text(context.read<AuthService>().role == 'user'
             ? 'entrar'
             : 'entrar admin'),
       ),
@@ -131,7 +131,7 @@ class _LoginCpfUserState extends State<LoginCpfUser> {
               ),
             ),
           ),
-          context.read<AuthService>().rool == 'admin'
+          context.read<AuthService>().role == 'admin'
               ? Container(
                   margin: const EdgeInsets.all(20),
                   child: TextButton(

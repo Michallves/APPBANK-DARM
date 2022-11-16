@@ -46,7 +46,7 @@ class Preload extends StatelessWidget {
                         margin: const EdgeInsets.symmetric(horizontal: 20),
                         child: ElevatedButton(
                           onPressed: () => {
-                            context.read<AuthService>().rool = 'user',
+                            context.read<AuthService>().role = 'user',
                             Navigator.of(context).pushNamed(AppRoutes.LOGIN_CPF)
                           },
                           child: const Text("entrar"),
@@ -58,7 +58,7 @@ class Preload extends StatelessWidget {
                         margin: const EdgeInsets.symmetric(horizontal: 20),
                         child: OutlinedButton(
                           onPressed: () {
-                            context.read<AuthService>().rool = 'user';
+                            context.read<AuthService>().role = 'user';
                             Navigator.of(context)
                                 .pushNamed(AppRoutes.REGISTER_CPF);
                           },
@@ -86,7 +86,7 @@ class Preload extends StatelessWidget {
                       ),
                       TextButton(
                         onPressed: () => {
-                          context.read<AuthService>().rool = 'admin',
+                          context.read<AuthService>().role = 'admin',
                           Navigator.of(context).pushNamed(AppRoutes.LOGIN_CPF)
                         },
                         style: const ButtonStyle(

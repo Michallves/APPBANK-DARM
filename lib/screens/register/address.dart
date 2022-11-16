@@ -15,7 +15,7 @@ class RegisterAddressUser extends StatefulWidget {
 
 class _RegisterAddressUserState extends State<RegisterAddressUser> {
   bool isButtonActive = false;
-  final state = TextEditingController();
+  String? state;
   final city = TextEditingController();
   final neighborhood = TextEditingController();
   final street = TextEditingController();
@@ -24,37 +24,58 @@ class _RegisterAddressUserState extends State<RegisterAddressUser> {
   @override
   void initState() {
     super.initState();
-    state.addListener(() {
-      if (state.text.length > 1) {
-        setState(() => isButtonActive = true);
-        city.addListener(() {
-          if (city.text.length > 1) {
-            setState(() => isButtonActive = true);
-          } else {
-            setState(() => isButtonActive = false);
-          }
-        });
-      } else {
-        setState(() => isButtonActive = false);
-      }
-    });
   }
 
   _pressButton() {
     context.read<AuthService>().address = [
-      state.text,
+      state!,
       city.text,
       neighborhood.text,
       street.text,
       number.text,
     ];
-    context.read<AuthService>().rool == 'user'
+    context.read<AuthService>().role == 'user'
         ? Navigator.of(context).pushNamed(AppRoutes.REGISTER_ACCOUNT_TYPE)
         : Navigator.of(context).pushNamed(AppRoutes.REGISTER_PASSWORD);
   }
 
+  List<String> states = [
+    "Acre",
+    "Alagoas",
+    "Amapá",
+    "Amazonas",
+    "Bahia",
+    "Ceará",
+    "Distrito Federal",
+    "Espírito Santo",
+    "Goiás",
+    "Maranhão",
+    "Mato Grosso",
+    "Mato Grosso do Sul",
+    "Minas Gerais",
+    "Pará",
+    "Paraíba",
+    "Paraná",
+    "Pernambuco",
+    "Piauí",
+    "Rio de Janeiro",
+    "Rio Grande do Norte",
+    "Rio Grande do Sul",
+    "Rondônia",
+    "Roraima",
+    "Santa Catarina",
+    "São Paulo",
+    "Sergipe",
+    "Tocantins",
+  ];
+
   @override
   Widget build(BuildContext context) {
+    if (state != null) {
+      setState(() => isButtonActive = true);
+    } else {
+      setState(() => isButtonActive = false);
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -69,34 +90,47 @@ class _RegisterAddressUserState extends State<RegisterAddressUser> {
                 margin: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   children: [
-                    TextFormField(
-                      controller: state,
-                      autofocus: true,
-                      style: const TextStyle(fontSize: 26),
-                      decoration: const InputDecoration(
-                        labelText: 'Estado',
-                        labelStyle: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                    DropdownButton(
+                        dropdownColor: Colors.white,
+                        focusColor: Colors.transparent,
+                        hint: const Text(
+                          'Estado',
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
                         ),
-                        border: InputBorder.none,
-                      ),
-                      cursorColor: Colors.black,
-                      textInputAction: TextInputAction.next,
-                    ),
+                        style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
+                        itemHeight: 70,
+                        isExpanded: true,
+                        value: state,
+                        items: states.map((state) {
+                          return DropdownMenuItem(
+                            value: state,
+                            child: Text(state),
+                          );
+                        }).toList(),
+                        onChanged: (newValue) {
+                          setState(() {
+                            state = newValue;
+                          });
+                        }),
                     TextFormField(
                       controller: city,
                       style: const TextStyle(fontSize: 26),
                       decoration: const InputDecoration(
-                        labelText: 'Cidade',
-                        labelStyle: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        border: InputBorder.none,
-                      ),
+                          labelText: 'Cidade',
+                          labelStyle: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black)),
+                          border: UnderlineInputBorder()),
                       cursorColor: Colors.black,
                       textInputAction: TextInputAction.next,
                     ),
@@ -110,7 +144,9 @@ class _RegisterAddressUserState extends State<RegisterAddressUser> {
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
-                        border: InputBorder.none,
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black)),
+                        border: UnderlineInputBorder(),
                       ),
                       cursorColor: Colors.black,
                       textInputAction: TextInputAction.next,
@@ -125,7 +161,9 @@ class _RegisterAddressUserState extends State<RegisterAddressUser> {
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
-                        border: InputBorder.none,
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black)),
+                        border: UnderlineInputBorder(),
                       ),
                       cursorColor: Colors.black,
                       textInputAction: TextInputAction.next,
@@ -144,7 +182,9 @@ class _RegisterAddressUserState extends State<RegisterAddressUser> {
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
-                        border: InputBorder.none,
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black)),
+                        border: UnderlineInputBorder(),
                       ),
                       cursorColor: Colors.black,
                       textInputAction: TextInputAction.done,

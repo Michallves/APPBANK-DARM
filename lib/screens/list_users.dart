@@ -71,7 +71,7 @@ class _ListUsersState extends State<ListUsers> {
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: ((context, index) {
                     DocumentSnapshot user = snapshot.data!.docs[index];
-                    return user['rool'] == "user"
+                    return user['role'] == "user"
                         ? ListTile(
                             leading: CircleAvatar(
                               backgroundColor: Colors.black,

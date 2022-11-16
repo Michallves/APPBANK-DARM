@@ -7,7 +7,7 @@ class AuthService extends ChangeNotifier {
   FirebaseFirestore db = FirebaseFirestore.instance;
   User? usuario;
 
-  String rool = 'user';
+  String role = 'user';
   String? cpf;
   String? name;
   String? email;
@@ -38,9 +38,9 @@ class AuthService extends ChangeNotifier {
       'name': name,
       "email": email,
       "telephone": telephone,
-      if (rool == 'user') "accountType": accountType,
+      if (role == 'user') "accountType": accountType,
       "image": '',
-      "rool": rool,
+      "role": role,
       'state': address![0],
       "address": {
         "city": address![1],
@@ -70,6 +70,10 @@ class AuthService extends ChangeNotifier {
 
   Future updatePassword(String password) async {
     return await usuario?.updatePassword(password);
+  }
+
+  Future passwordReset() async {
+    return await _auth.sendPasswordResetEmail(email: email!);
   }
 
   Future deleteAccount() async {

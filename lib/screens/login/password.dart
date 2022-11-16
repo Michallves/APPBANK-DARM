@@ -1,10 +1,7 @@
 import 'package:appbankdarm/services/auth_service.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:pin_code_text_field/pin_code_text_field.dart';
 import 'package:provider/provider.dart';
-
 import '../../widgets/bottom_button.dart';
 import '../../widgets/pin.dart';
 
@@ -39,11 +36,11 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
     AuthService auth = context.read<AuthService>();
 
     await context.read<AuthService>().login(password.text).then((_) {
-      if (auth.rool == 'user') {
+      if (auth.role == 'user') {
         setState(() {
           Navigator.of(context).pushReplacementNamed(AppRoutes.HOME_USER);
         });
-      } else if (auth.rool == 'admin') {
+      } else if (auth.role == 'admin') {
         setState(() {
           Navigator.of(context).pushReplacementNamed(AppRoutes.HOME_ADMIN);
         });
@@ -52,6 +49,10 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
       _showModal();
       setState(() => isLoading = false);
     });
+  }
+
+  _passwordReset() async {
+    await context.read<AuthService>().passwordReset();
   }
 
   @override
@@ -72,24 +73,23 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
                   focusNode: myFocusNode,
                 )),
           ),
-          Column(
-            children: [
-              const TextButton(
-                onPressed: null,
-                child: Text('recuperar senha',
+          Container(
+              margin: const EdgeInsets.all(20),
+              child: TextButton(
+                  onPressed: () => _passwordReset(),
+                  child: const Text(
+                    'recuperar conta',
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: 16,
-                        fontWeight: FontWeight.bold)),
-              ),
-              BottomButtom(
-                onPress: () => _login(),
-                title: 'entrar',
-                enabled: isButtonActive,
-                loading: isLoading,
-              )
-            ],
-          ),
+                        fontWeight: FontWeight.bold),
+                  ))),
+          BottomButtom(
+            onPress: () => _login(),
+            title: 'entrar',
+            enabled: isButtonActive,
+            loading: isLoading,
+          )
         ],
       ),
     );

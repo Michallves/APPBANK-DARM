@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:appbankdarm/widgets/bottom_button.dart';
+import 'package:appbankdarm/widgets/info_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -82,37 +83,34 @@ class _AccountUserState extends State<AccountUser> {
             )
           : Column(
               children: [
+                SizedBox(
+                    height: 180,
+                    child: GestureDetector(
+                      onTap: _showModal,
+                      child: CircleAvatar(
+                          radius: 80,
+                          backgroundColor: Colors.black,
+                          backgroundImage:
+                              NetworkImage((user?['image']).toString()),
+                          child: user?['image'] == ''
+                              ? Text(
+                                  (user?['name'])
+                                      .toString()
+                                      .substring(0, 2)
+                                      .toUpperCase(),
+                                  style: const TextStyle(
+                                      color: Colors.white, fontSize: 80),
+                                )
+                              : null),
+                    )),
                 Expanded(
-                  child: SizedBox(
-                      height: 100,
-                      child: Column(
-                        children: [
-                          GestureDetector(
-                            onTap: _showModal,
-                            child: CircleAvatar(
-                                radius: 80,
-                                backgroundColor: Colors.black,
-                                backgroundImage:
-                                    NetworkImage((user?['image']).toString()),
-                                child: user?['image'] == ''
-                                    ? Text(
-                                        (user?['name'])
-                                            .toString()
-                                            .substring(0, 2)
-                                            .toUpperCase(),
-                                        style: const TextStyle(
-                                            color: Colors.white, fontSize: 80),
-                                      )
-                                    : null),
-                          ),
-                          const SizedBox(
-                            height: 40,
-                          ),
-                          Text((user?['name']).toString(),
-                              style: const TextStyle(fontSize: 25))
-                        ],
-                      )),
-                ),
+                    child: InfoUser(
+                  name: user?['name'],
+                  cpf: user?['cpf'],
+                  number: user?['telephone'],
+                  email: user?['email'],
+                  typeAccount: user?['accountType'],
+                )),
                 Container(
                   width: double.infinity,
                   height: 50,

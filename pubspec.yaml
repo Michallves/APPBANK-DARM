@@ -45,6 +45,8 @@ dependencies:
   cloud_firestore: ^4.0.5
   credit_card_validator: ^2.0.1
   material_design_icons_flutter: ^5.0.6996
+  badges: ^2.0.3
+  email_validator: ^2.1.17
 
 
 

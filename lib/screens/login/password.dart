@@ -34,21 +34,22 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
   _login() async {
     setState(() => isLoading = true);
     AuthService auth = context.read<AuthService>();
-
-    await context.read<AuthService>().login(password.text).then((_) {
-      if (auth.role == 'user') {
-        setState(() {
-          Navigator.of(context).pushReplacementNamed(AppRoutes.HOME_USER);
-        });
-      } else if (auth.role == 'admin') {
-        setState(() {
-          Navigator.of(context).pushReplacementNamed(AppRoutes.HOME_ADMIN);
-        });
-      }
-    }).catchError((_) {
+    try {
+      await context.read<AuthService>().login(password.text).then((_) {
+        if (auth.role == 'user') {
+          setState(() {
+            Navigator.of(context).pushReplacementNamed(AppRoutes.HOME_USER);
+          });
+        } else if (auth.role == 'admin') {
+          setState(() {
+            Navigator.of(context).pushReplacementNamed(AppRoutes.HOME_ADMIN);
+          });
+        }
+      });
+    } catch (_) {
       _showModal("passwordError");
       setState(() => isLoading = false);
-    });
+    }
   }
 
   _passwordReset() async {
@@ -106,6 +107,7 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
       ),
       context: context,
       builder: (context) => SizedBox(
+            height: 280,
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [

@@ -1,9 +1,9 @@
 import 'package:appbankdarm/widgets/my_cards.dart';
 import 'package:appbankdarm/services/user_service.dart';
 import 'package:appbankdarm/widgets/requested_cards.dart';
+import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -54,6 +54,23 @@ class _HomeUserState extends State<HomeUser> {
               : userService.screen == 'requestedCards'
                   ? 'Cartões solicitados'
                   : ''),
+          actions: [
+            userService.screen == 'myCards'
+                ? Center(
+                    child: Badge(
+                    badgeColor: Colors.black,
+                    badgeContent: Text(
+                      (user?['cards']).toString(),
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                    child: const Icon(
+                      Icons.credit_card,
+                      size: 30,
+                    ),
+                  ))
+                : Container(),
+            const Padding(padding: EdgeInsets.symmetric(horizontal: 10))
+          ],
         ),
         drawer: Drawer(
             backgroundColor: Colors.white,

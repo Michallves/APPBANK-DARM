@@ -1,6 +1,7 @@
 import 'package:appbankdarm/services/auth_service.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../widgets/bottom_button.dart';
@@ -21,7 +22,7 @@ class _RegisterEmailUserState extends State<RegisterEmailUser> {
   void initState() {
     super.initState();
     email.addListener(() {
-      if (email.text.length > 10) {
+      if (EmailValidator.validate(email.text)) {
         setState(() => isButtonActive = true);
       } else {
         setState(() => isButtonActive = false);

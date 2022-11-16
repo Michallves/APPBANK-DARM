@@ -16,7 +16,7 @@ class _ListUsersState extends State<ListUsers> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Lista de Usuários',
+          'Usuários',
         ),
         actions: [
           ElevatedButton(

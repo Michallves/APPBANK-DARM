@@ -90,6 +90,7 @@ class _RegisterCardValidityState extends State<RegisterCardValidity> {
   }
 
   _showModal() => showModalBottomSheet(
+      isDismissible: false,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(10), topRight: Radius.circular(10)),

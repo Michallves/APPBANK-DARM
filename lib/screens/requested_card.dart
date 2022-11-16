@@ -140,7 +140,10 @@ class _RequestedCardState extends State<RequestedCard> {
                   title: 'cancelar solicitação',
                   color: Colors.redAccent,
                 )
-              : Container(),
+              : BottomButtom(
+                  onPress: () => Navigator.of(context).pop(),
+                  title: 'voltar',
+                ),
         ],
       ),
     );

@@ -34,17 +34,18 @@ class _RegisterPasswordConfirmState extends State<RegisterPasswordConfirm> {
   _register() async {
     setState(() => isLoading = true);
     AuthService auth = context.read<AuthService>();
-
-    context.read<AuthService>().register(password.text).then((_) {
-      if (auth.role == 'user') {
-        Navigator.of(context).pushReplacementNamed(AppRoutes.HOME_USER);
-      } else {
-        Navigator.of(context).pushReplacementNamed(AppRoutes.HOME_ADMIN);
-      }
-    }).catchError((_) {
+    try {
+      context.read<AuthService>().register(password.text).then((_) {
+        if (auth.role == 'user') {
+          Navigator.of(context).pushReplacementNamed(AppRoutes.HOME_USER);
+        } else {
+          Navigator.of(context).pushReplacementNamed(AppRoutes.HOME_ADMIN);
+        }
+      });
+    } catch (_) {
       showModal();
       setState(() => isLoading = false);
-    });
+    }
   }
 
   _pressButton() {
@@ -92,7 +93,7 @@ class _RegisterPasswordConfirmState extends State<RegisterPasswordConfirm> {
       ),
       context: context,
       builder: (context) => SizedBox(
-            height: 250,
+            height: 280,
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [

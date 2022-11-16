@@ -350,7 +350,7 @@ class _CartaoState extends State<Cartao> with TickerProviderStateMixin {
                             child: Row(
                               children: [
                                 Expanded(
-                                    child: (widget.type != null
+                                    child: (widget.type != ''
                                         ? Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.end,

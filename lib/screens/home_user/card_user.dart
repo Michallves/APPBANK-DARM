@@ -1,9 +1,9 @@
 import 'package:appbankdarm/services/auth_service.dart';
 import 'package:appbankdarm/services/card_service.dart';
-import 'package:appbankdarm/services/user_service.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:appbankdarm/widgets/bottom_button.dart';
 import 'package:appbankdarm/widgets/cartao.dart';
+import 'package:appbankdarm/widgets/info_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -60,9 +60,18 @@ class _CardUserState extends State<CardUser> {
               name: card?['name'],
               validity: card?['validity'],
               cvc: card?['cvc'],
+              type: card?['type'],
               obscure: false,
               animation: true,
             ),
+          ),
+          InfoCard(
+            name: card?['name'],
+            number: card?['number'],
+            validity: card?['validity'],
+            cvc: card?['cvc'],
+            flag: card?['flag'],
+            type: card?['type'],
           ),
           const Spacer(
             flex: 1,

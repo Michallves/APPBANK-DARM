@@ -6,6 +6,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../widgets/info_card.dart';
+
 class CardAdmin extends StatefulWidget {
   const CardAdmin({super.key});
 
@@ -16,7 +18,7 @@ class CardAdmin extends StatefulWidget {
 class _CardAdminState extends State<CardAdmin> {
   bool isLoading = false;
   bool isLoadingButton = false;
-  final justification = TextEditingController(text: ' ');
+  final justification = TextEditingController();
 
   FirebaseFirestore db = FirebaseFirestore.instance;
   DocumentSnapshot<Object?>? card;
@@ -85,6 +87,14 @@ class _CardAdminState extends State<CardAdmin> {
                     animation: true,
                   ),
                 ),
+                InfoCard(
+                  name: card?['name'],
+                  number: card?['number'],
+                  validity: card?['validity'],
+                  cvc: card?['cvc'],
+                  flag: card?['flag'],
+                  type: card?['type'],
+                ),
                 const Spacer(
                   flex: 1,
                 ),
@@ -92,7 +102,7 @@ class _CardAdminState extends State<CardAdmin> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                        width: MediaQuery.of(context).size.width / 2.3,
+                        width: MediaQuery.of(context).size.width / 2.5,
                         height: 50,
                         margin: const EdgeInsets.fromLTRB(20, 0, 10, 20),
                         child: ElevatedButton(
@@ -109,7 +119,7 @@ class _CardAdminState extends State<CardAdmin> {
                           child: const Text('recusar'),
                         )),
                     Container(
-                        width: MediaQuery.of(context).size.width / 2.3,
+                        width: MediaQuery.of(context).size.width / 2.5,
                         height: 50,
                         margin: const EdgeInsets.fromLTRB(10, 0, 20, 20),
                         child: ElevatedButton(
@@ -133,64 +143,68 @@ class _CardAdminState extends State<CardAdmin> {
   }
 
   void showModal() => showModalBottomSheet(
+      isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(10), topRight: Radius.circular(10)),
       ),
       context: context,
-      builder: (context) => SizedBox(
-          child: isLoading == false
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      builder: (context) => isLoading == false
+          ? Padding(
+              padding: MediaQuery.of(context).viewInsets,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                      Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Expanded(
-                              child: Column(
-                            children: [
-                              const Padding(padding: EdgeInsets.all(10)),
-                              const Text(
-                                'Tem certeza que deseja recusar o cartão?',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                    Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Expanded(
+                            child: Column(
+                          children: [
+                            const Padding(padding: EdgeInsets.all(10)),
+                            const Text(
+                              'Tem certeza que deseja recusar o cartão?',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
                               ),
-                              const Padding(padding: EdgeInsets.all(10)),
-                              TextField(
-                                maxLength: 160,
-                                maxLines: 3,
-                                controller: justification,
-                                cursorColor: Colors.black,
-                                decoration: const InputDecoration(
-                                  labelText: 'Justificativa',
-                                  border: OutlineInputBorder(),
-                                  focusedBorder: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.black)),
-                                ),
-                              )
-                            ],
-                          ))),
-                      Column(
-                        children: [
-                          BottomButtom(
-                            onPress: () => _recusedCard(),
-                            title: 'recusar',
-                            color: Colors.redAccent,
-                          ),
-                          BottomButtom(
-                            onPress: () => Navigator.of(context).pop(),
-                            title: 'cancelar',
-                            color: Colors.grey[350],
-                          )
-                        ],
-                      ),
-                    ])
-              : const Center(
-                  child: CircularProgressIndicator(
-                    color: Colors.black,
-                  ),
-                )));
+                            ),
+                            const Padding(padding: EdgeInsets.all(10)),
+                            TextField(
+                              maxLength: 160,
+                              maxLines: 3,
+                              controller: justification,
+                              cursorColor: Colors.black,
+                              decoration: const InputDecoration(
+                                labelText: 'Justificativa',
+                                border: OutlineInputBorder(),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.black)),
+                              ),
+                            )
+                          ],
+                        ))),
+                    const Padding(padding: EdgeInsets.all(10)),
+                    Column(
+                      children: [
+                        BottomButtom(
+                          onPress: () => _recusedCard(),
+                          title: 'recusar',
+                          color: Colors.redAccent,
+                        ),
+                        BottomButtom(
+                          onPress: () => Navigator.of(context).pop(),
+                          title: 'cancelar',
+                          color: Colors.grey[350],
+                        )
+                      ],
+                    ),
+                  ]))
+          : const Center(
+              child: CircularProgressIndicator(
+                color: Colors.black,
+              ),
+            ));
 }

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:appbankdarm/services/user_service.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:appbankdarm/widgets/bottom_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -18,8 +19,14 @@ class CreateCardValidity extends StatefulWidget {
 
 class _CreateCardValidityState extends State<CreateCardValidity> {
   bool isLoading = false;
-  String validity = '';
+  String? validity;
   Random random = Random();
+  @override
+  void initState() {
+    super.initState();
+    context.read<UserService>().readUser();
+  }
+
   _createNumber() {
     String number;
     String? flag = context.read<CardService>().flag;
@@ -64,26 +71,29 @@ class _CreateCardValidityState extends State<CreateCardValidity> {
   _createCard() async {
     CardService card = context.read<CardService>();
     setState(() => isLoading = true);
-
-    await FirebaseFirestore.instance
-        .collection("requested_cards")
-        .add({
-          'idUser': context.read<AuthService>().usuario?.uid,
-          'number': _createNumber(),
-          'cvc': _createCvc(),
-          'name': card.name,
-          'flag': card.flag,
-          'validity':
-              "${DateTime.now().month.toString().padLeft(2, '0')}/${(DateTime.now().year.toInt() + int.parse(validity)).toString().substring(2, 4)}",
-          'type': card.type,
-          'state': 'waiting',
-          'justification': '',
-        })
-        .then((_) =>
-            Navigator.of(context).pushReplacementNamed(AppRoutes.HOME_USER))
-        .catchError((_) {
-          setState(() => isLoading = false);
-        });
+    if (context.read<UserService>().user?['cards'] < 6) {
+      await FirebaseFirestore.instance
+          .collection("requested_cards")
+          .add({
+            'idUser': context.read<AuthService>().usuario?.uid,
+            'number': _createNumber(),
+            'cvc': _createCvc(),
+            'name': card.name,
+            'flag': card.flag,
+            'validity':
+                "${DateTime.now().month.toString().padLeft(2, '0')}/${(DateTime.now().year.toInt() + int.parse(validity!)).toString().substring(2, 4)}",
+            'type': card.type,
+            'state': 'waiting',
+            'justification': '',
+          })
+          .then((_) =>
+              Navigator.of(context).pushReplacementNamed(AppRoutes.HOME_USER))
+          .catchError((_) {
+            setState(() => isLoading = false);
+          });
+    } else {
+      _showModal();
+    }
   }
 
   @override
@@ -178,11 +188,36 @@ class _CreateCardValidityState extends State<CreateCardValidity> {
           ),
           BottomButtom(
               loading: isLoading,
-              enabled: true,
+              enabled: validity != null ? true : false,
               onPress: () => _createCard(),
               title: 'solicitar cartão')
         ],
       ),
     );
   }
+
+  _showModal() => showModalBottomSheet(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+      ),
+      context: context,
+      builder: (context) => SizedBox(
+            height: 300,
+            child: Column(children: [
+              const Expanded(
+                child: Center(
+                  child: Text(
+                    'Você já possui 6 cartões',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              BottomButtom(
+                onPress: () => Navigator.of(context)
+                    .pushReplacementNamed(AppRoutes.HOME_USER),
+                title: 'Voltar para inicio',
+              )
+            ]),
+          ));
 }

@@ -6,6 +6,7 @@ import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../services/card_service.dart';
+import '../../services/user_service.dart';
 import '../../widgets/bottom_button.dart';
 
 class RegisterCardValidity extends StatefulWidget {
@@ -30,16 +31,21 @@ class _RegisterCardValidityState extends State<RegisterCardValidity> {
       }
     });
     super.initState();
+    context.read<UserService>().readUser();
   }
 
   _registerCard() async {
     setState(() => isLoading = true);
-    try {
-      await context.read<CardService>().registerCard(validity.text);
-    } catch (_) {
-      setState(() => isLoading = false);
-    } finally {
-      Navigator.of(context).pushReplacementNamed(AppRoutes.HOME_USER);
+    if (context.read<UserService>().user?['cards'] < 6) {
+      try {
+        await context.read<CardService>().registerCard(validity.text);
+      } catch (_) {
+        setState(() => isLoading = false);
+      } finally {
+        Navigator.of(context).pushReplacementNamed(AppRoutes.HOME_USER);
+      }
+    } else {
+      _showModal();
     }
   }
 
@@ -82,4 +88,29 @@ class _RegisterCardValidityState extends State<RegisterCardValidity> {
       ),
     );
   }
+
+  _showModal() => showModalBottomSheet(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+      ),
+      context: context,
+      builder: (context) => SizedBox(
+            height: 300,
+            child: Column(children: [
+              const Expanded(
+                child: Center(
+                  child: Text(
+                    'Você já possui 6 cartões',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              BottomButtom(
+                onPress: () => Navigator.of(context)
+                    .pushReplacementNamed(AppRoutes.HOME_USER),
+                title: 'Voltar para inicio',
+              )
+            ]),
+          ));
 }

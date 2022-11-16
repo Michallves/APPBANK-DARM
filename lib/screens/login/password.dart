@@ -46,13 +46,17 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
         });
       }
     }).catchError((_) {
-      _showModal();
+      _showModal("passwordError");
       setState(() => isLoading = false);
     });
   }
 
   _passwordReset() async {
-    await context.read<AuthService>().passwordReset();
+    await context
+        .read<AuthService>()
+        .passwordReset()
+        .then((_) => _showModal("passwordReset"))
+        .catchError((_) => _showModal("passwordResetSent"));
   }
 
   @override
@@ -95,41 +99,61 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
     );
   }
 
-  _showModal() => showModalBottomSheet(
-      isDismissible: false,
+  _showModal(String modalScreen) => showModalBottomSheet(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(10), topRight: Radius.circular(10)),
       ),
       context: context,
       builder: (context) => SizedBox(
-            height: 250,
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Expanded(
-                      child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: const [
-                      Text(
-                        'Senha incorreta!',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        'a senha que você inseriu está incorreta. Tente novamente.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ],
-                  )),
+                    child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(
+                              modalScreen == 'passwordError'
+                                  ? 'Senha incorreta!'
+                                  : modalScreen == 'passwordReset'
+                                      ? 'Email de recuperação enviado!'
+                                      : 'Email de recuperação já foi enviado',
+                              style: const TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              modalScreen == 'passwordError'
+                                  ? 'a senha que você inseriu está incorreta. Recupere a senha ou Tente novamente.'
+                                  : 'link de redefinição de senha foi enviado para seu email ${(context.read<AuthService>().email).toString().substring(0, 1)}*****${(context.read<AuthService>().email).toString().substring(7)}',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                          ],
+                        )),
+                  ),
+                  modalScreen == 'passwordError'
+                      ? BottomButtom(
+                          onPress: () {
+                            Navigator.of(context).pop();
+                            _passwordReset();
+                          },
+                          title: 'recuperar senha',
+                        )
+                      : Container(),
                   BottomButtom(
                     onPress: () => {
                       Navigator.of(context).pop(),
                       myFocusNode.requestFocus()
                     },
-                    title: 'tentar novamente',
-                    color: Colors.redAccent,
+                    title: modalScreen == "passwordError"
+                        ? 'tentar novamente'
+                        : 'ok',
+                    color: modalScreen == "passwordError"
+                        ? Colors.redAccent
+                        : Colors.black,
                   ),
                 ]),
           ));

@@ -1,42 +1,42 @@
-import 'package:appbankdarm/screens/user/account/changePassword/current_password.dart';
-import 'package:appbankdarm/screens/user/account/changePassword/new_password.dart';
-import 'package:appbankdarm/screens/user/account/changePassword/new_password_confirm.dart';
-import 'package:appbankdarm/screens/admin/card_admin.dart';
-import 'package:appbankdarm/screens/user/card_user.dart';
-import 'package:appbankdarm/screens/admin/home_admin.dart';
-import 'package:appbankdarm/screens/admin/list_users.dart';
-import 'package:appbankdarm/screens/user/requested_card.dart';
+import 'package:appbankdarm/view/user/account/changePassword/current_password.dart';
+import 'package:appbankdarm/view/user/account/changePassword/new_password.dart';
+import 'package:appbankdarm/view/user/account/changePassword/new_password_confirm.dart';
+import 'package:appbankdarm/view/admin/card_admin.dart';
+import 'package:appbankdarm/view/user/card_user.dart';
+import 'package:appbankdarm/view/admin/home_admin.dart';
+import 'package:appbankdarm/view/admin/list_users.dart';
+import 'package:appbankdarm/view/user/requested_card.dart';
 import 'package:flutter/material.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 //Routes
-import 'screens/preload.dart';
+import 'view/preload.dart';
 //Pages Login User
-import 'screens/login/cpf.dart';
-import 'screens/login/password.dart';
+import 'view/login/cpf.dart';
+import 'view/login/password.dart';
 //Pages Register User
-import 'screens/register/cpf.dart';
-import 'screens/register/name.dart';
-import 'screens/register/email.dart';
-import 'screens/register/telephone.dart';
-import 'screens/register/address.dart';
-import 'screens/register/accountType.dart';
-import 'screens/register/password.dart';
-import 'screens/register/passwordConfirm.dart';
+import 'view/register/cpf.dart';
+import 'view/register/name.dart';
+import 'view/register/email.dart';
+import 'view/register/telephone.dart';
+import 'view/register/address.dart';
+import 'view/register/accountType.dart';
+import 'view/register/password.dart';
+import 'view/register/passwordConfirm.dart';
 //Pages Home User
-import 'package:appbankdarm/screens/user/home_user.dart';
+import 'package:appbankdarm/view/user/home_user.dart';
 //Pages Account User
-import 'screens/user/account/profile.dart';
-import 'screens/user/account/delete.dart';
+import 'view/user/account/profile.dart';
+import 'view/user/account/delete.dart';
 //Pages Create Card User
-import 'screens/user/request_card/name.dart';
-import 'screens/user/request_card/type.dart';
-import 'screens/user/request_card/flag.dart';
-import 'screens/user/request_card/validity.dart';
+import 'view/user/request_card/name.dart';
+import 'view/user/request_card/type.dart';
+import 'view/user/request_card/flag.dart';
+import 'view/user/request_card/validity.dart';
 //Pages Register Card User
-import 'screens/user/register_card/name.dart';
-import 'screens/user/register_card/number.dart';
-import 'screens/user/register_card/cvc.dart';
-import 'screens/user/register_card/validity.dart';
+import 'view/user/register_card/name.dart';
+import 'view/user/register_card/number.dart';
+import 'view/user/register_card/cvc.dart';
+import 'view/user/register_card/validity.dart';
 
 class AppBank extends StatelessWidget {
   const AppBank({super.key});
@@ -98,10 +98,10 @@ class AppBank extends StatelessWidget {
         AppRoutes.NEW_PASSWORD: (ctx) => const NewPassword(),
         AppRoutes.NEW_PASSWORD_CONFIRM: (ctx) => const NewPasswordConfirm(),
         //Create Card User
-        AppRoutes.CREATE_CARD_NAME: (ctx) => const CreateCardName(),
+        AppRoutes.REQUEST_CARD_NAME: (ctx) => const CreateCardName(),
         AppRoutes.CREATE_CARD_TYPE: (ctx) => const CreateCardType(),
         AppRoutes.CREATE_CARD_FLAG: (ctx) => const CreateCardFlag(),
-        AppRoutes.CREATE_CARD_VALIDITY: (ctx) => const CreateCardValidity(),
+        AppRoutes.REQUEST_CARD_VALIDITY: (ctx) => const CreateCardValidity(),
         //Register Card User
         AppRoutes.REGISTER_CARD_NAME: (ctx) => const RegisterCardName(),
         AppRoutes.REGISTER_CARD_NUMBER: (ctx) => const RegisterCardNumber(),

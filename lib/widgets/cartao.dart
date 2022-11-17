@@ -110,13 +110,6 @@ class _CartaoState extends State<Cartao> with TickerProviderStateMixin {
                     height: (MediaQuery.of(context).size.width - 40) * 0.60,
                     decoration: BoxDecoration(
                         color: Colors.black,
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black.withOpacity(.05),
-                              offset: Offset(0, 0),
-                              blurRadius: 20,
-                              spreadRadius: 3)
-                        ],
                         borderRadius: BorderRadius.circular(10)),
                     child: Container(
                       margin: EdgeInsets.all(

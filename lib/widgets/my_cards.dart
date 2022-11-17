@@ -1,5 +1,6 @@
-import 'package:appbankdarm/services/card_service.dart';
+import 'package:appbankdarm/controller/card_service.dart';
 import 'package:appbankdarm/widgets/cartao.dart';
+import 'package:appbankdarm/widgets/cartao_void.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:provider/provider.dart';
@@ -20,12 +21,10 @@ class MyCards extends StatelessWidget {
               );
             }
             if (snapshot.data!.docs.isEmpty) {
-              return const Center(
-                child: Text(
-                  'Lista vazia',
-                  style: TextStyle(color: Colors.grey),
-                ),
-              );
+              return GestureDetector(
+                  onTap: () => Navigator.of(context)
+                      .pushNamed(AppRoutes.REGISTER_CARD_NAME),
+                  child: const CartaoVoid());
             } else {
               return ListView.separated(
                   padding: const EdgeInsets.all(20),

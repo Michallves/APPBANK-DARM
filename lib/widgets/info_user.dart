@@ -117,7 +117,6 @@ class InfoUser extends StatelessWidget {
               )
             ],
           ),
-          const Padding(padding: EdgeInsets.all(40))
         ],
       ),
     );

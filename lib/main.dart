@@ -1,7 +1,7 @@
-import 'package:appbankdarm/services/admin_service.dart';
-import 'package:appbankdarm/services/auth_service.dart';
-import 'package:appbankdarm/services/card_service.dart';
-import 'package:appbankdarm/services/user_service.dart';
+import 'package:appbankdarm/controller/admin_service.dart';
+import 'package:appbankdarm/controller/auth_service.dart';
+import 'package:appbankdarm/controller/card_service.dart';
+import 'package:appbankdarm/controller/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';

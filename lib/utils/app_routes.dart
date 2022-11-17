@@ -20,10 +20,10 @@ abstract class AppRoutes {
   static const NEW_PASSWORD = '/newPassword';
   static const NEW_PASSWORD_CONFIRM = '/newPasswordConfirm';
   static const REQUESTED_CARD = '/requestedCard';
-  static const CREATE_CARD_NAME = '/createCardName';
+  static const REQUEST_CARD_NAME = '/createCardName';
   static const CREATE_CARD_TYPE = '/createCardType';
   static const CREATE_CARD_FLAG = '/createCardFLag';
-  static const CREATE_CARD_VALIDITY = '/createCardValidity';
+  static const REQUEST_CARD_VALIDITY = '/createCardValidity';
   static const REGISTER_CARD_NAME = '/registerCardName';
   static const REGISTER_CARD_NUMBER = '/registerCardNumber';
   static const REGISTER_CARD_CVC = '/registerCardCvc';

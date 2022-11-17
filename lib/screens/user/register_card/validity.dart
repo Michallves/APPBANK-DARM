@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import '../../services/card_service.dart';
-import '../../services/user_service.dart';
-import '../../widgets/bottom_button.dart';
+import '../../../services/card_service.dart';
+import '../../../services/user_service.dart';
+import '../../../widgets/bottom_button.dart';
 
 class RegisterCardValidity extends StatefulWidget {
   const RegisterCardValidity({super.key});

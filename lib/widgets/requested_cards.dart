@@ -6,15 +6,8 @@ import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
-class RequestedCards extends StatefulWidget {
+class RequestedCards extends StatelessWidget {
   const RequestedCards({super.key});
-
-  @override
-  State<RequestedCards> createState() => _RequestedCardsState();
-}
-
-class _RequestedCardsState extends State<RequestedCards> {
-  bool isLoading = true;
 
   @override
   Widget build(BuildContext context) {

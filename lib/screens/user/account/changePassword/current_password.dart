@@ -2,8 +2,8 @@ import 'package:appbankdarm/services/auth_service.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../widgets/bottom_button.dart';
-import '../../../widgets/pin.dart';
+import '../../../../widgets/bottom_button.dart';
+import '../../../../widgets/pin.dart';
 
 class CurrentPassword extends StatefulWidget {
   const CurrentPassword({super.key});

@@ -5,14 +5,9 @@ import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
-class MyCards extends StatefulWidget {
+class MyCards extends StatelessWidget {
   const MyCards({super.key});
 
-  @override
-  State<MyCards> createState() => _MyCardsState();
-}
-
-class _MyCardsState extends State<MyCards> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

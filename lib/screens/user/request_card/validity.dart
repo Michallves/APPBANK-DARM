@@ -7,8 +7,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../services/auth_service.dart';
-import '../../services/card_service.dart';
+import '../../../services/auth_service.dart';
+import '../../../services/card_service.dart';
 
 class CreateCardValidity extends StatefulWidget {
   const CreateCardValidity({super.key});

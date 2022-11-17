@@ -55,20 +55,22 @@ class _HomeUserState extends State<HomeUser> {
                   ? 'Cartões solicitados'
                   : ''),
           actions: [
-            userService.screen == 'myCards'
-                ? Center(
-                    child: Badge(
-                    badgeColor: Colors.black,
-                    badgeContent: Text(
-                      (user?['cards']).toString(),
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                    child: const Icon(
-                      Icons.credit_card,
-                      size: 30,
-                    ),
-                  ))
-                : Container(),
+            isLoading == true
+                ? Container()
+                : userService.screen == 'myCards'
+                    ? Center(
+                        child: Badge(
+                        badgeColor: Colors.black,
+                        badgeContent: Text(
+                          (user?['cards']).toString(),
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                        child: const Icon(
+                          Icons.credit_card,
+                          size: 30,
+                        ),
+                      ))
+                    : Container(),
             const Padding(padding: EdgeInsets.symmetric(horizontal: 10))
           ],
         ),

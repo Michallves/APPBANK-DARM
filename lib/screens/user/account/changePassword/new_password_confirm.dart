@@ -1,9 +1,9 @@
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../services/auth_service.dart';
-import '../../../widgets/bottom_button.dart';
-import '../../../widgets/pin.dart';
+import '../../../../services/auth_service.dart';
+import '../../../../widgets/bottom_button.dart';
+import '../../../../widgets/pin.dart';
 
 class NewPasswordConfirm extends StatefulWidget {
   const NewPasswordConfirm({super.key});

@@ -52,29 +52,32 @@ class _CardUserState extends State<CardUser> {
       appBar: AppBar(),
       body: Column(
         children: [
-          Container(
-            margin: const EdgeInsets.all(20),
-            child: Cartao(
-              number: card?['number'],
-              flag: card?['flag'],
-              name: card?['name'],
-              validity: card?['validity'],
-              cvc: card?['cvc'],
-              type: card?['type'],
-              obscure: false,
-              animation: true,
+          Expanded(
+            child: ListView(
+              children: [
+                Container(
+                  margin: const EdgeInsets.all(20),
+                  child: Cartao(
+                    number: card?['number'],
+                    flag: card?['flag'],
+                    name: card?['name'],
+                    validity: card?['validity'],
+                    cvc: card?['cvc'],
+                    type: card?['type'],
+                    obscure: false,
+                    animation: true,
+                  ),
+                ),
+                InfoCard(
+                  name: card?['name'],
+                  number: card?['number'],
+                  validity: card?['validity'],
+                  cvc: card?['cvc'],
+                  flag: card?['flag'],
+                  type: card?['type'],
+                ),
+              ],
             ),
-          ),
-          InfoCard(
-            name: card?['name'],
-            number: card?['number'],
-            validity: card?['validity'],
-            cvc: card?['cvc'],
-            flag: card?['flag'],
-            type: card?['type'],
-          ),
-          const Spacer(
-            flex: 1,
           ),
           BottomButtom(
             onPress: () => showModal(),

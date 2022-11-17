@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
-import '../services/admin_service.dart';
-import '../services/auth_service.dart';
-import '../utils/app_routes.dart';
-import '../widgets/cartao.dart';
+import '../../services/admin_service.dart';
+import '../../services/auth_service.dart';
+import '../../utils/app_routes.dart';
+import '../../widgets/cartao.dart';
 
 class HomeAdmin extends StatefulWidget {
   const HomeAdmin({super.key});

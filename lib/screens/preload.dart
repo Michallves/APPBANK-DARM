@@ -28,7 +28,7 @@ class Preload extends StatelessWidget {
               ),
             ),
             Container(
-              height: 220,
+              height: 200,
               decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
@@ -36,68 +36,68 @@ class Preload extends StatelessWidget {
                   topRight: Radius.circular(10),
                 ),
               ),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      height: 50,
-                      margin: const EdgeInsets.symmetric(horizontal: 20),
-                      child: ElevatedButton(
-                        onPressed: () => {
-                          context.read<AuthService>().role = 'user',
-                          Navigator.of(context).pushNamed(AppRoutes.LOGIN_CPF)
-                        },
-                        child: const Text("entrar"),
-                      ),
-                    ),
-                    Container(
-                      width: double.infinity,
-                      height: 50,
-                      margin: const EdgeInsets.symmetric(horizontal: 20),
-                      child: OutlinedButton(
-                        onPressed: () {
-                          context.read<AuthService>().role = 'user';
-                          Navigator.of(context)
-                              .pushNamed(AppRoutes.REGISTER_CPF);
-                        },
-                        style: ButtonStyle(
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                          ),
-                          side: MaterialStateProperty.all(
-                            const BorderSide(
-                              width: 3,
-                            ),
-                          ),
-                          elevation: ButtonStyleButton.allOrNull(0.0),
-                          foregroundColor:
-                              MaterialStateProperty.all<Color>(Colors.black),
-                        ),
-                        child: const Text(
-                          "criar conta",
-                          style: TextStyle(fontWeight: FontWeight.bold),
+              child: Column(children: [
+                Container(
+                  width: double.infinity,
+                  height: 50,
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  child: ElevatedButton(
+                    onPressed: () => {
+                      context.read<AuthService>().role = 'user',
+                      Navigator.of(context).pushNamed(AppRoutes.LOGIN_CPF)
+                    },
+                    child: const Text("entrar"),
+                  ),
+                ),
+                Container(
+                  width: double.infinity,
+                  height: 50,
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  child: OutlinedButton(
+                    onPressed: () {
+                      context.read<AuthService>().role = 'user';
+                      Navigator.of(context).pushNamed(AppRoutes.REGISTER_CPF);
+                    },
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
                         ),
                       ),
+                      side: MaterialStateProperty.all(
+                        const BorderSide(
+                          width: 2,
+                        ),
+                      ),
+                      elevation: ButtonStyleButton.allOrNull(0.0),
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(Colors.black),
                     ),
-                    TextButton(
-                      onPressed: () => {
-                        context.read<AuthService>().role = 'admin',
-                        Navigator.of(context).pushNamed(AppRoutes.LOGIN_CPF)
-                      },
-                      style: const ButtonStyle(
-                        foregroundColor: MaterialStatePropertyAll(Colors.black),
-                      ),
-                      child: const Text(
-                        'entrar admin',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 15),
-                      ),
-                    )
-                  ]),
+                    child: const Text(
+                      "criar conta",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                  child: TextButton(
+                    onPressed: () => {
+                      context.read<AuthService>().role = 'admin',
+                      Navigator.of(context).pushNamed(AppRoutes.LOGIN_CPF)
+                    },
+                    style: const ButtonStyle(
+                      foregroundColor: MaterialStatePropertyAll(Colors.black),
+                    ),
+                    child: const Text(
+                      'entrar admin',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                    ),
+                  ),
+                )
+              ]),
             ),
           ],
         ),

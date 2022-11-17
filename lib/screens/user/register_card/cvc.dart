@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
 import 'package:provider/provider.dart';
 
-import '../../widgets/bottom_button.dart';
+import '../../../widgets/bottom_button.dart';
 
 class RegisterCardCvc extends StatefulWidget {
   const RegisterCardCvc({super.key});

@@ -3,8 +3,8 @@ import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
 import 'package:provider/provider.dart';
-import '../../widgets/bottom_button.dart';
-import '../../widgets/pin.dart';
+import '../../../widgets/bottom_button.dart';
+import '../../../widgets/pin.dart';
 
 class DeleteUser extends StatefulWidget {
   const DeleteUser({super.key});

@@ -1,11 +1,11 @@
-import 'package:appbankdarm/screens/account/changePassword/current_password.dart';
-import 'package:appbankdarm/screens/account/changePassword/new_password.dart';
-import 'package:appbankdarm/screens/account/changePassword/new_password_confirm.dart';
-import 'package:appbankdarm/screens/card_admin.dart';
-import 'package:appbankdarm/screens/home_user/card_user.dart';
-import 'package:appbankdarm/screens/home_admin.dart';
-import 'package:appbankdarm/screens/list_users.dart';
-import 'package:appbankdarm/screens/requested_card.dart';
+import 'package:appbankdarm/screens/user/account/changePassword/current_password.dart';
+import 'package:appbankdarm/screens/user/account/changePassword/new_password.dart';
+import 'package:appbankdarm/screens/user/account/changePassword/new_password_confirm.dart';
+import 'package:appbankdarm/screens/admin/card_admin.dart';
+import 'package:appbankdarm/screens/user/card_user.dart';
+import 'package:appbankdarm/screens/admin/home_admin.dart';
+import 'package:appbankdarm/screens/admin/list_users.dart';
+import 'package:appbankdarm/screens/user/requested_card.dart';
 import 'package:flutter/material.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 //Routes
@@ -23,20 +23,20 @@ import 'screens/register/accountType.dart';
 import 'screens/register/password.dart';
 import 'screens/register/passwordConfirm.dart';
 //Pages Home User
-import 'package:appbankdarm/screens/home_user/home_user.dart';
+import 'package:appbankdarm/screens/user/home_user.dart';
 //Pages Account User
-import 'screens/account/profile.dart';
-import 'screens/account/delete.dart';
+import 'screens/user/account/profile.dart';
+import 'screens/user/account/delete.dart';
 //Pages Create Card User
-import 'screens/request_card/name.dart';
-import 'screens/request_card/type.dart';
-import 'screens/request_card/flag.dart';
-import 'screens/request_card/validity.dart';
+import 'screens/user/request_card/name.dart';
+import 'screens/user/request_card/type.dart';
+import 'screens/user/request_card/flag.dart';
+import 'screens/user/request_card/validity.dart';
 //Pages Register Card User
-import 'screens/register_card/name.dart';
-import 'screens/register_card/number.dart';
-import 'screens/register_card/cvc.dart';
-import 'screens/register_card/validity.dart';
+import 'screens/user/register_card/name.dart';
+import 'screens/user/register_card/number.dart';
+import 'screens/user/register_card/cvc.dart';
+import 'screens/user/register_card/validity.dart';
 
 class AppBank extends StatelessWidget {
   const AppBank({super.key});

@@ -34,54 +34,56 @@ class _RegisterAccountTypeUserState extends State<RegisterAccountTypeUser> {
           'tipo de conta',
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Column(children: [
-              ListTile(
-                title: const Text('Poupança'),
-                onTap: () => setState(() {
-                  accountType = 'savings';
-                }),
-                contentPadding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                leading: Radio(
-                  value: 'savings',
-                  activeColor: Colors.black,
-                  groupValue: accountType,
-                  onChanged: ((String? value) {
-                    setState(() {
-                      accountType = value.toString();
-                    });
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: Column(children: [
+                ListTile(
+                  title: const Text('Poupança'),
+                  onTap: () => setState(() {
+                    accountType = 'savings';
                   }),
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  leading: Radio(
+                    value: 'savings',
+                    activeColor: Colors.black,
+                    groupValue: accountType,
+                    onChanged: ((String? value) {
+                      setState(() {
+                        accountType = value.toString();
+                      });
+                    }),
+                  ),
                 ),
-              ),
-              ListTile(
-                title: const Text('Corrente'),
-                onTap: () => setState(() {
-                  accountType = 'current';
-                }),
-                contentPadding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                leading: Radio(
-                  value: 'current',
-                  activeColor: Colors.black,
-                  groupValue: accountType,
-                  onChanged: ((String? value) {
-                    setState(() {
-                      accountType = value.toString();
-                    });
+                ListTile(
+                  title: const Text('Corrente'),
+                  onTap: () => setState(() {
+                    accountType = 'current';
                   }),
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  leading: Radio(
+                    value: 'current',
+                    activeColor: Colors.black,
+                    groupValue: accountType,
+                    onChanged: ((String? value) {
+                      setState(() {
+                        accountType = value.toString();
+                      });
+                    }),
+                  ),
                 ),
-              ),
-            ]),
-          ),
-          BottomButtom(
-            onPress: () => _pressButton(),
-            title: 'continuar',
-            enabled: isButtonActive,
-          )
-        ],
+              ]),
+            ),
+            BottomButtom(
+              onPress: () => _pressButton(),
+              title: 'continuar',
+              enabled: isButtonActive,
+            )
+          ],
+        ),
       ),
     );
   }

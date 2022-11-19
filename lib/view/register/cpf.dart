@@ -82,56 +82,58 @@ class _RegisterCpfUserState extends State<RegisterCpfUser> {
               : 'criar admin',
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Container(
-              margin: const EdgeInsets.all(20),
-              child: TextFormField(
-                key: formFieldKey,
-                controller: cpf,
-                keyboardType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  CpfInputFormatter()
-                ],
-                autofocus: true,
-                style: const TextStyle(fontSize: 26),
-                validator: (String? value) {
-                  if (UtilBrasilFields.isCPFValido(cpf.text) == false &&
-                      cpf.text.length == 14) {
-                    setState(() {
-                      labelErr = true;
-                    });
-                    return 'CPF inválido. confira e tente novamente';
-                  } else {
-                    labelErr = false;
-                  }
-                },
-                decoration: InputDecoration(
-                  hintText: '000.000.000-00',
-                  labelText: 'qual seu CPF?',
-                  labelStyle: TextStyle(
-                    color: labelErr == true ? Colors.red : Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.all(20),
+                child: TextFormField(
+                  key: formFieldKey,
+                  controller: cpf,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    CpfInputFormatter()
+                  ],
+                  autofocus: true,
+                  style: const TextStyle(fontSize: 26),
+                  validator: (String? value) {
+                    if (UtilBrasilFields.isCPFValido(cpf.text) == false &&
+                        cpf.text.length == 14) {
+                      setState(() {
+                        labelErr = true;
+                      });
+                      return 'CPF inválido. confira e tente novamente';
+                    } else {
+                      labelErr = false;
+                    }
+                  },
+                  decoration: InputDecoration(
+                    hintText: '000.000.000-00',
+                    labelText: 'qual seu CPF?',
+                    labelStyle: TextStyle(
+                      color: labelErr == true ? Colors.red : Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    errorStyle: const TextStyle(
+                      color: Colors.red,
+                    ),
+                    border: InputBorder.none,
                   ),
-                  errorStyle: const TextStyle(
-                    color: Colors.red,
-                  ),
-                  border: InputBorder.none,
+                  cursorColor: Colors.black,
                 ),
-                cursorColor: Colors.black,
               ),
             ),
-          ),
-          BottomButtom(
-            onPress: () => _pushCpf(),
-            title: 'continuar',
-            enabled: isButtonActive,
-            loading: isLoading,
-          )
-        ],
+            BottomButtom(
+              onPress: () => _pushCpf(),
+              title: 'continuar',
+              enabled: isButtonActive,
+              loading: isLoading,
+            )
+          ],
+        ),
       ),
     );
   }

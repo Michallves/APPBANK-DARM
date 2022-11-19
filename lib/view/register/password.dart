@@ -44,22 +44,24 @@ class _RegisterPasswordState extends State<RegisterPassword> {
           'senha',
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Container(
-                margin: const EdgeInsets.symmetric(vertical: 40),
-                child: Pin(
-                  textEditingController: password,
-                  focusNode: myFocusNode,
-                )),
-          ),
-          BottomButtom(
-            onPress: () => _pressButton(),
-            title: 'continuar',
-            enabled: isButtonActive,
-          )
-        ],
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: Container(
+                  margin: const EdgeInsets.symmetric(vertical: 40),
+                  child: Pin(
+                    textEditingController: password,
+                    focusNode: myFocusNode,
+                  )),
+            ),
+            BottomButtom(
+              onPress: () => _pressButton(),
+              title: 'continuar',
+              enabled: isButtonActive,
+            )
+          ],
+        ),
       ),
     );
   }

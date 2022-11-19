@@ -108,14 +108,14 @@ class _HomeUserState extends State<HomeUser> {
                             ],
                           )),
                 ListTile(
-                  title: const Text('Conta'),
+                  title: const Text('conta'),
                   onTap: () =>
                       Navigator.of(context).pushNamed(AppRoutes.ACCOUNT),
                   leading: const Icon(Icons.account_circle_outlined, size: 30),
                   iconColor: Colors.black,
                 ),
                 ListTile(
-                  title: const Text('Carteira'),
+                  title: const Text('carteira'),
                   onTap: () => setState(() {
                     userService.screen = "myCards";
                     Navigator.of(context).pop();
@@ -124,14 +124,14 @@ class _HomeUserState extends State<HomeUser> {
                   iconColor: Colors.black,
                 ),
                 ListTile(
-                  title: const Text('Cadastrar cartão'),
+                  title: const Text('cadastrar cartão'),
                   onTap: () => Navigator.of(context)
                       .pushNamed(AppRoutes.REGISTER_CARD_NAME),
                   leading: const Icon(Icons.add_card, size: 30),
                   iconColor: Colors.black,
                 ),
                 ListTile(
-                  title: const Text('Cartões solicitados'),
+                  title: const Text('cartões solicitados'),
                   onTap: () => setState(() {
                     userService.screen = "requestedCards";
                     Navigator.of(context).pop();
@@ -141,14 +141,18 @@ class _HomeUserState extends State<HomeUser> {
                   iconColor: Colors.black,
                 ),
                 ListTile(
-                  title: const Text('Solicitar cartão'),
+                  title: const Text('solicitar cartão'),
                   onTap: () => Navigator.of(context)
-                      .pushNamed(AppRoutes.REQUEST_CARD_VALIDITY),
+                      .pushNamed(AppRoutes.REQUEST_CARD_NAME),
                   leading: const Icon(Icons.card_membership_outlined, size: 30),
                   iconColor: Colors.black,
                 ),
-                const Spacer(
-                  flex: 1,
+                ListTile(
+                  title: const Text('configuração'),
+                  onTap: () =>
+                      Navigator.of(context).pushNamed(AppRoutes.CONFIG_USER),
+                  leading: const Icon(Icons.settings_outlined, size: 30),
+                  iconColor: Colors.black,
                 ),
                 ListTile(
                   title:
@@ -160,9 +164,9 @@ class _HomeUserState extends State<HomeUser> {
               ],
             )),
         body: userService.screen == 'myCards'
-            ? const MyCards()
+            ? const SafeArea(child: MyCards())
             : userService.screen == 'requestedCards'
-                ? const RequestedCards()
+                ? const SafeArea(child: RequestedCards())
                 : null);
   }
 }

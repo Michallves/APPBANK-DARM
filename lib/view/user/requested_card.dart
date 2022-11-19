@@ -41,113 +41,119 @@ class _RequestedCardState extends State<RequestedCard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView(children: [
-              Container(
-                margin: const EdgeInsets.all(20),
-                child: Cartao(
-                  number: card?['number'],
-                  flag: card?['flag'],
-                  name: card?['name'],
-                  validity: card?['validity'],
-                  cvc: card?['cvc'],
-                  type: card?['type'],
-                  obscure: false,
-                  animation: true,
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  margin: const EdgeInsets.all(20),
-                  child: Column(children: [
-                    const ListTile(
-                      title: Text('cartão solicitado'),
-                      leading: Icon(
-                        MdiIcons.creditCardSyncOutline,
-                        size: 30,
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.all(20),
+                      child: Cartao(
+                        number: card?['number'],
+                        flag: card?['flag'],
+                        name: card?['name'],
+                        validity: card?['validity'],
+                        cvc: card?['cvc'],
+                        type: card?['type'],
+                        obscure: false,
+                        animation: true,
                       ),
-                      iconColor: Colors.black,
                     ),
                     Container(
-                      height: 20,
-                      alignment: Alignment.centerLeft,
-                      child: const VerticalDivider(
-                        width: 60,
-                        thickness: 2,
-                        color: Colors.grey,
-                      ),
+                      margin: const EdgeInsets.all(20),
+                      child: Column(children: [
+                        const ListTile(
+                          title: Text('cartão solicitado'),
+                          leading: Icon(
+                            MdiIcons.creditCardSyncOutline,
+                            size: 30,
+                          ),
+                          iconColor: Colors.black,
+                        ),
+                        Container(
+                          height: 20,
+                          alignment: Alignment.centerLeft,
+                          child: const VerticalDivider(
+                            width: 60,
+                            thickness: 2,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        const ListTile(
+                          title: Text('aguardando avaliação...'),
+                          leading: Icon(
+                            MdiIcons.creditCardClockOutline,
+                            size: 30,
+                          ),
+                          iconColor: Colors.black,
+                        ),
+                        card?['state'] == 'approved'
+                            ? Column(children: [
+                                Container(
+                                  height: 20,
+                                  alignment: Alignment.centerLeft,
+                                  child: const VerticalDivider(
+                                    width: 60,
+                                    thickness: 2,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                const ListTile(
+                                  title: Text('cartão aprovado',
+                                      style:
+                                          TextStyle(color: Colors.greenAccent)),
+                                  leading: Icon(
+                                    MdiIcons.creditCardCheckOutline,
+                                    size: 30,
+                                  ),
+                                  iconColor: Colors.greenAccent,
+                                )
+                              ])
+                            : Container(),
+                        card?['state'] == 'recused'
+                            ? Column(children: [
+                                Container(
+                                  height: 20,
+                                  alignment: Alignment.centerLeft,
+                                  child: const VerticalDivider(
+                                    width: 60,
+                                    thickness: 2,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                ListTile(
+                                  title: const Text('cartão recusado',
+                                      style:
+                                          TextStyle(color: Colors.redAccent)),
+                                  subtitle: Text(card?['justification']),
+                                  leading: const Icon(
+                                    MdiIcons.creditCardRemoveOutline,
+                                    size: 30,
+                                  ),
+                                  iconColor: Colors.redAccent,
+                                ),
+                              ])
+                            : Container(),
+                      ]),
                     ),
-                    const ListTile(
-                      title: Text('aguardando avaliação...'),
-                      leading: Icon(
-                        MdiIcons.creditCardClockOutline,
-                        size: 30,
-                      ),
-                      iconColor: Colors.black,
-                    ),
-                    card?['state'] == 'approved'
-                        ? Column(children: [
-                            Container(
-                              height: 20,
-                              alignment: Alignment.centerLeft,
-                              child: const VerticalDivider(
-                                width: 60,
-                                thickness: 2,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            const ListTile(
-                              title: Text('cartão aprovado',
-                                  style: TextStyle(color: Colors.greenAccent)),
-                              leading: Icon(
-                                MdiIcons.creditCardCheckOutline,
-                                size: 30,
-                              ),
-                              iconColor: Colors.greenAccent,
-                            )
-                          ])
-                        : Container(),
-                    card?['state'] == 'recused'
-                        ? Column(children: [
-                            Container(
-                              height: 20,
-                              alignment: Alignment.centerLeft,
-                              child: const VerticalDivider(
-                                width: 60,
-                                thickness: 2,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            ListTile(
-                              title: const Text('cartão recusado',
-                                  style: TextStyle(color: Colors.redAccent)),
-                              subtitle: Text(card?['justification']),
-                              leading: const Icon(
-                                MdiIcons.creditCardRemoveOutline,
-                                size: 30,
-                              ),
-                              iconColor: Colors.redAccent,
-                            ),
-                          ])
-                        : Container(),
-                  ]),
+                  ],
                 ),
               ),
-            ]),
-          ),
-          card?['state'] == 'waiting'
-              ? BottomButtom(
-                  onPress: () => showModal(),
-                  title: 'cancelar solicitação',
-                  color: Colors.redAccent,
-                )
-              : BottomButtom(
-                  onPress: () => Navigator.of(context).pop(),
-                  title: 'voltar',
-                ),
-        ],
+            ),
+            card?['state'] == 'waiting'
+                ? BottomButtom(
+                    onPress: () => showModal(),
+                    title: 'cancelar solicitação',
+                    color: Colors.redAccent,
+                  )
+                : BottomButtom(
+                    onPress: () => Navigator.of(context).pop(),
+                    title: 'voltar',
+                  ),
+          ],
+        ),
       ),
     );
   }

@@ -40,34 +40,36 @@ class _RegisterNameUserState extends State<RegisterNameUser> {
           'nome',
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Container(
-              margin: const EdgeInsets.all(20),
-              child: TextField(
-                controller: name,
-                autofocus: true,
-                keyboardType: TextInputType.name,
-                style: const TextStyle(fontSize: 26),
-                decoration: const InputDecoration(
-                  labelText: 'nome completo',
-                  labelStyle: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.all(20),
+                child: TextField(
+                  controller: name,
+                  autofocus: true,
+                  keyboardType: TextInputType.name,
+                  style: const TextStyle(fontSize: 26),
+                  decoration: const InputDecoration(
+                    labelText: 'nome completo',
+                    labelStyle: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    border: InputBorder.none,
                   ),
-                  border: InputBorder.none,
+                  cursorColor: Colors.black,
                 ),
-                cursorColor: Colors.black,
               ),
             ),
-          ),
-          BottomButtom(
-              enabled: isButtonActive,
-              onPress: () => _pressButton(),
-              title: "Continuar")
-        ],
+            BottomButtom(
+                enabled: isButtonActive,
+                onPress: () => _pressButton(),
+                title: "Continuar")
+          ],
+        ),
       ),
     );
   }

@@ -53,23 +53,25 @@ class _NewPasswordConfirmState extends State<NewPasswordConfirm> {
           'confirmar nova senha',
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Container(
-                margin: const EdgeInsets.symmetric(vertical: 20),
-                child: Pin(
-                  textEditingController: password,
-                  focusNode: myFocusNode,
-                )),
-          ),
-          BottomButtom(
-            loading: isLoading,
-            onPress: () => _pressButton(),
-            title: 'alterar senha',
-            enabled: isButtonActive,
-          )
-        ],
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: Container(
+                  margin: const EdgeInsets.symmetric(vertical: 20),
+                  child: Pin(
+                    textEditingController: password,
+                    focusNode: myFocusNode,
+                  )),
+            ),
+            BottomButtom(
+              loading: isLoading,
+              onPress: () => _pressButton(),
+              title: 'alterar senha',
+              enabled: isButtonActive,
+            )
+          ],
+        ),
       ),
     );
   }

@@ -25,7 +25,7 @@ class _BottomButtomState extends State<BottomButtom> {
     return Container(
         width: MediaQuery.of(context).size.width,
         height: 50,
-        margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+        margin: const EdgeInsets.all(20),
         child: widget.loading != true
             ? ElevatedButton(
                 onPressed: widget.enabled != false

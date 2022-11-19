@@ -68,34 +68,36 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
           'senha',
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Container(
-                margin: const EdgeInsets.symmetric(vertical: 40),
-                child: Pin(
-                  textEditingController: password,
-                  focusNode: myFocusNode,
-                )),
-          ),
-          Container(
-              margin: const EdgeInsets.all(20),
-              child: TextButton(
-                  onPressed: () => _passwordReset(),
-                  child: const Text(
-                    'recuperar conta',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
-                  ))),
-          BottomButtom(
-            onPress: () => _login(),
-            title: 'entrar',
-            enabled: isButtonActive,
-            loading: isLoading,
-          )
-        ],
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: Container(
+                  margin: const EdgeInsets.symmetric(vertical: 40),
+                  child: Pin(
+                    textEditingController: password,
+                    focusNode: myFocusNode,
+                  )),
+            ),
+            Container(
+                margin: const EdgeInsets.all(20),
+                child: TextButton(
+                    onPressed: () => _passwordReset(),
+                    child: const Text(
+                      'recuperar conta',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                    ))),
+            BottomButtom(
+              onPress: () => _login(),
+              title: 'entrar',
+              enabled: isButtonActive,
+              loading: isLoading,
+            )
+          ],
+        ),
       ),
     );
   }

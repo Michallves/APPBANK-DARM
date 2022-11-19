@@ -57,34 +57,39 @@ class _RegisterCardValidityState extends State<RegisterCardValidity> {
           'data de validade',
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Container(
-              margin: const EdgeInsets.all(20),
-              child: TextFormField(
-                controller: validity,
-                keyboardType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  ValidadeCartaoInputFormatter()
-                ],
-                autofocus: true,
-                style: const TextStyle(fontSize: 26),
-                decoration: const InputDecoration(
-                  hintText: '00/00',
-                  border: InputBorder.none,
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.all(20),
+                child: TextFormField(
+                  controller: validity,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    ValidadeCartaoInputFormatter()
+                  ],
+                  autofocus: true,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 28,
+                  ),
+                  decoration: const InputDecoration(
+                    hintText: '00/00',
+                    border: InputBorder.none,
+                  ),
+                  cursorColor: Colors.black,
                 ),
-                cursorColor: Colors.black,
               ),
             ),
-          ),
-          BottomButtom(
-              loading: isLoading,
-              enabled: isButtonActive,
-              onPress: () => isButtonActive == true ? _registerCard() : null,
-              title: "cadastrar cartão"),
-        ],
+            BottomButtom(
+                loading: isLoading,
+                enabled: isButtonActive,
+                onPress: () => isButtonActive == true ? _registerCard() : null,
+                title: "cadastrar cartão"),
+          ],
+        ),
       ),
     );
   }

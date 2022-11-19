@@ -1,10 +1,11 @@
-import 'package:appbankdarm/view/user/account/changePassword/current_password.dart';
-import 'package:appbankdarm/view/user/account/changePassword/new_password.dart';
-import 'package:appbankdarm/view/user/account/changePassword/new_password_confirm.dart';
+import 'package:appbankdarm/view/user/config/changePassword/current_password.dart';
+import 'package:appbankdarm/view/user/config/changePassword/new_password.dart';
+import 'package:appbankdarm/view/user/config/changePassword/new_password_confirm.dart';
 import 'package:appbankdarm/view/admin/card_admin.dart';
 import 'package:appbankdarm/view/user/card_user.dart';
 import 'package:appbankdarm/view/admin/home_admin.dart';
 import 'package:appbankdarm/view/admin/list_users.dart';
+import 'package:appbankdarm/view/user/config/config.dart';
 import 'package:appbankdarm/view/user/requested_card.dart';
 import 'package:flutter/material.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
@@ -25,8 +26,8 @@ import 'view/register/passwordConfirm.dart';
 //Pages Home User
 import 'package:appbankdarm/view/user/home_user.dart';
 //Pages Account User
-import 'view/user/account/profile.dart';
-import 'view/user/account/delete.dart';
+import 'view/user/account.dart';
+import 'view/user/config/delete.dart';
 //Pages Create Card User
 import 'view/user/request_card/name.dart';
 import 'view/user/request_card/type.dart';
@@ -92,6 +93,7 @@ class AppBank extends StatelessWidget {
         AppRoutes.REQUESTED_CARD: (ctx) => const RequestedCard(),
         //Account User
         AppRoutes.ACCOUNT: (ctx) => const AccountUser(),
+        AppRoutes.CONFIG_USER: (ctx) => const ConfigUser(),
         AppRoutes.DELETE: (ctx) => const DeleteUser(),
         //Change Password User
         AppRoutes.CURRENT_PASSWORD: (ctx) => const CurrentPassword(),

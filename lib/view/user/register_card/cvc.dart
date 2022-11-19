@@ -44,34 +44,36 @@ class _RegisterCardCvcState extends State<RegisterCardCvc> {
           'CVC',
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Container(
-              margin: const EdgeInsets.symmetric(vertical: 40),
-              child: PinCodeTextField(
-                focusNode: myFocusNode,
-                controller: cvc,
-                keyboardType: TextInputType.number,
-                errorBorderColor: Colors.red,
-                pinBoxWidth: 35,
-                pinBoxHeight: 50,
-                pinBoxRadius: 10,
-                pinBoxOuterPadding: const EdgeInsets.symmetric(horizontal: 10),
-                wrapAlignment: WrapAlignment.spaceAround,
-                maxLength: 3,
-                pinTextStyle: const TextStyle(fontSize: 20),
-                highlight: true,
-                defaultBorderColor: Colors.black38,
-                hasTextBorderColor: Colors.black38,
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.symmetric(vertical: 40),
+                child: PinCodeTextField(
+                  focusNode: myFocusNode,
+                  controller: cvc,
+                  keyboardType: TextInputType.number,
+                  errorBorderColor: Colors.red,
+                  pinBoxWidth: 35,
+                  pinBoxHeight: 50,
+                  pinBoxRadius: 10,
+                  pinBoxOuterPadding:
+                      const EdgeInsets.symmetric(horizontal: 10),
+                  wrapAlignment: WrapAlignment.spaceAround,
+                  maxLength: 3,
+                  pinTextStyle: const TextStyle(fontSize: 20),
+                  defaultBorderColor: Colors.black38,
+                  hasTextBorderColor: Colors.black38,
+                ),
               ),
             ),
-          ),
-          BottomButtom(
-              enabled: isButtonActive,
-              onPress: () => isButtonActive == true ? _pressButton() : null,
-              title: "continuar")
-        ],
+            BottomButtom(
+                enabled: isButtonActive,
+                onPress: () => isButtonActive == true ? _pressButton() : null,
+                title: "continuar")
+          ],
+        ),
       ),
     );
   }

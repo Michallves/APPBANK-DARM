@@ -107,37 +107,39 @@ class _RegisterEmailUserState extends State<RegisterEmailUser> {
           'E-mail',
         ),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Expanded(
-            child: Container(
-              margin: const EdgeInsets.all(20),
-              child: TextFormField(
-                controller: email,
-                autofocus: true,
-                keyboardType: TextInputType.emailAddress,
-                style: const TextStyle(fontSize: 26),
-                decoration: const InputDecoration(
-                  labelText: 'E-mail',
-                  labelStyle: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+      body: SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.all(20),
+                child: TextFormField(
+                  controller: email,
+                  autofocus: true,
+                  keyboardType: TextInputType.emailAddress,
+                  style: const TextStyle(fontSize: 26),
+                  decoration: const InputDecoration(
+                    labelText: 'E-mail',
+                    labelStyle: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    border: InputBorder.none,
                   ),
-                  border: InputBorder.none,
+                  cursorColor: Colors.black,
                 ),
-                cursorColor: Colors.black,
               ),
             ),
-          ),
-          BottomButtom(
-            onPress: () => _pressButton(),
-            title: 'continuar',
-            enabled: isButtonActive,
-            loading: isLoading,
-          )
-        ],
+            BottomButtom(
+              onPress: () => _pressButton(),
+              title: 'continuar',
+              enabled: isButtonActive,
+              loading: isLoading,
+            )
+          ],
+        ),
       ),
     );
   }

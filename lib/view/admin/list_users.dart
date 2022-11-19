@@ -57,45 +57,47 @@ class _ListUsersState extends State<ListUsers> {
               )),
         ],
       ),
-      body: StreamBuilder<QuerySnapshot>(
-          stream: context.read<AdminService>().readUsers(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return const Center(
-                child: CircularProgressIndicator(color: Colors.black),
-              );
-            } else {
-              return ListView.separated(
-                  padding: const EdgeInsets.all(10),
-                  separatorBuilder: (_, ___) => const Divider(),
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: ((context, index) {
-                    DocumentSnapshot user = snapshot.data!.docs[index];
-                    return user['role'] == "user"
-                        ? ListTile(
-                            leading: CircleAvatar(
-                              backgroundColor: Colors.black,
-                              radius: 30,
-                              backgroundImage:
-                                  NetworkImage((user['image']).toString()),
-                              child: user['image'] == ''
-                                  ? Text(
-                                      (user['name'])
-                                          .toString()
-                                          .substring(0, 2)
-                                          .toUpperCase(),
-                                      style: const TextStyle(
-                                          color: Colors.white, fontSize: 20))
-                                  : null,
-                            ),
-                            title: Text(user['name']),
-                            subtitle: Text(
-                                "Estado: ${user['state']}\nCartões: ${user['cards']}"),
-                          )
-                        : Container();
-                  }));
-            }
-          }),
+      body: SafeArea(
+        child: StreamBuilder<QuerySnapshot>(
+            stream: context.read<AdminService>().readUsers(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(
+                  child: CircularProgressIndicator(color: Colors.black),
+                );
+              } else {
+                return ListView.separated(
+                    padding: const EdgeInsets.all(10),
+                    separatorBuilder: (_, ___) => const Divider(),
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: ((context, index) {
+                      DocumentSnapshot user = snapshot.data!.docs[index];
+                      return user['role'] == "user"
+                          ? ListTile(
+                              leading: CircleAvatar(
+                                backgroundColor: Colors.black,
+                                radius: 30,
+                                backgroundImage:
+                                    NetworkImage((user['image']).toString()),
+                                child: user['image'] == ''
+                                    ? Text(
+                                        (user['name'])
+                                            .toString()
+                                            .substring(0, 2)
+                                            .toUpperCase(),
+                                        style: const TextStyle(
+                                            color: Colors.white, fontSize: 20))
+                                    : null,
+                              ),
+                              title: Text(user['name']),
+                              subtitle: Text(
+                                  "Estado: ${user['state']}\nCartões: ${user['cards']}"),
+                            )
+                          : Container();
+                    }));
+              }
+            }),
+      ),
     );
   }
 }

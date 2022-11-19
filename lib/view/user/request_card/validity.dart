@@ -104,94 +104,96 @@ class _CreateCardValidityState extends State<CreateCardValidity> {
           'validade',
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  ListTile(
-                    title: const Text('2 anos'),
-                    onTap: () => setState(() {
-                      validity = '2';
-                    }),
-                    contentPadding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 15),
-                    leading: Radio(
-                      value: '2',
-                      activeColor: Colors.black,
-                      groupValue: validity,
-                      onChanged: ((String? value) {
-                        setState(() {
-                          validity = value.toString();
-                        });
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    ListTile(
+                      title: const Text('2 anos'),
+                      onTap: () => setState(() {
+                        validity = '2';
                       }),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 15),
+                      leading: Radio(
+                        value: '2',
+                        activeColor: Colors.black,
+                        groupValue: validity,
+                        onChanged: ((String? value) {
+                          setState(() {
+                            validity = value.toString();
+                          });
+                        }),
+                      ),
                     ),
-                  ),
-                  ListTile(
-                    title: const Text('4 anos'),
-                    onTap: () => setState(() {
-                      validity = '4';
-                    }),
-                    contentPadding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 15),
-                    leading: Radio(
-                      value: '4',
-                      activeColor: Colors.black,
-                      groupValue: validity,
-                      onChanged: ((String? value) {
-                        setState(() {
-                          validity = value.toString();
-                        });
+                    ListTile(
+                      title: const Text('4 anos'),
+                      onTap: () => setState(() {
+                        validity = '4';
                       }),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 15),
+                      leading: Radio(
+                        value: '4',
+                        activeColor: Colors.black,
+                        groupValue: validity,
+                        onChanged: ((String? value) {
+                          setState(() {
+                            validity = value.toString();
+                          });
+                        }),
+                      ),
                     ),
-                  ),
-                  ListTile(
-                    title: const Text('5 anos'),
-                    onTap: () => setState(() {
-                      validity = '5';
-                    }),
-                    contentPadding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 15),
-                    leading: Radio(
-                      value: '5',
-                      activeColor: Colors.black,
-                      groupValue: validity,
-                      onChanged: ((String? value) {
-                        setState(() {
-                          validity = value.toString();
-                        });
+                    ListTile(
+                      title: const Text('5 anos'),
+                      onTap: () => setState(() {
+                        validity = '5';
                       }),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 15),
+                      leading: Radio(
+                        value: '5',
+                        activeColor: Colors.black,
+                        groupValue: validity,
+                        onChanged: ((String? value) {
+                          setState(() {
+                            validity = value.toString();
+                          });
+                        }),
+                      ),
                     ),
-                  ),
-                  ListTile(
-                    title: const Text('6 anos'),
-                    onTap: () => setState(() {
-                      validity = '6';
-                    }),
-                    contentPadding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 15),
-                    leading: Radio(
-                      value: '6',
-                      activeColor: Colors.black,
-                      groupValue: validity,
-                      onChanged: ((String? value) {
-                        setState(() {
-                          validity = value.toString();
-                        });
+                    ListTile(
+                      title: const Text('6 anos'),
+                      onTap: () => setState(() {
+                        validity = '6';
                       }),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 15),
+                      leading: Radio(
+                        value: '6',
+                        activeColor: Colors.black,
+                        groupValue: validity,
+                        onChanged: ((String? value) {
+                          setState(() {
+                            validity = value.toString();
+                          });
+                        }),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-          BottomButtom(
-              loading: isLoading,
-              enabled: validity != null ? true : false,
-              onPress: () => _createCard(),
-              title: 'solicitar cartão')
-        ],
+            BottomButtom(
+                loading: isLoading,
+                enabled: validity != null ? true : false,
+                onPress: () => _createCard(),
+                title: 'solicitar cartão')
+          ],
+        ),
       ),
     );
   }

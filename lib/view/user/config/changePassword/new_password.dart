@@ -43,22 +43,24 @@ class _NewPasswordState extends State<NewPassword> {
           'nova senha',
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Container(
-                margin: const EdgeInsets.symmetric(vertical: 20),
-                child: Pin(
-                  textEditingController: password,
-                  focusNode: myFocusNode,
-                )),
-          ),
-          BottomButtom(
-            onPress: () => _pressButton(),
-            title: 'continuar',
-            enabled: isButtonActive,
-          )
-        ],
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: Container(
+                  margin: const EdgeInsets.symmetric(vertical: 20),
+                  child: Pin(
+                    textEditingController: password,
+                    focusNode: myFocusNode,
+                  )),
+            ),
+            BottomButtom(
+              onPress: () => _pressButton(),
+              title: 'continuar',
+              enabled: isButtonActive,
+            )
+          ],
+        ),
       ),
     );
   }

@@ -106,103 +106,108 @@ class _RegisterCardNumberState extends State<RegisterCardNumber> {
           'número do cartão',
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Container(
-                margin: const EdgeInsets.all(20),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                        width: MediaQuery.of(context).size.width - 120,
-                        child: TextFormField(
-                          key: formFieldKey,
-                          controller: number,
-                          keyboardType: TextInputType.number,
-                          focusNode: myFocusNode,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                            CartaoBancarioInputFormatter(),
-                          ],
-                          validator: (String? value) {
-                            if (CreditCardValidator()
-                                        .validateCCNum(number.text)
-                                        .isValid ==
-                                    false &&
-                                number.text.length == 19) {
-                              setState(() {
-                                labelErr = true;
-                              });
-                              return 'Número inválido. confira e tente novamente';
-                            } else {
-                              labelErr = false;
-                            }
-                          },
-                          autofocus: true,
-                          style: TextStyle(
-                            fontSize: 26,
-                            color: labelErr == true ? Colors.red : Colors.black,
-                          ),
-                          decoration: InputDecoration(
-                            hintText: '0000 0000 0000 0000',
-                            labelStyle: TextStyle(
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: Container(
+                  margin: const EdgeInsets.all(20),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                          width: MediaQuery.of(context).size.width - 120,
+                          child: TextFormField(
+                            key: formFieldKey,
+                            controller: number,
+                            keyboardType: TextInputType.number,
+                            focusNode: myFocusNode,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              CartaoBancarioInputFormatter(),
+                            ],
+                            validator: (String? value) {
+                              if (CreditCardValidator()
+                                          .validateCCNum(number.text)
+                                          .isValid ==
+                                      false &&
+                                  number.text.length == 19 &&
+                                  flag != '') {
+                                setState(() {
+                                  labelErr = true;
+                                });
+                                return 'Número inválido. confira e tente novamente';
+                              } else {
+                                labelErr = false;
+                              }
+                            },
+                            autofocus: true,
+                            style: TextStyle(
+                              fontSize: 26,
                               color:
                                   labelErr == true ? Colors.red : Colors.black,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
                             ),
-                            errorStyle: const TextStyle(
-                              color: Colors.red,
+                            decoration: InputDecoration(
+                              hintText: '0000 0000 0000 0000',
+                              labelStyle: TextStyle(
+                                color: labelErr == true
+                                    ? Colors.red
+                                    : Colors.black,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              errorStyle: const TextStyle(
+                                color: Colors.red,
+                              ),
+                              border: InputBorder.none,
                             ),
-                            border: InputBorder.none,
-                          ),
-                          cursorColor: Colors.black,
-                        )),
-                    Container(
-                      height: 50,
-                      width: 80,
-                      alignment: AlignmentDirectional.center,
-                      child: flag == 'mastercard'
-                          ? Image.asset(
-                              'assets/images/mastercard2.png',
-                              width: 70,
-                              fit: BoxFit.fitWidth,
-                            )
-                          : flag == 'visa'
-                              ? Image.asset(
-                                  'assets/images/visa2.png',
-                                  width: 70,
-                                  fit: BoxFit.fitWidth,
-                                )
-                              : flag == 'elo'
-                                  ? Image.asset(
-                                      'assets/images/elo2.png',
-                                      width: 90,
-                                      fit: BoxFit.fitWidth,
-                                    )
-                                  : flag == 'hipercard'
-                                      ? Image.asset(
-                                          'assets/images/hipercard.png',
-                                          width: 90,
-                                          fit: BoxFit.fitWidth,
-                                        )
-                                      : flag == 'amex'
-                                          ? Image.asset(
-                                              'assets/images/americanexpress.png',
-                                              width: 60,
-                                              fit: BoxFit.fitWidth,
-                                            )
-                                          : Container(),
-                    ),
-                  ],
-                )),
-          ),
-          BottomButtom(
-              enabled: isButtonActive,
-              onPress: () => _pressButton(),
-              title: "continuar")
-        ],
+                            cursorColor: Colors.black,
+                          )),
+                      Container(
+                        height: 50,
+                        width: 80,
+                        alignment: AlignmentDirectional.center,
+                        child: flag == 'mastercard'
+                            ? Image.asset(
+                                'assets/images/mastercard2.png',
+                                width: 70,
+                                fit: BoxFit.fitWidth,
+                              )
+                            : flag == 'visa'
+                                ? Image.asset(
+                                    'assets/images/visa2.png',
+                                    width: 70,
+                                    fit: BoxFit.fitWidth,
+                                  )
+                                : flag == 'elo'
+                                    ? Image.asset(
+                                        'assets/images/elo2.png',
+                                        width: 90,
+                                        fit: BoxFit.fitWidth,
+                                      )
+                                    : flag == 'hipercard'
+                                        ? Image.asset(
+                                            'assets/images/hipercard.png',
+                                            width: 90,
+                                            fit: BoxFit.fitWidth,
+                                          )
+                                        : flag == 'amex'
+                                            ? Image.asset(
+                                                'assets/images/americanexpress.png',
+                                                width: 60,
+                                                fit: BoxFit.fitWidth,
+                                              )
+                                            : Container(),
+                      ),
+                    ],
+                  )),
+            ),
+            BottomButtom(
+                enabled: isButtonActive,
+                onPress: () => _pressButton(),
+                title: "continuar")
+          ],
+        ),
       ),
     );
   }

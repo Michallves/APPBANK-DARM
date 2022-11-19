@@ -37,36 +37,38 @@ class _CreateCardNameState extends State<CreateCardName> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'criar cartão',
+          'solicitar cartão',
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Container(
-              margin: const EdgeInsets.all(20),
-              child: TextFormField(
-                controller: name,
-                autofocus: true,
-                style: const TextStyle(fontSize: 26),
-                decoration: const InputDecoration(
-                  labelText: 'nome completo',
-                  labelStyle: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.all(20),
+                child: TextFormField(
+                  controller: name,
+                  autofocus: true,
+                  style: const TextStyle(fontSize: 26),
+                  decoration: const InputDecoration(
+                    labelText: 'nome completo',
+                    labelStyle: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    border: InputBorder.none,
                   ),
-                  border: InputBorder.none,
+                  cursorColor: Colors.black,
                 ),
-                cursorColor: Colors.black,
               ),
             ),
-          ),
-          BottomButtom(
-              enabled: isButtonActive,
-              onPress: () => _pressButton(),
-              title: 'continuar'),
-        ],
+            BottomButtom(
+                enabled: isButtonActive,
+                onPress: () => _pressButton(),
+                title: 'continuar'),
+          ],
+        ),
       ),
     );
   }

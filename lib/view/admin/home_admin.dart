@@ -97,38 +97,40 @@ class _HomeAdminState extends State<HomeAdmin> {
               )
             ],
           )),
-      body: StreamBuilder<QuerySnapshot>(
-          stream: context.read<AdminService>().readCards(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return const Center(
-                child: CircularProgressIndicator(color: Colors.black),
-              );
-            } else {
-              return ListView.separated(
-                  padding: const EdgeInsets.all(20),
-                  separatorBuilder: (_, ___) =>
-                      const Padding(padding: EdgeInsets.all(10)),
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: ((context, index) {
-                    DocumentSnapshot card = snapshot.data!.docs[index];
-                    return GestureDetector(
-                      onTap: () {
-                        context.read<AdminService>().card = card;
-                        Navigator.of(context).pushNamed(AppRoutes.CARD_ADMIN);
-                      },
-                      child: Cartao(
-                        obscure: false,
-                        number: card['number'],
-                        flag: card['flag'],
-                        name: card['name'],
-                        validity: card['validity'],
-                        cvc: null,
-                      ),
-                    );
-                  }));
-            }
-          }),
+      body: SafeArea(
+        child: StreamBuilder<QuerySnapshot>(
+            stream: context.read<AdminService>().readCards(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(
+                  child: CircularProgressIndicator(color: Colors.black),
+                );
+              } else {
+                return ListView.separated(
+                    padding: const EdgeInsets.all(20),
+                    separatorBuilder: (_, ___) =>
+                        const Padding(padding: EdgeInsets.all(10)),
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: ((context, index) {
+                      DocumentSnapshot card = snapshot.data!.docs[index];
+                      return GestureDetector(
+                        onTap: () {
+                          context.read<AdminService>().card = card;
+                          Navigator.of(context).pushNamed(AppRoutes.CARD_ADMIN);
+                        },
+                        child: Cartao(
+                          obscure: false,
+                          number: card['number'],
+                          flag: card['flag'],
+                          name: card['name'],
+                          validity: card['validity'],
+                          cvc: null,
+                        ),
+                      );
+                    }));
+              }
+            }),
+      ),
     );
   }
 }

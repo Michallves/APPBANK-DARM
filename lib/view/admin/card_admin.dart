@@ -64,18 +64,21 @@ class _CardAdminState extends State<CardAdmin> {
 
   @override
   Widget build(BuildContext context) {
-    return isLoading == true
-        ? const Scaffold(
-            body: Center(
-                child: CircularProgressIndicator(
-            color: Colors.black,
-          )))
-        : Scaffold(
-            appBar: AppBar(),
-            body: Column(
-              children: [
-                Expanded(
-                  child: ListView(children: [
+    if (isLoading == true) {
+      return const Scaffold(
+          body: Center(
+              child: CircularProgressIndicator(
+        color: Colors.black,
+      )));
+    } else {
+      return Scaffold(
+        appBar: AppBar(),
+        body: SafeArea(
+          child: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(children: [
                     Container(
                       margin: const EdgeInsets.all(20),
                       child: Cartao(
@@ -99,48 +102,51 @@ class _CardAdminState extends State<CardAdmin> {
                     ),
                   ]),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                        width: MediaQuery.of(context).size.width / 2.5,
-                        height: 50,
-                        margin: const EdgeInsets.fromLTRB(20, 0, 10, 20),
-                        child: ElevatedButton(
-                          onPressed: () => showModal(),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.redAccent,
-                            foregroundColor: Colors.white,
-                            elevation: 0,
-                            shadowColor: Colors.transparent,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                      width: MediaQuery.of(context).size.width / 2.5,
+                      height: 50,
+                      margin: const EdgeInsets.fromLTRB(20, 20, 10, 20),
+                      child: ElevatedButton(
+                        onPressed: () => showModal(),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.redAccent,
+                          foregroundColor: Colors.white,
+                          elevation: 0,
+                          shadowColor: Colors.transparent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
                           ),
-                          child: const Text('recusar'),
-                        )),
-                    Container(
-                        width: MediaQuery.of(context).size.width / 2.5,
-                        height: 50,
-                        margin: const EdgeInsets.fromLTRB(10, 0, 20, 20),
-                        child: ElevatedButton(
-                          onPressed: () => _approvedCard(),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.greenAccent,
-                            foregroundColor: Colors.white,
-                            elevation: 0,
-                            shadowColor: Colors.transparent,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
+                        ),
+                        child: const Text('recusar'),
+                      )),
+                  Container(
+                      width: MediaQuery.of(context).size.width / 2.5,
+                      height: 50,
+                      margin: const EdgeInsets.fromLTRB(10, 20, 20, 20),
+                      child: ElevatedButton(
+                        onPressed: () => _approvedCard(),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.greenAccent,
+                          foregroundColor: Colors.white,
+                          elevation: 0,
+                          shadowColor: Colors.transparent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
                           ),
-                          child: const Text('aceitar'),
-                        )),
-                  ],
-                ),
-              ],
-            ),
-          );
+                        ),
+                        child: const Text('aceitar'),
+                      )),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    }
   }
 
   void showModal() => showModalBottomSheet(
@@ -187,7 +193,6 @@ class _CardAdminState extends State<CardAdmin> {
                             )
                           ],
                         ))),
-                    const Padding(padding: EdgeInsets.all(10)),
                     Column(
                       children: [
                         BottomButtom(

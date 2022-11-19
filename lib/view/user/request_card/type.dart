@@ -28,111 +28,113 @@ class _CreateCardTypeState extends State<CreateCardType> {
           'tipo de conta',
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  ListTile(
-                    title: const Text('Crédito'),
-                    onTap: () => setState(() {
-                      type = 'credit';
-                    }),
-                    contentPadding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 15),
-                    leading: Radio(
-                      value: 'credit',
-                      activeColor: Colors.black,
-                      groupValue: type,
-                      onChanged: ((String? value) {
-                        setState(() {
-                          type = value.toString();
-                        });
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    ListTile(
+                      title: const Text('Crédito'),
+                      onTap: () => setState(() {
+                        type = 'credit';
                       }),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 15),
+                      leading: Radio(
+                        value: 'credit',
+                        activeColor: Colors.black,
+                        groupValue: type,
+                        onChanged: ((String? value) {
+                          setState(() {
+                            type = value.toString();
+                          });
+                        }),
+                      ),
                     ),
-                  ),
-                  ListTile(
-                    title: const Text('Débito'),
-                    onTap: () => setState(() {
-                      type = 'debit';
-                    }),
-                    contentPadding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 15),
-                    leading: Radio(
-                      value: 'debit',
-                      activeColor: Colors.black,
-                      groupValue: type,
-                      onChanged: ((String? value) {
-                        setState(() {
-                          type = value.toString();
-                        });
+                    ListTile(
+                      title: const Text('Débito'),
+                      onTap: () => setState(() {
+                        type = 'debit';
                       }),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 15),
+                      leading: Radio(
+                        value: 'debit',
+                        activeColor: Colors.black,
+                        groupValue: type,
+                        onChanged: ((String? value) {
+                          setState(() {
+                            type = value.toString();
+                          });
+                        }),
+                      ),
                     ),
-                  ),
-                  ListTile(
-                    title: const Text('Poupança'),
-                    onTap: () => setState(() {
-                      type = 'savings';
-                    }),
-                    contentPadding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 15),
-                    leading: Radio(
-                      value: 'savings',
-                      activeColor: Colors.black,
-                      groupValue: type,
-                      onChanged: ((String? value) {
-                        setState(() {
-                          type = value.toString();
-                        });
+                    ListTile(
+                      title: const Text('Poupança'),
+                      onTap: () => setState(() {
+                        type = 'savings';
                       }),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 15),
+                      leading: Radio(
+                        value: 'savings',
+                        activeColor: Colors.black,
+                        groupValue: type,
+                        onChanged: ((String? value) {
+                          setState(() {
+                            type = value.toString();
+                          });
+                        }),
+                      ),
                     ),
-                  ),
-                  ListTile(
-                    title: const Text('Crédito e Débito'),
-                    onTap: () => setState(() {
-                      type = 'credit&debit';
-                    }),
-                    contentPadding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 15),
-                    leading: Radio(
-                      value: 'credit&debit',
-                      activeColor: Colors.black,
-                      groupValue: type,
-                      onChanged: ((String? value) {
-                        setState(() {
-                          type = value.toString();
-                        });
+                    ListTile(
+                      title: const Text('Crédito e Débito'),
+                      onTap: () => setState(() {
+                        type = 'credit&debit';
                       }),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 15),
+                      leading: Radio(
+                        value: 'credit&debit',
+                        activeColor: Colors.black,
+                        groupValue: type,
+                        onChanged: ((String? value) {
+                          setState(() {
+                            type = value.toString();
+                          });
+                        }),
+                      ),
                     ),
-                  ),
-                  ListTile(
-                    title: const Text('Poupança e Débito'),
-                    onTap: () => setState(() {
-                      type = 'savingst&debit';
-                    }),
-                    contentPadding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 15),
-                    leading: Radio(
-                      value: 'savingst&debit',
-                      activeColor: Colors.black,
-                      groupValue: type,
-                      onChanged: ((String? value) {
-                        setState(() {
-                          type = value.toString();
-                        });
+                    ListTile(
+                      title: const Text('Poupança e Débito'),
+                      onTap: () => setState(() {
+                        type = 'savingst&debit';
                       }),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 15),
+                      leading: Radio(
+                        value: 'savingst&debit',
+                        activeColor: Colors.black,
+                        groupValue: type,
+                        onChanged: ((String? value) {
+                          setState(() {
+                            type = value.toString();
+                          });
+                        }),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-          BottomButtom(
-              enabled: type != '' ? true : false,
-              onPress: () => _pressButton(),
-              title: 'continuar')
-        ],
+            BottomButtom(
+                enabled: type != '' ? true : false,
+                onPress: () => _pressButton(),
+                title: 'continuar')
+          ],
+        ),
       ),
     );
   }

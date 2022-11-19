@@ -15,6 +15,7 @@ abstract class AppRoutes {
   static const HOME_USER = '/homeUser';
   static const CARD_USER = '/cardUser';
   static const ACCOUNT = '/accountUser';
+  static const CONFIG_USER = '/configUser';
   static const DELETE = '/deleteUser';
   static const CURRENT_PASSWORD = '/currentPassword';
   static const NEW_PASSWORD = '/newPassword';

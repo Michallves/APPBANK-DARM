@@ -1,6 +1,4 @@
 import 'dart:io';
-import 'package:appbankdarm/utils/app_routes.dart';
-import 'package:appbankdarm/widgets/bottom_button.dart';
 import 'package:appbankdarm/widgets/info_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -8,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-import '../../../controller/user_service.dart';
+import '../../controller/user_service.dart';
 
 class AccountUser extends StatefulWidget {
   const AccountUser({super.key});
@@ -72,62 +70,52 @@ class _AccountUserState extends State<AccountUser> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'conta',
+        appBar: AppBar(
+          title: const Text(
+            'conta',
+          ),
         ),
-      ),
-      body: isLoading == true
-          ? const Center(
-              child: CircularProgressIndicator(color: Colors.black),
-            )
-          : ListView(
-              children: [
-                SizedBox(
-                    height: 180,
-                    child: GestureDetector(
-                      onTap: _showModal,
-                      child: CircleAvatar(
-                          radius: 80,
-                          backgroundColor: Colors.black,
-                          backgroundImage:
-                              NetworkImage((user?['image']).toString()),
-                          child: user?['image'] == ''
-                              ? Text(
-                                  (user?['name'])
-                                      .toString()
-                                      .substring(0, 2)
-                                      .toUpperCase(),
-                                  style: const TextStyle(
-                                      color: Colors.white, fontSize: 80),
-                                )
-                              : null),
-                    )),
-                InfoUser(
-                  name: user?['name'],
-                  cpf: user?['cpf'],
-                  number: user?['telephone'],
-                  email: user?['email'],
-                  typeAccount: user?['accountType'],
+        body: isLoading == true
+            ? const SafeArea(
+                child: Center(
+                  child: CircularProgressIndicator(color: Colors.black),
                 ),
-                Container(
-                  width: double.infinity,
-                  height: 50,
-                  margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.of(context)
-                        .pushNamed(AppRoutes.CURRENT_PASSWORD),
-                    child: const Text("alterar senha"),
+              )
+            : SafeArea(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      SizedBox(
+                          height: 180,
+                          child: GestureDetector(
+                            onTap: _showModal,
+                            child: CircleAvatar(
+                                radius: 80,
+                                backgroundColor: Colors.black,
+                                backgroundImage:
+                                    NetworkImage((user?['image']).toString()),
+                                child: user?['image'] == ''
+                                    ? Text(
+                                        (user?['name'])
+                                            .toString()
+                                            .substring(0, 2)
+                                            .toUpperCase(),
+                                        style: const TextStyle(
+                                            color: Colors.white, fontSize: 80),
+                                      )
+                                    : null),
+                          )),
+                      InfoUser(
+                        name: user?['name'],
+                        cpf: user?['cpf'],
+                        number: user?['telephone'],
+                        email: user?['email'],
+                        typeAccount: user?['accountType'],
+                      ),
+                    ],
                   ),
                 ),
-                BottomButtom(
-                    onPress: () =>
-                        Navigator.of(context).pushNamed(AppRoutes.DELETE),
-                    title: "excluir conta",
-                    color: Colors.redAccent),
-              ],
-            ),
-    );
+              ));
   }
 
   _showModal() => showModalBottomSheet(

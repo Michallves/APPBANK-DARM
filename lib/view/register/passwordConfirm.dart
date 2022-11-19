@@ -64,23 +64,25 @@ class _RegisterPasswordConfirmState extends State<RegisterPasswordConfirm> {
           'senha novamente',
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Container(
-                margin: const EdgeInsets.symmetric(vertical: 40),
-                child: Pin(
-                  textEditingController: password,
-                  focusNode: myFocusNode,
-                )),
-          ),
-          BottomButtom(
-            onPress: () => _pressButton(),
-            title: 'criar conta',
-            enabled: isButtonActive,
-            loading: isLoading,
-          )
-        ],
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: Container(
+                  margin: const EdgeInsets.symmetric(vertical: 40),
+                  child: Pin(
+                    textEditingController: password,
+                    focusNode: myFocusNode,
+                  )),
+            ),
+            BottomButtom(
+              onPress: () => _pressButton(),
+              title: 'criar conta',
+              enabled: isButtonActive,
+              loading: isLoading,
+            )
+          ],
+        ),
       ),
     );
   }

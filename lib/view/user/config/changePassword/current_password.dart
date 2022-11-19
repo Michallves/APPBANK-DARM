@@ -1,19 +1,18 @@
 import 'package:appbankdarm/controller/auth_service.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:flutter/material.dart';
-import 'package:pin_code_text_field/pin_code_text_field.dart';
 import 'package:provider/provider.dart';
-import '../../../widgets/bottom_button.dart';
-import '../../../widgets/pin.dart';
+import '../../../../widgets/bottom_button.dart';
+import '../../../../widgets/pin.dart';
 
-class DeleteUser extends StatefulWidget {
-  const DeleteUser({super.key});
+class CurrentPassword extends StatefulWidget {
+  const CurrentPassword({super.key});
 
   @override
-  State<DeleteUser> createState() => _DeleteUserState();
+  State<CurrentPassword> createState() => _CurrentPasswordState();
 }
 
-class _DeleteUserState extends State<DeleteUser> {
+class _CurrentPasswordState extends State<CurrentPassword> {
   bool isButtonActive = false;
   bool isLoading = false;
   final password = TextEditingController();
@@ -34,11 +33,13 @@ class _DeleteUserState extends State<DeleteUser> {
 
   _reAuth() async {
     setState(() => isLoading = true);
-    context.read<AuthService>().reAuth(password.text).catchError((_) {
+    context.read<AuthService>().reAuth(password.text).then((_) {
+      Navigator.of(context).pushNamed(AppRoutes.NEW_PASSWORD);
+      setState(() => isLoading = false);
+    }).catchError((_) {
       setState(() => isLoading = false);
       _showModal();
-    }).then((_) => context.read<AuthService>().deleteAccount().then(
-        (_) => Navigator.of(context).pushReplacementNamed(AppRoutes.PRELOAD)));
+    });
   }
 
   @override
@@ -46,32 +47,28 @@ class _DeleteUserState extends State<DeleteUser> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'excluir conta',
+          'senha atual',
         ),
       ),
-      body: Column(
-        children: [
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 10),
-            child: const Text('digite sua senha para excluir a conta.',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18, color: Colors.grey)),
-          ),
-          Expanded(
-            child: Container(
-                margin: const EdgeInsets.symmetric(vertical: 20),
-                child: Pin(
-                  textEditingController: password,
-                  focusNode: myFocusNode,
-                )),
-          ),
-          BottomButtom(
-            loading: isLoading,
-            onPress: () => _reAuth(),
-            title: 'excluir',
-            enabled: isButtonActive,
-          )
-        ],
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: Container(
+                  margin: const EdgeInsets.symmetric(vertical: 20),
+                  child: Pin(
+                    textEditingController: password,
+                    focusNode: myFocusNode,
+                  )),
+            ),
+            BottomButtom(
+              loading: isLoading,
+              onPress: () => _reAuth(),
+              title: 'continuar',
+              enabled: isButtonActive,
+            )
+          ],
+        ),
       ),
     );
   }

@@ -1,4 +1,4 @@
-import 'package:appbankdarm/controller/admin_service.dart';
+import 'package:appbankdarm/services/admin_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';

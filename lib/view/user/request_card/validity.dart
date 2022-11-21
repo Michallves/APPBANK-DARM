@@ -1,14 +1,14 @@
 import 'dart:math';
 
-import 'package:appbankdarm/controller/user_service.dart';
+import 'package:appbankdarm/services/user_service.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:appbankdarm/widgets/bottom_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../controller/auth_service.dart';
-import '../../../controller/card_service.dart';
+import '../../../services/auth_service.dart';
+import '../../../services/card_service.dart';
 
 class CreateCardValidity extends StatefulWidget {
   const CreateCardValidity({super.key});

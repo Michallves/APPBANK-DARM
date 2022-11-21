@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
-import '../../controller/admin_service.dart';
-import '../../controller/auth_service.dart';
+import '../../services/admin_service.dart';
+import '../../services/auth_service.dart';
 import '../../utils/app_routes.dart';
 import '../../widgets/cartao.dart';
 

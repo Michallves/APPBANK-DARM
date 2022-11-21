@@ -1,4 +1,4 @@
-import 'package:appbankdarm/controller/auth_service.dart';
+import 'package:appbankdarm/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../utils/app_routes.dart';

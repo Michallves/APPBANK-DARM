@@ -1,4 +1,4 @@
-import 'package:appbankdarm/controller/auth_service.dart';
+import 'package:appbankdarm/services/auth_service.dart';
 import 'package:appbankdarm/widgets/pin.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -46,6 +46,12 @@ class _NewPasswordState extends State<NewPassword> {
       body: SafeArea(
         child: Column(
           children: [
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 10),
+              child: const Text('digite sua nova senha.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 18, color: Colors.grey)),
+            ),
             Expanded(
               child: Container(
                   margin: const EdgeInsets.symmetric(vertical: 20),

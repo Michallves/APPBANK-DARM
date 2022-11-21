@@ -1,4 +1,4 @@
-import 'package:appbankdarm/controller/auth_service.dart';
+import 'package:appbankdarm/services/auth_service.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';

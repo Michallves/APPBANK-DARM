@@ -1,5 +1,5 @@
 import 'package:appbankdarm/widgets/my_cards.dart';
-import 'package:appbankdarm/controller/user_service.dart';
+import 'package:appbankdarm/services/user_service.dart';
 import 'package:appbankdarm/widgets/requested_cards.dart';
 import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-import '../../controller/auth_service.dart';
+import '../../services/auth_service.dart';
 
 class HomeUser extends StatefulWidget {
   const HomeUser({super.key});

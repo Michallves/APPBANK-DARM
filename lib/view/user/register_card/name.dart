@@ -1,7 +1,7 @@
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../controller/card_service.dart';
+import '../../../services/card_service.dart';
 import '../../../widgets/bottom_button.dart';
 
 class RegisterCardName extends StatefulWidget {

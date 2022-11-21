@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:appbankdarm/models/usuario.dart';
 import 'package:appbankdarm/widgets/info_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -6,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-import '../../controller/user_service.dart';
+import '../../services/user_service.dart';
 
 class AccountUser extends StatefulWidget {
   const AccountUser({super.key});
@@ -105,13 +106,14 @@ class _AccountUserState extends State<AccountUser> {
                                       )
                                     : null),
                           )),
-                      InfoUser(
-                        name: user?['name'],
-                        cpf: user?['cpf'],
-                        number: user?['telephone'],
-                        email: user?['email'],
-                        typeAccount: user?['accountType'],
-                      ),
+                      InfoUser(Usuario(
+                          name: user?['name'],
+                          cpf: user?['cpf'],
+                          telephone: user?['telephone'],
+                          email: user?['email'],
+                          accountType: user?['accountType'],
+                          state: user?['state'],
+                          address: user?['address'])),
                     ],
                   ),
                 ),

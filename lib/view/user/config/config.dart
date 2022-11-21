@@ -22,20 +22,21 @@ class _ConfigUserState extends State<ConfigUser> {
           child: SingleChildScrollView(
             child: Column(
               children: [
+               
                 ListTile(
                   onTap: () => Navigator.of(context)
                       .pushNamed(AppRoutes.CURRENT_PASSWORD),
                   title: const Text('alterar senha'),
-                  trailing: const Icon(Icons.arrow_forward_ios),
+                  trailing: const Icon(Icons.arrow_forward),
                 ),
-                const Divider(color: Colors.grey),
+                const Divider(),
                 ListTile(
                   onTap: () =>
                       Navigator.of(context).pushNamed(AppRoutes.DELETE),
                   title: const Text('excluir conta'),
-                  trailing: const Icon(Icons.arrow_forward_ios),
+                  trailing: const Icon(Icons.arrow_forward),
                 ),
-                const Divider(color: Colors.grey),
+                const Divider(),
               ],
             ),
           ),

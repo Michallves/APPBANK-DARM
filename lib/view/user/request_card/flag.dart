@@ -3,7 +3,7 @@ import 'package:appbankdarm/widgets/bottom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../controller/card_service.dart';
+import '../../../services/card_service.dart';
 
 class CreateCardFlag extends StatefulWidget {
   const CreateCardFlag({super.key});

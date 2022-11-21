@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/services.dart';
-import 'package:appbankdarm/controller/auth_service.dart';
+import 'package:appbankdarm/services/auth_service.dart';
 import 'package:provider/provider.dart';
 
 class LoginCpfUser extends StatefulWidget {
@@ -137,7 +137,8 @@ class _LoginCpfUserState extends State<LoginCpfUser> {
                     margin: const EdgeInsets.all(20),
                     child: TextButton(
                         onPressed: () {
-                          Navigator.of(context).pushNamed(AppRoutes.REGISTER_CPF);
+                          Navigator.of(context)
+                              .pushNamed(AppRoutes.REGISTER_CPF);
                         },
                         child: const Text(
                           'criar conta admin',

@@ -1,5 +1,5 @@
-import 'package:appbankdarm/controller/auth_service.dart';
-import 'package:appbankdarm/controller/card_service.dart';
+import 'package:appbankdarm/services/auth_service.dart';
+import 'package:appbankdarm/services/card_service.dart';
 import 'package:appbankdarm/utils/app_routes.dart';
 import 'package:appbankdarm/widgets/bottom_button.dart';
 import 'package:appbankdarm/widgets/cartao.dart';

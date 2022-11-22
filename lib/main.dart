@@ -4,19 +4,14 @@ import 'package:appbankdarm/app/services/auth_service.dart';
 import 'package:appbankdarm/app/services/card_service.dart';
 import 'package:appbankdarm/app/services/user_service.dart';
 import 'package:appbankdarm/app/theme/app_theme.dart';
+import 'package:appbankdarm/config.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'app/routes/app_routes.dart';
-import 'firebase_options.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await initConfigurations();
 
   runApp(MultiProvider(
       providers: [

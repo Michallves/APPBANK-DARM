@@ -7,5 +7,5 @@ initConfigurations() async {
 
   await Firebase.initializeApp();
 
-  Get.lazyPut(() => null);
+  Get.lazyPut<AuthController>(() => AuthController());
 }

@@ -1,63 +1,82 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class AuthService extends ChangeNotifier {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  FirebaseFirestore db = FirebaseFirestore.instance;
+class AuthService extends GetxController {
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseFirestore _firebaseDB = FirebaseFirestore.instance;
   User? usuario;
+  final Rxn<User> _firebaseUser = Rxn<User>();
 
-  String role = 'user';
-  String? cpf;
-  String? name;
-  String? email;
-  String? telephone;
-  List<String>? address;
-  String? accountType;
-  String? password;
-  String? type;
+  User? get user => _firebaseUser.value;
+  static AuthService get to => Get.find<AuthService>();
 
-  AuthService() {
-    _getUser();
+  showSnack(String title, String message) {
+    Get.snackbar(title, message,
+        backgroundColor: Colors.black,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.TOP);
   }
 
-  Future login(String password) async {
-    UserCredential userAuth = await _auth.signInWithEmailAndPassword(
-        email: email!, password: password);
-    _getUser();
-    return userAuth;
+  login({required String email, required String password}) async {
+    try {
+      await _firebaseAuth.signInWithEmailAndPassword(
+          email: email, password: password);
+    } on FirebaseAuthException catch (erro) {
+      showSnack('Erro no login!', erro.message!);
+    }
   }
 
-  Future register(passwordConfirm) async {
-    UserCredential userAuth = await _auth.createUserWithEmailAndPassword(
-      email: email!,
-      password: passwordConfirm,
-    );
-    await db.collection("users").doc(userAuth.user?.uid).set({
-      "cpf": cpf,
-      'name': name,
-      "email": email,
-      "telephone": telephone,
-      if (role == 'user') "accountType": accountType,
-      "image": '',
-      "role": role,
-      'state': address![0],
-      "address": {
-        "city": address![1],
-        "neighborhood": address![2],
-        "street": address![3],
-        "number": address![4],
-      },
-      "cards": 0,
-    });
-    _getUser();
-    return userAuth;
+  createUser(
+      {required String email,
+      required String password,
+      required String name,
+      required String cpf,
+      required String telephone,
+      required String accountType,
+      required String state,
+      required String city,
+      required String district,
+      required String street,
+      required String number}) async {
+    try {
+      await _firebaseAuth
+          .createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      )
+          .then((UserCredential userCredential) async {
+        await _firebaseDB
+            .collection("users")
+            .doc(userCredential.user?.uid)
+            .set({
+          "cpf": cpf,
+          'name': name,
+          "email": email,
+          "telephone": telephone,
+          "accountType": accountType,
+          "image": '',
+          "address": {
+            'state': state,
+            "city": city,
+            "district": district,
+            "street": street,
+            "number": number,
+          },
+        });
+      });
+    } on FirebaseAuthException catch (erro) {
+      showSnack('Erro ao registrar!', erro.message!);
+    }
   }
 
-  Future logout() async {
-    void logout = await _auth.signOut();
-    _getUser();
-    return logout;
+  logout() async {
+    try {
+      await _firebaseAuth.signOut();
+    } on FirebaseAuthException catch (erro) {
+      showSnack('Erro ao sair!', erro.message!);
+    }
   }
 
   Future reAuth(String password) async {
@@ -72,18 +91,21 @@ class AuthService extends ChangeNotifier {
     return await usuario?.updatePassword(password);
   }
 
-  Future passwordReset() async {
-    return await _auth.sendPasswordResetEmail(email: email!);
+  passwordReset(email) async {
+    try {
+    await _firebaseAuth.sendPasswordResetEmail(email);
+    } on FirebaseAuthException catch (erro) {
+      showSnack('Erro ao sair!', erro.message!);
+    }
   }
 
   Future deleteAccount() async {
     void deleteUser = await usuario?.delete();
-    await db.collection('users').doc(usuario?.uid).delete();
+    await _firebaseDB.collection('users').doc(usuario?.uid).delete();
     return deleteUser;
   }
 
   _getUser() {
-    usuario = _auth.currentUser;
-    notifyListeners();
+    usuario = _firebaseAuth.currentUser;
   }
 }

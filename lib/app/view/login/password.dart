@@ -1,4 +1,4 @@
-import 'package:appbankdarm/app/services/auth_service.dart';
+import 'package:appbankdarm/app/providers/auth_provider.dart';
 import 'package:appbankdarm/app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -33,9 +33,9 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
 
   _login() async {
     setState(() => isLoading = true);
-    AuthService auth = context.read<AuthService>();
+    AuthProvider auth = context.read<AuthProvider>();
     try {
-      await context.read<AuthService>().login(password.text).then((_) {
+      await context.read<AuthProvider>().login(password.text).then((_) {
         if (auth.role == 'user') {
           setState(() {
             Navigator.of(context).pushReplacementNamed(Routes.HOME_USER);
@@ -54,7 +54,7 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
 
   _passwordReset() async {
     await context
-        .read<AuthService>()
+        .read<AuthProvider>()
         .passwordReset()
         .then((_) => _showModal("passwordReset"))
         .catchError((_) => _showModal("passwordResetSent"));
@@ -131,7 +131,7 @@ class _LoginPasswordUserState extends State<LoginPasswordUser> {
                             Text(
                               modalScreen == 'passwordError'
                                   ? 'a senha que você inseriu está incorreta. Recupere a senha ou Tente novamente.'
-                                  : 'link de redefinição de senha foi enviado para seu email ${(context.read<AuthService>().email).toString().substring(0, 1)}*****${(context.read<AuthService>().email).toString().substring(7)}',
+                                  : 'link de redefinição de senha foi enviado para seu email ${(context.read<AuthProvider>().email).toString().substring(0, 1)}*****${(context.read<AuthProvider>().email).toString().substring(7)}',
                               textAlign: TextAlign.center,
                               style: const TextStyle(fontSize: 16),
                             ),

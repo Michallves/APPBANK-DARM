@@ -1,4 +1,4 @@
-import 'package:appbankdarm/app/services/auth_service.dart';
+import 'package:appbankdarm/app/providers/auth_provider.dart';
 import 'package:appbankdarm/app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:brasil_fields/brasil_fields.dart';
@@ -31,7 +31,7 @@ class _RegisterTelephoneUserState extends State<RegisterTelephoneUser> {
   }
 
   _pressButton() {
-    context.read<AuthService>().telephone = telephone.text;
+    context.read<AuthProvider>().telephone = telephone.text;
     Navigator.of(context).pushNamed(Routes.REGISTER_ADDRESS);
   }
 

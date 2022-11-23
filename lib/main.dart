@@ -1,30 +1,29 @@
 import 'package:appbankdarm/app/routes/app_pages.dart';
-import 'package:appbankdarm/app/services/admin_service.dart';
-import 'package:appbankdarm/app/services/auth_service.dart';
-import 'package:appbankdarm/app/services/card_service.dart';
-import 'package:appbankdarm/app/services/user_service.dart';
+import 'package:appbankdarm/app/providers/admin_service.dart';
+import 'package:appbankdarm/app/providers/auth_provider.dart';
+import 'package:appbankdarm/app/providers/card_service.dart';
+import 'package:appbankdarm/app/providers/user_service.dart';
 import 'package:appbankdarm/app/theme/app_theme.dart';
-import 'package:appbankdarm/config.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'app/routes/app_routes.dart';
 
 Future<void> main() async {
-  await initConfigurations();
+  await Firebase.initializeApp();
 
   runApp(MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => AuthService()),
         ChangeNotifierProvider(
             create: (context) =>
-                UserService(auth: context.read<AuthService>())),
+                UserService(auth: context.read<AuthProvider>())),
         ChangeNotifierProvider(
             create: (context) =>
-                CardService(auth: context.read<AuthService>())),
+                CardService(auth: context.read<AuthProvider>())),
         ChangeNotifierProvider(
             create: (context) =>
-                AdminService(auth: context.read<AuthService>())),
+                AdminService(auth: context.read<AuthProvider>())),
       ],
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,

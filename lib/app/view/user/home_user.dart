@@ -1,5 +1,5 @@
 import 'package:appbankdarm/app/view/widgets/my_cards.dart';
-import 'package:appbankdarm/app/services/user_service.dart';
+import 'package:appbankdarm/app/providers/user_service.dart';
 import 'package:appbankdarm/app/view/widgets/requested_cards.dart';
 import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-import '../../services/auth_service.dart';
+import '../../providers/auth_provider.dart';
 
 class HomeUser extends StatefulWidget {
   const HomeUser({super.key});
@@ -40,7 +40,7 @@ class _HomeUserState extends State<HomeUser> {
   }
 
   _logout() async {
-    context.read<AuthService>().logout().then(
+    context.read<AuthProvider>().logout().then(
         (_) => Navigator.of(context).pushReplacementNamed(Routes.PRELOAD));
   }
 

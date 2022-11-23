@@ -1,10 +1,11 @@
-import 'package:appbankdarm/app/services/auth_service.dart';
+import 'package:appbankdarm/app/controllers/auth_controller.dart';
 import 'package:appbankdarm/app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 
 class Preload extends StatelessWidget {
-  const Preload({super.key});
+  Preload({super.key});
+  final AuthController controller = Get.put(AuthController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +46,7 @@ class Preload extends StatelessWidget {
                         horizontal: 20, vertical: 20),
                     child: ElevatedButton(
                       onPressed: () => {
-                        context.read<AuthService>().role = 'user',
+                        controller.role.value = 'user',
                         Navigator.of(context).pushNamed(Routes.LOGIN_CPF)
                       },
                       child: const Text("entrar"),
@@ -57,7 +58,7 @@ class Preload extends StatelessWidget {
                     margin: const EdgeInsets.symmetric(horizontal: 20),
                     child: OutlinedButton(
                       onPressed: () {
-                        context.read<AuthService>().role = 'user';
+                        controller.role.value = 'user';
                         Navigator.of(context).pushNamed(Routes.REGISTER_CPF);
                       },
                       style: ButtonStyle(
@@ -84,7 +85,7 @@ class Preload extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () => {
-                      context.read<AuthService>().role = 'admin',
+                      controller.role.value = 'admin',
                       Navigator.of(context).pushNamed(Routes.LOGIN_CPF)
                     },
                     style: const ButtonStyle(

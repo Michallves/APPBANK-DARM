@@ -1,4 +1,4 @@
-import 'package:appbankdarm/app/services/auth_service.dart';
+import 'package:appbankdarm/app/providers/auth_provider.dart';
 import 'package:appbankdarm/app/routes/app_routes.dart';
 import 'package:appbankdarm/app/view/widgets/bottom_button.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +28,7 @@ class _RegisterNameUserState extends State<RegisterNameUser> {
   }
 
   _pressButton() {
-    context.read<AuthService>().name = name.text;
+    context.read<AuthProvider>().name = name.text;
     Navigator.of(context).pushNamed(Routes.REGISTER_EMAIL);
   }
 

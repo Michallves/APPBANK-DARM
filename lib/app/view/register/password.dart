@@ -1,4 +1,4 @@
-import 'package:appbankdarm/app/services/auth_service.dart';
+import 'package:appbankdarm/app/providers/auth_provider.dart';
 import 'package:appbankdarm/app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
@@ -32,7 +32,7 @@ class _RegisterPasswordState extends State<RegisterPassword> {
   }
 
   _pressButton() {
-    context.read<AuthService>().password = password.text;
+    context.read<AuthProvider>().password = password.text;
     Navigator.of(context).pushNamed(Routes.REGISTER_PASSWORD_CONFIRM);
   }
 

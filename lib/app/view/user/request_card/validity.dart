@@ -1,14 +1,14 @@
 import 'dart:math';
 
-import 'package:appbankdarm/app/services/user_service.dart';
+import 'package:appbankdarm/app/providers/user_service.dart';
 import 'package:appbankdarm/app/routes/app_routes.dart';
 import 'package:appbankdarm/app/view/widgets/bottom_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../services/auth_service.dart';
-import '../../../services/card_service.dart';
+import '../../../providers/auth_provider.dart';
+import '../../../providers/card_service.dart';
 
 class CreateCardValidity extends StatefulWidget {
   const CreateCardValidity({super.key});
@@ -75,7 +75,7 @@ class _CreateCardValidityState extends State<CreateCardValidity> {
       await FirebaseFirestore.instance
           .collection("requested_cards")
           .add({
-            'idUser': context.read<AuthService>().usuario?.uid,
+            'idUser': context.read<AuthProvider>().usuario?.uid,
             'number': _createNumber(),
             'cvc': _createCvc(),
             'name': card.name,

@@ -3,14 +3,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class AuthService extends GetxController {
+class AuthProvider extends GetxController {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firebaseDB = FirebaseFirestore.instance;
   User? usuario;
   final Rxn<User> _firebaseUser = Rxn<User>();
 
   User? get user => _firebaseUser.value;
-  static AuthService get to => Get.find<AuthService>();
+  static AuthProvider get to => Get.find<AuthProvider>();
 
   showSnack(String title, String message) {
     Get.snackbar(title, message,
@@ -28,7 +28,7 @@ class AuthService extends GetxController {
     }
   }
 
-  createUser(
+  registerUser(
       {required String email,
       required String password,
       required String name,
@@ -108,4 +108,21 @@ class AuthService extends GetxController {
   _getUser() {
     usuario = _firebaseAuth.currentUser;
   }
+
+  getEmail(cpf) async {
+    late String email;
+    await _firebaseDB
+        .collection("users")
+        .where("cpf", isEqualTo: cpf)
+        .get()
+        .then((snapshot) => {
+              snapshot.docs.forEach((doc) => {
+                    email = doc.get('email').to,
+                  })
+            });
+    return email;
+  }
+
+ 
+  
 }

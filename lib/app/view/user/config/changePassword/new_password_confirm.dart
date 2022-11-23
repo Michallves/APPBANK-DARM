@@ -1,7 +1,7 @@
 import 'package:appbankdarm/app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../../services/auth_service.dart';
+import '../../../../providers/auth_provider.dart';
 import '../../../widgets/bottom_button.dart';
 import '../../../widgets/pin.dart';
 
@@ -33,12 +33,12 @@ class _NewPasswordConfirmState extends State<NewPasswordConfirm> {
 
   _changePassword() async {
     setState(() => isLoading = true);
-    await context.read<AuthService>().updatePassword(password.text).then(
+    await context.read<AuthProvider>().updatePassword(password.text).then(
         (_) => Navigator.of(context).pushReplacementNamed(Routes.HOME_USER));
   }
 
   _pressButton() {
-    if (context.read<AuthService>().password == password.text) {
+    if (context.read<AuthProvider>().password == password.text) {
       _changePassword();
     } else {
       _showModal();

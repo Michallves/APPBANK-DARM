@@ -1,4 +1,4 @@
-import 'package:appbankdarm/app/services/auth_service.dart';
+import 'package:appbankdarm/app/providers/auth_provider.dart';
 import 'package:appbankdarm/app/view/widgets/pin.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -31,7 +31,7 @@ class _NewPasswordState extends State<NewPassword> {
   }
 
   _pressButton() {
-    context.read<AuthService>().password = password.text;
+    context.read<AuthProvider>().password = password.text;
     Navigator.of(context).pushNamed(Routes.NEW_PASSWORD_CONFIRM);
   }
 

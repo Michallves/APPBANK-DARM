@@ -1,5 +1,5 @@
-import 'package:appbankdarm/app/services/auth_service.dart';
-import 'package:appbankdarm/app/services/card_service.dart';
+import 'package:appbankdarm/app/providers/auth_provider.dart';
+import 'package:appbankdarm/app/providers/card_service.dart';
 import 'package:appbankdarm/app/routes/app_routes.dart';
 import 'package:appbankdarm/app/view/widgets/bottom_button.dart';
 import 'package:appbankdarm/app/view/widgets/cartao.dart';
@@ -32,13 +32,13 @@ class _CardUserState extends State<CardUser> {
     FirebaseFirestore db = FirebaseFirestore.instance;
     await db
         .collection('users')
-        .doc(context.read<AuthService>().usuario?.uid)
+        .doc(context.read<AuthProvider>().usuario?.uid)
         .collection('cards')
         .doc(card?.id)
         .delete()
         .then((_) => db
                 .collection("users")
-                .doc(context.read<AuthService>().usuario?.uid)
+                .doc(context.read<AuthProvider>().usuario?.uid)
                 .update({
               "cards": FieldValue.increment(-1),
             }).then((_) => Navigator.of(context).pushNamed(Routes.HOME_USER)))

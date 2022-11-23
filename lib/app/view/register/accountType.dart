@@ -1,32 +1,15 @@
-import 'package:appbankdarm/app/services/auth_service.dart';
-import 'package:appbankdarm/app/routes/app_routes.dart';
+import 'package:appbankdarm/app/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 
 import '../widgets/bottom_button.dart';
 
-class RegisterAccountTypeUser extends StatefulWidget {
-  const RegisterAccountTypeUser({super.key});
-
-  @override
-  State<RegisterAccountTypeUser> createState() =>
-      _RegisterAccountTypeUserState();
-}
-
-class _RegisterAccountTypeUserState extends State<RegisterAccountTypeUser> {
-  bool isButtonActive = false;
-  String accountType = '';
-
-  _pressButton() {
-    context.read<AuthService>().accountType = accountType;
-    Navigator.of(context).pushNamed(Routes.REGISTER_PASSWORD);
-  }
+class RegisterAccountTypeUser extends StatelessWidget {
+  RegisterAccountTypeUser({super.key});
+  final AuthController controller = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
-    if (accountType != '') {
-      isButtonActive = true;
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -41,46 +24,46 @@ class _RegisterAccountTypeUserState extends State<RegisterAccountTypeUser> {
               child: Column(children: [
                 ListTile(
                   title: const Text('Poupança'),
-                  onTap: () => setState(() {
-                    accountType = 'savings';
-                  }),
+                  onTap: () => 
+                    controller.accountType = 'savings'
+                ,
                   contentPadding:
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                   leading: Radio(
                     value: 'savings',
                     activeColor: Colors.black,
-                    groupValue: accountType,
+                    groupValue: controller.accountType,
                     onChanged: ((String? value) {
-                      setState(() {
-                        accountType = value.toString();
-                      });
+                    
+                        controller.accountType = value.toString();
+                     
                     }),
                   ),
                 ),
                 ListTile(
                   title: const Text('Corrente'),
-                  onTap: () => setState(() {
-                    accountType = 'current';
-                  }),
+                  onTap: () => 
+                    controller.accountType = 'current'
+                 ,
                   contentPadding:
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                   leading: Radio(
                     value: 'current',
                     activeColor: Colors.black,
-                    groupValue: accountType,
+                    groupValue: controller.accountType,
                     onChanged: ((String? value) {
-                      setState(() {
-                        accountType = value.toString();
-                      });
+                     
+                        controller.accountType = value.toString();
+                     
                     }),
                   ),
                 ),
               ]),
             ),
             BottomButtom(
-              onPress: () => _pressButton(),
+              onPress: () => null,
               title: 'continuar',
-              enabled: isButtonActive,
+              enabled: controller.isButtonActive.value,
             )
           ],
         ),

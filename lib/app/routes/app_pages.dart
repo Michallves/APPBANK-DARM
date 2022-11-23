@@ -1,3 +1,4 @@
+import 'package:appbankdarm/app/bindings/auth_binding.dart';
 import 'package:get/get.dart';
 import '../view/admin/card_admin.dart';
 import '../view/admin/home_admin.dart';
@@ -34,27 +35,49 @@ import 'app_routes.dart';
 
 class AppPages {
   static final routes = [
-    GetPage(name: Routes.PRELOAD, page: () => const Preload()),
+    GetPage(name: Routes.PRELOAD, page: () =>  Preload(), binding: AuthBinding()),
     //Login User
-    GetPage(name: Routes.LOGIN_CPF, page: () => const LoginCpfUser()),
-    GetPage(name: Routes.LOGIN_PASSWORD, page: () => const LoginPasswordUser()),
+    GetPage(
+        name: Routes.LOGIN_CPF,
+        page: () => const LoginCpfUser(),
+        binding: AuthBinding()),
+    GetPage(
+        name: Routes.LOGIN_PASSWORD,
+        page: () => const LoginPasswordUser(),
+        binding: AuthBinding()),
     //Register User
-    GetPage(name: Routes.REGISTER_CPF, page: () => const RegisterCpfUser()),
-    GetPage(name: Routes.REGISTER_NAME, page: () => const RegisterNameUser()),
-    GetPage(name: Routes.REGISTER_EMAIL, page: () => const RegisterEmailUser()),
+    GetPage(
+        name: Routes.REGISTER_CPF,
+        page: () => RegisterCpfUser(),
+        binding: AuthBinding()),
+    GetPage(
+        name: Routes.REGISTER_NAME,
+        page: () => const RegisterNameUser(),
+        binding: AuthBinding()),
+    GetPage(
+        name: Routes.REGISTER_EMAIL,
+        page: () => RegisterEmailUser(),
+        binding: AuthBinding()),
     GetPage(
         name: Routes.REGISTER_TELEPHONE,
-        page: () => const RegisterTelephoneUser()),
+        page: () => const RegisterTelephoneUser(),
+        binding: AuthBinding()),
     GetPage(
-        name: Routes.REGISTER_ADDRESS, page: () => const RegisterAddressUser()),
+        name: Routes.REGISTER_ADDRESS,
+        page: () =>  RegisterAddressUser(),
+        binding: AuthBinding()),
     GetPage(
         name: Routes.REGISTER_ACCOUNT_TYPE,
-        page: () => const RegisterAccountTypeUser()),
+        page: () =>  RegisterAccountTypeUser(),
+        binding: AuthBinding()),
     GetPage(
-        name: Routes.REGISTER_PASSWORD, page: () => const RegisterPassword()),
+        name: Routes.REGISTER_PASSWORD,
+        page: () => const RegisterPassword(),
+        binding: AuthBinding()),
     GetPage(
         name: Routes.REGISTER_PASSWORD_CONFIRM,
-        page: () => const RegisterPasswordConfirm()),
+        page: () => const RegisterPasswordConfirm(),
+        binding: AuthBinding()),
     //Home User
     GetPage(name: Routes.HOME_USER, page: () => const HomeUser()),
     GetPage(name: Routes.CARD_USER, page: () => const CardUser()),

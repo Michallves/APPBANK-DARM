@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import 'auth_service.dart';
+import 'auth_provider.dart';
 
 class CardService extends ChangeNotifier {
   late FirebaseFirestore db = FirebaseFirestore.instance;
-  late AuthService auth;
+  late AuthProvider auth;
 
   DocumentSnapshot<Object?>? card;
   String? id;

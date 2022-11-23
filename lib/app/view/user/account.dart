@@ -7,7 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/user_model.dart';
-import '../../services/user_service.dart';
+import '../../providers/user_service.dart';
 
 class AccountUser extends StatefulWidget {
   const AccountUser({super.key});

@@ -1,81 +1,17 @@
-import 'package:appbankdarm/app/services/auth_service.dart';
-import 'package:appbankdarm/app/routes/app_routes.dart';
+import 'package:appbankdarm/app/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-
+import 'package:get/get.dart';
+import '../../utils/states.dart';
 import '../widgets/bottom_button.dart';
 
-class RegisterAddressUser extends StatefulWidget {
-  const RegisterAddressUser({super.key});
+class RegisterAddressUser extends StatelessWidget {
+  RegisterAddressUser({super.key});
 
-  @override
-  State<RegisterAddressUser> createState() => _RegisterAddressUserState();
-}
-
-class _RegisterAddressUserState extends State<RegisterAddressUser> {
-  bool isButtonActive = false;
-  String? state;
-  final city = TextEditingController();
-  final neighborhood = TextEditingController();
-  final street = TextEditingController();
-  final number = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  _pressButton() {
-    context.read<AuthService>().address = [
-      state!,
-      city.text,
-      neighborhood.text,
-      street.text,
-      number.text,
-    ];
-    context.read<AuthService>().role == 'user'
-        ? Navigator.of(context).pushNamed(Routes.REGISTER_ACCOUNT_TYPE)
-        : Navigator.of(context).pushNamed(Routes.REGISTER_PASSWORD);
-  }
-
-  List<String> states = [
-    "Acre",
-    "Alagoas",
-    "Amapá",
-    "Amazonas",
-    "Bahia",
-    "Ceará",
-    "Distrito Federal",
-    "Espírito Santo",
-    "Goiás",
-    "Maranhão",
-    "Mato Grosso",
-    "Mato Grosso do Sul",
-    "Minas Gerais",
-    "Pará",
-    "Paraíba",
-    "Paraná",
-    "Pernambuco",
-    "Piauí",
-    "Rio de Janeiro",
-    "Rio Grande do Norte",
-    "Rio Grande do Sul",
-    "Rondônia",
-    "Roraima",
-    "Santa Catarina",
-    "São Paulo",
-    "Sergipe",
-    "Tocantins",
-  ];
+  final AuthController controller = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
-    if (state != null) {
-      setState(() => isButtonActive = true);
-    } else {
-      setState(() => isButtonActive = false);
-    }
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -107,7 +43,7 @@ class _RegisterAddressUserState extends State<RegisterAddressUser> {
                               color: Colors.black),
                           itemHeight: 70,
                           isExpanded: true,
-                          value: state,
+                          value: controller.state,
                           items: states.map((state) {
                             return DropdownMenuItem(
                               value: state,
@@ -115,12 +51,12 @@ class _RegisterAddressUserState extends State<RegisterAddressUser> {
                             );
                           }).toList(),
                           onChanged: (newValue) {
-                            setState(() {
-                              state = newValue;
-                            });
+                           
+                              controller.state = newValue.toString();
+                          
                           }),
                       TextFormField(
-                        controller: city,
+                        controller: controller.cityTextController,
                         style: const TextStyle(fontSize: 26),
                         decoration: const InputDecoration(
                             labelText: 'Cidade',
@@ -136,7 +72,7 @@ class _RegisterAddressUserState extends State<RegisterAddressUser> {
                         textInputAction: TextInputAction.next,
                       ),
                       TextFormField(
-                        controller: neighborhood,
+                        controller: controller.districtTextController,
                         style: const TextStyle(fontSize: 26),
                         decoration: const InputDecoration(
                           labelText: 'Bairro',
@@ -153,7 +89,7 @@ class _RegisterAddressUserState extends State<RegisterAddressUser> {
                         textInputAction: TextInputAction.next,
                       ),
                       TextFormField(
-                        controller: street,
+                        controller: controller.streetTextController,
                         style: const TextStyle(fontSize: 26),
                         decoration: const InputDecoration(
                           labelText: 'Rua',
@@ -170,7 +106,7 @@ class _RegisterAddressUserState extends State<RegisterAddressUser> {
                         textInputAction: TextInputAction.next,
                       ),
                       TextFormField(
-                        controller: number,
+                        controller: controller.numberTextController,
                         keyboardType: TextInputType.number,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
@@ -196,9 +132,9 @@ class _RegisterAddressUserState extends State<RegisterAddressUser> {
               ),
             ),
             BottomButtom(
-              onPress: () => _pressButton(),
+              onPress: () => null,
               title: 'continuar',
-              enabled: isButtonActive,
+              enabled: controller.isButtonActive.value,
             )
           ],
         ),

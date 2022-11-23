@@ -1,4 +1,4 @@
-import 'package:appbankdarm/app/services/card_service.dart';
+import 'package:appbankdarm/app/providers/card_service.dart';
 import 'package:appbankdarm/app/view/widgets/cartao.dart';
 import 'package:appbankdarm/app/view/widgets/cartao_void.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

@@ -1,4 +1,4 @@
-import 'package:appbankdarm/app/services/auth_service.dart';
+import 'package:appbankdarm/app/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../routes/app_routes.dart';
@@ -33,9 +33,9 @@ class _RegisterPasswordConfirmState extends State<RegisterPasswordConfirm> {
 
   _register() async {
     setState(() => isLoading = true);
-    AuthService auth = context.read<AuthService>();
+    AuthProvider auth = context.read<AuthProvider>();
     try {
-      context.read<AuthService>().register(password.text).then((_) {
+      context.read<AuthProvider>().register(password.text).then((_) {
         if (auth.role == 'user') {
           Navigator.of(context).pushReplacementNamed(Routes.HOME_USER);
         } else {
@@ -49,7 +49,7 @@ class _RegisterPasswordConfirmState extends State<RegisterPasswordConfirm> {
   }
 
   _pressButton() {
-    if (context.read<AuthService>().password == password.text) {
+    if (context.read<AuthProvider>().password == password.text) {
       _register();
     } else {
       showModal();

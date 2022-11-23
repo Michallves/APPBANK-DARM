@@ -1,4 +1,4 @@
-import 'package:appbankdarm/app/services/auth_service.dart';
+import 'package:appbankdarm/app/providers/auth_provider.dart';
 import 'package:appbankdarm/app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
@@ -34,10 +34,10 @@ class _DeleteUserState extends State<DeleteUser> {
 
   _reAuth() async {
     setState(() => isLoading = true);
-    context.read<AuthService>().reAuth(password.text).catchError((_) {
+    context.read<AuthProvider>().reAuth(password.text).catchError((_) {
       setState(() => isLoading = false);
       _showModal();
-    }).then((_) => context.read<AuthService>().deleteAccount().then(
+    }).then((_) => context.read<AuthProvider>().deleteAccount().then(
         (_) => Navigator.of(context).pushReplacementNamed(Routes.PRELOAD)));
   }
 

@@ -93,7 +93,7 @@ class AuthService extends GetxController {
 
   passwordReset(email) async {
     try {
-    await _firebaseAuth.sendPasswordResetEmail(email);
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
     } on FirebaseAuthException catch (erro) {
       showSnack('Erro ao sair!', erro.message!);
     }

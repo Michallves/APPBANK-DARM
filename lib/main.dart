@@ -9,9 +9,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'app/routes/app_routes.dart';
+import 'firebase_options.dart';
 
-Future<void> main() async {
-  await Firebase.initializeApp();
+main() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   runApp(MultiProvider(
       providers: [
@@ -29,7 +32,7 @@ Future<void> main() async {
         debugShowCheckedModeBanner: false,
         title: 'APPBANK',
         theme: appThemeData,
-        getPages: AppPages.routes,
         initialRoute: Routes.PRELOAD,
+        getPages: AppPages.routes,
       )));
 }

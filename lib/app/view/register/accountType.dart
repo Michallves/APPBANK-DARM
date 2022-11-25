@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 
 import '../widgets/bottom_button.dart';
 
-class RegisterAccountTypeUser extends StatelessWidget {
-  RegisterAccountTypeUser({super.key});
+class RegisterAccountType extends StatelessWidget {
+  RegisterAccountType({super.key});
   final AuthController controller = Get.put(AuthController());
 
   @override

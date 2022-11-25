@@ -6,18 +6,17 @@ import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-class LoginCpfUser extends StatelessWidget {
-  LoginCpfUser({super.key});
+class LoginCpf extends StatelessWidget {
+  LoginCpf({super.key});
 
-  final AuthController controller = Get.put(AuthController());
+  final controller = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => Scaffold(
-      appBar:  AppBar(
-            title: Text(
-                controller.role.value == 'user' ? 'entrar' : 'entrar admin'),
-          ),
+
+    return Scaffold(
+      appBar: AppBar(
+          title: Obx(() => Text(controller.cpfTextController.value.text))),
       body: SafeArea(
         child: Column(
           children: [
@@ -37,9 +36,9 @@ class LoginCpfUser extends StatelessWidget {
                   autofocus: true,
                   style: const TextStyle(fontSize: 26),
                   validator: (String? value) {
-                    if (GetUtils.isCpf(controller.cpfTextController.text) ==
-                            false &&
-                        controller.cpfTextController.text.length == 14) {
+                    if (GetUtils.isCpf(
+                            controller.cpfTextController.value.text) ==
+                        false) {
                       return 'CPF inválido. confira e tente novamente';
                     }
                   },
@@ -59,9 +58,7 @@ class LoginCpfUser extends StatelessWidget {
                 ? Container(
                     margin: const EdgeInsets.all(20),
                     child: TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pushNamed(Routes.REGISTER_CPF);
-                        },
+                        onPressed: () => Get.toNamed(Routes.REGISTER_CPF),
                         child: const Text(
                           'criar conta admin',
                           style: TextStyle(
@@ -70,16 +67,16 @@ class LoginCpfUser extends StatelessWidget {
                               fontWeight: FontWeight.bold),
                         )))
                 : Container(),
-            BottomButtom(
+            Obx(() => BottomButtom(
                 loading: controller.isLoading.value,
-                enabled: controller.isButtonActive.value,
-                onPress: () => null,
-                title: 'continuar')
+                enabled: controller.cpfTextController.value.text.length >= 10
+                    ? true
+                    : false,
+                onPress: () => controller.loginUser(),
+                title: 'continuar'))
           ],
         ),
       ),
-    ));
+    );
   }
-
-  
 }

@@ -1,61 +1,12 @@
-import 'package:appbankdarm/app/providers/auth_provider.dart';
+import 'package:appbankdarm/app/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../routes/app_routes.dart';
+import 'package:get/get.dart';
 import '../widgets/bottom_button.dart';
 import '../widgets/pin.dart';
 
-class RegisterPasswordConfirm extends StatefulWidget {
-  const RegisterPasswordConfirm({super.key});
-
-  @override
-  State<RegisterPasswordConfirm> createState() =>
-      _RegisterPasswordConfirmState();
-}
-
-class _RegisterPasswordConfirmState extends State<RegisterPasswordConfirm> {
-  bool isButtonActive = false;
-  bool isLoading = false;
-  final password = TextEditingController();
-  FocusNode myFocusNode = FocusNode();
-  @override
-  void initState() {
-    myFocusNode.requestFocus();
-    password.addListener(() {
-      if (password.text.length == 6) {
-        setState(() => isButtonActive = true);
-      } else {
-        setState(() => isButtonActive = false);
-      }
-    });
-    super.initState();
-  }
-
-  _register() async {
-    setState(() => isLoading = true);
-    AuthProvider auth = context.read<AuthProvider>();
-    try {
-      context.read<AuthProvider>().register(password.text).then((_) {
-        if (auth.role == 'user') {
-          Navigator.of(context).pushReplacementNamed(Routes.HOME_USER);
-        } else {
-          Navigator.of(context).pushReplacementNamed(Routes.HOME_ADMIN);
-        }
-      });
-    } catch (_) {
-      showModal();
-      setState(() => isLoading = false);
-    }
-  }
-
-  _pressButton() {
-    if (context.read<AuthProvider>().password == password.text) {
-      _register();
-    } else {
-      showModal();
-    }
-  }
-
+class RegisterPasswordConfirm extends StatelessWidget {
+  RegisterPasswordConfirm({super.key});
+  final AuthController controller = Get.put(AuthController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,58 +22,19 @@ class _RegisterPasswordConfirmState extends State<RegisterPasswordConfirm> {
               child: Container(
                   margin: const EdgeInsets.symmetric(vertical: 40),
                   child: Pin(
-                    textEditingController: password,
-                    focusNode: myFocusNode,
+                    textEditingController:
+                        controller.confirmPasswordTextController,
                   )),
             ),
-            BottomButtom(
-              onPress: () => _pressButton(),
-              title: 'criar conta',
-              enabled: isButtonActive,
-              loading: isLoading,
-            )
+            Obx(() => BottomButtom(
+                  onPress: () => null,
+                  title: 'criar conta',
+                  enabled: controller.isButtonActive.value,
+                  loading: controller.isLoading.value,
+                ))
           ],
         ),
       ),
     );
   }
-
-  void showModal() => showModalBottomSheet(
-      isDismissible: false,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-      ),
-      context: context,
-      builder: (context) => SizedBox(
-            height: 280,
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Expanded(
-                      child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: const [
-                      Text(
-                        'as senhas são diferentes',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        'a senha e a confirmação de senha precisam ser exatamentes iguais',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ],
-                  )),
-                  BottomButtom(
-                    onPress: () => {
-                      Navigator.of(context).pop(),
-                      myFocusNode.requestFocus(),
-                    },
-                    title: 'tentar novamente',
-                    color: Colors.redAccent,
-                  )
-                ]),
-          ));
 }

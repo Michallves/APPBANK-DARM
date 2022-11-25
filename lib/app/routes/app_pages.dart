@@ -39,44 +39,44 @@ class AppPages {
     //Login User
     GetPage(
         name: Routes.LOGIN_CPF,
-        page: () => const LoginCpfUser(),
+        page: () => LoginCpf(),
         binding: AuthBinding()),
     GetPage(
         name: Routes.LOGIN_PASSWORD,
-        page: () => const LoginPasswordUser(),
+        page: () => LoginPassword(),
         binding: AuthBinding()),
     //Register User
     GetPage(
         name: Routes.REGISTER_CPF,
-        page: () => RegisterCpfUser(),
+        page: () => RegisterCpf(),
         binding: AuthBinding()),
     GetPage(
         name: Routes.REGISTER_NAME,
-        page: () => const RegisterNameUser(),
+        page: () => RegisterName(),
         binding: AuthBinding()),
     GetPage(
         name: Routes.REGISTER_EMAIL,
-        page: () => RegisterEmailUser(),
+        page: () => RegisterEmail(),
         binding: AuthBinding()),
     GetPage(
         name: Routes.REGISTER_TELEPHONE,
-        page: () => const RegisterTelephoneUser(),
+        page: () => RegisterTelephone(),
         binding: AuthBinding()),
     GetPage(
         name: Routes.REGISTER_ADDRESS,
-        page: () =>  RegisterAddressUser(),
+        page: () =>  RegisterAddress(),
         binding: AuthBinding()),
     GetPage(
         name: Routes.REGISTER_ACCOUNT_TYPE,
-        page: () =>  RegisterAccountTypeUser(),
+        page: () =>  RegisterAccountType(),
         binding: AuthBinding()),
     GetPage(
         name: Routes.REGISTER_PASSWORD,
-        page: () => const RegisterPassword(),
+        page: () => RegisterPassword(),
         binding: AuthBinding()),
     GetPage(
         name: Routes.REGISTER_PASSWORD_CONFIRM,
-        page: () => const RegisterPasswordConfirm(),
+        page: () => RegisterPasswordConfirm(),
         binding: AuthBinding()),
     //Home User
     GetPage(name: Routes.HOME_USER, page: () => const HomeUser()),
@@ -88,10 +88,10 @@ class AppPages {
     GetPage(name: Routes.DELETE, page: () => const DeleteUser()),
     //Change Password User
     GetPage(name: Routes.CURRENT_PASSWORD, page: () => const CurrentPassword()),
-    GetPage(name: Routes.NEW_PASSWORD, page: () => const NewPassword()),
+    GetPage(name: Routes.NEW_PASSWORD, page: () => NewPassword()),
     GetPage(
         name: Routes.NEW_PASSWORD_CONFIRM,
-        page: () => const NewPasswordConfirm()),
+        page: () => NewPasswordConfirm()),
     //Create Card User
     GetPage(name: Routes.REQUEST_CARD_NAME, page: () => const CreateCardName()),
     GetPage(name: Routes.CREATE_CARD_TYPE, page: () => const CreateCardType()),

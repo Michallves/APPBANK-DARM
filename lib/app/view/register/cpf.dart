@@ -5,15 +5,12 @@ import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-class RegisterCpfUser extends StatelessWidget {
-  RegisterCpfUser({super.key});
+class RegisterCpf extends StatelessWidget {
+  RegisterCpf({super.key});
   final AuthController controller = Get.put(AuthController());
 
-  
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -58,7 +55,5 @@ class RegisterCpfUser extends StatelessWidget {
         ),
       ),
     );
-
-    
   }
 }

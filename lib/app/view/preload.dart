@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 
 class Preload extends StatelessWidget {
   Preload({super.key});
-  final AuthController controller = Get.put(AuthController());
+  final controller = Get.put(AuthController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +47,7 @@ class Preload extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () => {
                         controller.role.value = 'user',
-                        Navigator.of(context).pushNamed(Routes.LOGIN_CPF)
+                        print(controller.readUsers())
                       },
                       child: const Text("entrar"),
                     ),
@@ -59,7 +59,7 @@ class Preload extends StatelessWidget {
                     child: OutlinedButton(
                       onPressed: () {
                         controller.role.value = 'user';
-                        Navigator.of(context).pushNamed(Routes.REGISTER_CPF);
+                        Get.toNamed(Routes.REGISTER_CPF);
                       },
                       style: ButtonStyle(
                         shape:
@@ -86,7 +86,7 @@ class Preload extends StatelessWidget {
                   TextButton(
                     onPressed: () => {
                       controller.role.value = 'admin',
-                      Navigator.of(context).pushNamed(Routes.LOGIN_CPF)
+                      Get.toNamed(Routes.LOGIN_CPF)
                     },
                     style: const ButtonStyle(
                       foregroundColor: MaterialStatePropertyAll(Colors.black),

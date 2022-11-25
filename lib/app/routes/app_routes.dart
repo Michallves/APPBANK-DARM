@@ -2,15 +2,15 @@
 
 abstract class Routes {
   static const PRELOAD = '/';
-  static const LOGIN_CPF = '/LoginCpfUser';
-  static const LOGIN_PASSWORD = '/LoginPasswordUser';
-  static const REGISTER_CPF = '/RegisterCpfUser';
-  static const REGISTER_NAME = '/RegisterNameUser';
-  static const REGISTER_EMAIL = '/RegisterEmailUser';
-  static const REGISTER_TELEPHONE = '/RegisterTelephoneUser';
+  static const LOGIN_CPF = '/LoginCpf';
+  static const LOGIN_PASSWORD = '/LoginPassword';
+  static const REGISTER_CPF = '/RegisterCpf';
+  static const REGISTER_NAME = '/RegisterName';
+  static const REGISTER_EMAIL = '/RegisterEmail';
+  static const REGISTER_TELEPHONE = '/RegisterTelephone';
   static const REGISTER_ADDRESS = '/RegisterAddressUser';
-  static const REGISTER_ACCOUNT_TYPE = '/RegisterAccountTypeUser';
-  static const REGISTER_PASSWORD = '/RegisterPasswordUser';
+  static const REGISTER_ACCOUNT_TYPE = '/RegisterAccountType';
+  static const REGISTER_PASSWORD = '/RegisterPassword';
   static const REGISTER_PASSWORD_CONFIRM = '/RegisterPasswordConfirm';
   static const HOME_USER = '/homeUser';
   static const CARD_USER = '/cardUser';

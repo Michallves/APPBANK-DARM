@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
+import '../../models/user_model.dart';
+
 class ListUsers extends StatefulWidget {
   const ListUsers({super.key});
 
@@ -11,6 +13,20 @@ class ListUsers extends StatefulWidget {
 }
 
 class _ListUsersState extends State<ListUsers> {
+  Future<List<UserModel>> _getUsers() async {
+    List<UserModel> userModelList = [];
+
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    final data = await firestore.collection("users").get();
+
+    for (var user in data.docs) {
+      userModelList.add(UserModel.fromJson(user.data()));
+    }
+
+    return userModelList;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,84 +34,33 @@ class _ListUsersState extends State<ListUsers> {
         title: const Text(
           'Usuários',
         ),
-        actions: [
-          ElevatedButton(
-              style: const ButtonStyle(
-                  backgroundColor:
-                      MaterialStatePropertyAll(Colors.transparent)),
-              onPressed: () => setState(() {
-                    context.read<AdminService>().filter = "name";
-                  }),
-              child: const Icon(
-                Icons.sort_by_alpha,
-                color: Colors.black,
-                size: 30,
-              )),
-          ElevatedButton(
-              style: const ButtonStyle(
-                  backgroundColor:
-                      MaterialStatePropertyAll(Colors.transparent)),
-              onPressed: () => setState(() {
-                    context.read<AdminService>().filter = "state";
-                  }),
-              child: const Icon(
-                Icons.location_on_outlined,
-                color: Colors.black,
-                size: 30,
-              )),
-          ElevatedButton(
-              style: const ButtonStyle(
-                  backgroundColor:
-                      MaterialStatePropertyAll(Colors.transparent)),
-              onPressed: () => setState(() {
-                    context.read<AdminService>().filter = "cards";
-                  }),
-              child: const Icon(
-                Icons.credit_card,
-                color: Colors.black,
-                size: 30,
-              )),
-        ],
       ),
       body: SafeArea(
-        child: StreamBuilder<QuerySnapshot>(
-            stream: context.read<AdminService>().readUsers(),
+        child: StreamBuilder<Object>(
+            stream: _getUsers().asStream(),
             builder: (context, snapshot) {
-              if (!snapshot.hasData) {
+              if (!snapshot.hasData)
                 return const Center(
-                  child: CircularProgressIndicator(color: Colors.black),
+                  child: CircularProgressIndicator(),
                 );
-              } else {
-                return ListView.separated(
-                    padding: const EdgeInsets.all(10),
-                    separatorBuilder: (_, ___) => const Divider(),
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: ((context, index) {
-                      DocumentSnapshot user = snapshot.data!.docs[index];
-                      return user['role'] == "user"
-                          ? ListTile(
-                              leading: CircleAvatar(
-                                backgroundColor: Colors.black,
-                                radius: 30,
-                                backgroundImage:
-                                    NetworkImage((user['image']).toString()),
-                                child: user['image'] == ''
-                                    ? Text(
-                                        (user['name'])
-                                            .toString()
-                                            .substring(0, 2)
-                                            .toUpperCase(),
-                                        style: const TextStyle(
-                                            color: Colors.white, fontSize: 20))
-                                    : null,
-                              ),
-                              title: Text(user['name']),
-                              subtitle: Text(
-                                  "Estado: ${user['state']}\nCartões: ${user['cards']}"),
-                            )
-                          : Container();
-                    }));
-              }
+
+              List<UserModel> users = snapshot.data as List<UserModel>;
+              print(users);
+
+              return ListView.separated(
+                padding: const EdgeInsets.all(10),
+                separatorBuilder: (_, ___) => const Divider(),
+                itemCount: users.length,
+                itemBuilder: ((context, index) {
+                  UserModel user = users[index];
+                  return ListTile(
+                    leading: Image.network(
+                        "https://commons.wikimedia.org/wiki/Commons:Quality_images#/media/File:Gull_portrait_ca_usa.jpg"),
+                    title: Text(user.name!),
+                    subtitle: Text("Estado: ${user.state}"),
+                  );
+                }),
+              );
             }),
       ),
     );

@@ -5,8 +5,8 @@ import 'package:get/get.dart';
 import '../../utils/states.dart';
 import '../widgets/bottom_button.dart';
 
-class RegisterAddressUser extends StatelessWidget {
-  RegisterAddressUser({super.key});
+class RegisterAddress extends StatelessWidget {
+  RegisterAddress({super.key});
 
   final AuthController controller = Get.put(AuthController());
 

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../widgets/bottom_button.dart';
 
-class RegisterEmailUser extends StatelessWidget {
-  RegisterEmailUser({super.key});
+class RegisterEmail extends StatelessWidget {
+  RegisterEmail({super.key});
   final AuthController controller = Get.put(AuthController());
   @override
   Widget build(BuildContext context) {

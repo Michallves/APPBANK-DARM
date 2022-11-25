@@ -1,36 +1,11 @@
-import 'package:appbankdarm/app/providers/auth_provider.dart';
-import 'package:appbankdarm/app/routes/app_routes.dart';
+import 'package:appbankdarm/app/controllers/auth_controller.dart';
 import 'package:appbankdarm/app/view/widgets/bottom_button.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 
-class RegisterNameUser extends StatefulWidget {
-  const RegisterNameUser({super.key});
-
-  @override
-  State<RegisterNameUser> createState() => _RegisterNameUserState();
-}
-
-class _RegisterNameUserState extends State<RegisterNameUser> {
-  bool isButtonActive = false;
-  final name = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    name.addListener(() {
-      if (name.text.length > 10) {
-        setState(() => isButtonActive = true);
-      } else {
-        setState(() => isButtonActive = false);
-      }
-    });
-  }
-
-  _pressButton() {
-    context.read<AuthProvider>().name = name.text;
-    Navigator.of(context).pushNamed(Routes.REGISTER_EMAIL);
-  }
+class RegisterName extends StatelessWidget {
+  RegisterName({super.key});
+  final AuthController controller = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +22,7 @@ class _RegisterNameUserState extends State<RegisterNameUser> {
               child: Container(
                 margin: const EdgeInsets.all(20),
                 child: TextField(
-                  controller: name,
+                  controller: controller.nameTextController,
                   autofocus: true,
                   keyboardType: TextInputType.name,
                   style: const TextStyle(fontSize: 26),
@@ -64,10 +39,10 @@ class _RegisterNameUserState extends State<RegisterNameUser> {
                 ),
               ),
             ),
-            BottomButtom(
-                enabled: isButtonActive,
-                onPress: () => _pressButton(),
-                title: "Continuar")
+            Obx(() => BottomButtom(
+                enabled: controller.isButtonActive.value,
+                onPress: () => null,
+                title: "Continuar"))
           ],
         ),
       ),

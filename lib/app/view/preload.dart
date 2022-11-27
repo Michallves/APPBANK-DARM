@@ -47,7 +47,7 @@ class Preload extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () => {
                         controller.role.value = 'user',
-                        print(controller.readUsers())
+                        Get.toNamed(Routes.LOGIN_CPF)
                       },
                       child: const Text("entrar"),
                     ),

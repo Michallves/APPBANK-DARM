@@ -13,10 +13,10 @@ class LoginCpf extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
-          title: Obx(() => Text(controller.cpfTextController.value.text))),
+          title: Text(
+              controller.role.value == 'user' ? "entrar" : "entrar admin")),
       body: SafeArea(
         child: Column(
           children: [
@@ -69,10 +69,7 @@ class LoginCpf extends StatelessWidget {
                 : Container(),
             Obx(() => BottomButtom(
                 loading: controller.isLoading.value,
-                enabled: controller.cpfTextController.value.text.length >= 10
-                    ? true
-                    : false,
-                onPress: () => controller.loginUser(),
+                onPress: () => controller.getEmail(),
                 title: 'continuar'))
           ],
         ),

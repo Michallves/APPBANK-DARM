@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AuthProvider extends GetxController {
@@ -12,20 +11,9 @@ class AuthProvider extends GetxController {
   User? get user => _firebaseUser.value;
   static AuthProvider get to => Get.find<AuthProvider>();
 
-  showSnack(String title, String message) {
-    Get.snackbar(title, message,
-        backgroundColor: Colors.black,
-        colorText: Colors.white,
-        snackPosition: SnackPosition.TOP);
-  }
-
   Future login({required String email, required String password}) async {
-    try {
-      await _firebaseAuth.signInWithEmailAndPassword(
-          email: email, password: password);
-    } on FirebaseAuthException catch (erro) {
-      showSnack('Erro no login!', erro.message!);
-    }
+    await _firebaseAuth.signInWithEmailAndPassword(
+        email: email, password: password);
   }
 
   registerUser(
@@ -40,43 +28,32 @@ class AuthProvider extends GetxController {
       required String district,
       required String street,
       required String number}) async {
-    try {
-      await _firebaseAuth
-          .createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      )
-          .then((UserCredential userCredential) async {
-        await _firebaseDB
-            .collection("users")
-            .doc(userCredential.user?.uid)
-            .set({
-          "cpf": cpf,
-          'name': name,
-          "email": email,
-          "telephone": telephone,
-          "accountType": accountType,
-          "image": '',
-          "address": {
-            'state': state,
-            "city": city,
-            "district": district,
-            "street": street,
-            "number": number,
-          },
-        });
+    await _firebaseAuth
+        .createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    )
+        .then((UserCredential userCredential) async {
+      await _firebaseDB.collection("users").doc(userCredential.user?.uid).set({
+        "cpf": cpf,
+        'name': name,
+        "email": email,
+        "telephone": telephone,
+        "accountType": accountType,
+        "image": '',
+        "address": {
+          'state': state,
+          "city": city,
+          "district": district,
+          "street": street,
+          "number": number,
+        },
       });
-    } on FirebaseAuthException catch (erro) {
-      showSnack('Erro ao registrar!', erro.message!);
-    }
+    });
   }
 
   logout() async {
-    try {
-      await _firebaseAuth.signOut();
-    } on FirebaseAuthException catch (erro) {
-      showSnack('Erro ao sair!', erro.message!);
-    }
+    await _firebaseAuth.signOut();
   }
 
   Future reAuth(String password) async {
@@ -90,13 +67,24 @@ class AuthProvider extends GetxController {
   Future updatePassword(String password) async {
     return await usuario?.updatePassword(password);
   }
+  
+  
+  Future forgotPassword({required String email}) async {
+    await _firebaseAuth.sendPasswordResetEmail(email: email);
+  }
 
-  forgotPassword({required String email}) async {
-    try {
-      await _firebaseAuth.sendPasswordResetEmail(email: email);
-    } on FirebaseAuthException catch (erro) {
-      showSnack('Erro ao sair!', erro.message!);
-    }
+  getEmail(String cpf) async {
+    String? email;
+    await _firebaseDB
+        .collection("users")
+        .where("cpf", isEqualTo: cpf)
+        .get()
+        .then((snapshot) => {
+              snapshot.docs.forEach((doc) => {
+                    email = doc.get('email'),
+                  })
+            }); 
+    return email;
   }
 
   Future deleteAccount() async {
@@ -108,21 +96,4 @@ class AuthProvider extends GetxController {
   _getUser() {
     usuario = _firebaseAuth.currentUser;
   }
-
-  getEmail(cpf) async {
-    late String email;
-    await _firebaseDB
-        .collection("users")
-        .where("cpf", isEqualTo: cpf)
-        .get()
-        .then((snapshot) => {
-              snapshot.docs.forEach((doc) => {
-                    email = doc.get('email').to,
-                  })
-            });
-    return email;
-  }
-
- 
-  
 }

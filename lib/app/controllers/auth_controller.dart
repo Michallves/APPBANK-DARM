@@ -1,7 +1,7 @@
-import 'package:appbankdarm/app/models/user_model.dart';
 import 'package:appbankdarm/app/providers/auth_provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../routes/app_routes.dart';
@@ -28,42 +28,57 @@ class AuthController extends GetxController {
   var isLoading = false.obs;
   var isButtonActive = false.obs;
 
-  readUsers() async {
-    List<UserModel> userModelList = [];
-
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-    firestore.collection("users").get().then((user) {
-      for (var doc in user.docs) {
-        userModelList.add(UserModel.fromJson(doc.data()));
-      }
-    });
+  showSnack(String title, String message) {
+    Get.snackbar(title, message,
+        backgroundColor: Colors.black,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.TOP);
   }
 
   loginUser() async {
-    await authProvider
-        .login(
-            email: emailTextController.text,
-            password: passwordTextController.text)
-        .then((value) => Get.toNamed(Routes.HOME_USER));
+    try {
+      await authProvider
+          .login(
+              email: emailTextController.text,
+              password: passwordTextController.text)
+          .then((_) => Get.toNamed(Routes.HOME_USER));
+    } on FirebaseAuthException catch (erro) {
+      showSnack('Erro no login!', erro.message!);
+    }
   }
 
   registerUser() async {
-    await authProvider.registerUser(
-        email: emailTextController.text,
-        password: passwordTextController.text,
-        name: nameTextController.text,
-        cpf: cpfTextController.value.text,
-        telephone: telephoneTextController.text,
-        accountType: accountType,
-        state: state,
-        city: cityTextController.text,
-        district: districtTextController.text,
-        street: streetTextController.text,
-        number: numberTextController.text);
+    try {
+      await authProvider.registerUser(
+          email: emailTextController.text,
+          password: passwordTextController.text,
+          name: nameTextController.text,
+          cpf: cpfTextController.value.text,
+          telephone: telephoneTextController.text,
+          accountType: accountType,
+          state: state,
+          city: cityTextController.text,
+          district: districtTextController.text,
+          street: streetTextController.text,
+          number: numberTextController.text);
+    } on FirebaseAuthException catch (erro) {
+      showSnack('Erro ao registrar!', erro.message!);
+    }
   }
 
   forgotPassword() async {
-    await authProvider.forgotPassword(email: emailTextController.text);
+    try {
+      await authProvider.forgotPassword(email: emailTextController.text);
+    } on FirebaseAuthException catch (erro) {
+      showSnack('Erro ao sair!', erro.message!);
+    }
+  }
+
+  getEmail() async {
+    isLoading.value = true;
+
+    await authProvider.getEmail(cpfTextController.text).then((email) {});
+    print(authProvider.getEmail(cpfTextController.text).toString());
+    isLoading.value = false;
   }
 }

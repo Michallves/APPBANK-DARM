@@ -50,30 +50,30 @@ class InfoUser extends StatelessWidget {
             ],
           ),
           const Divider(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              infoUser(title: 'Estado', value: user.state!),
-              infoUser(
-                title: 'Cidade',
-                value: user.address?['city'],
-              ),
-              const Padding(padding: EdgeInsets.all(0)),
-            ],
-          ),
-          infoUser(title: 'Rua', value: user.address?['street']),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              infoUser(
-                  title: 'Bairro', value: user.address?['neighborhood']),
-              infoUser(
-                title: 'Número',
-                value: user.address?['number'],
-              ),
-              const Padding(padding: EdgeInsets.all(0)),
-            ],
-          ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //   infoUser(title: 'Estado', value: user.state!),
+          //     infoUser(
+          //       title: 'Cidade',
+          //       value: user.address?['city'],
+          //     ),
+          //     const Padding(padding: EdgeInsets.all(0)),
+          //   ],
+          // ),
+          // infoUser(title: 'Rua', value: user.address?['street']),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     infoUser(
+          //         title: 'Bairro', value: user.address?['neighborhood']),
+          //     infoUser(
+          //       title: 'Número',
+          //       value: user.address?['number'],
+          //     ),
+          //     const Padding(padding: EdgeInsets.all(0)),
+          //   ],
+          // ),
         ],
       ),
     );

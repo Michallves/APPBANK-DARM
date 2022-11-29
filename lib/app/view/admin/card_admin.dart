@@ -1,5 +1,5 @@
 import 'package:appbankdarm/app/models/card_model.dart';
-import 'package:appbankdarm/app/providers/admin_service.dart';
+import 'package:appbankdarm/app/services/admin_service.dart';
 import 'package:appbankdarm/app/routes/app_routes.dart';
 import 'package:appbankdarm/app/view/widgets/bottom_button.dart';
 import 'package:appbankdarm/app/view/widgets/cartao.dart';

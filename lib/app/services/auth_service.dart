@@ -1,54 +1,49 @@
+import 'package:appbankdarm/app/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
-class AuthProvider extends GetxController {
+class AuthService extends GetxController {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firebaseDB = FirebaseFirestore.instance;
   User? usuario;
   final Rxn<User> _firebaseUser = Rxn<User>();
 
   User? get user => _firebaseUser.value;
-  static AuthProvider get to => Get.find<AuthProvider>();
+  static AuthService get to => Get.put(AuthService());
 
   Future login({required String email, required String password}) async {
     await _firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
   }
 
-  registerUser(
-      {required String email,
-      required String password,
-      required String name,
-      required String cpf,
-      required String telephone,
-      required String accountType,
-      required String state,
-      required String city,
-      required String district,
-      required String street,
-      required String number}) async {
+  registerUser({required UserModel user, required String password}) async {
     await _firebaseAuth
         .createUserWithEmailAndPassword(
-      email: email,
+      email: user.email!,
       password: password,
     )
         .then((UserCredential userCredential) async {
-      await _firebaseDB.collection("users").doc(userCredential.user?.uid).set({
-        "cpf": cpf,
-        'name': name,
-        "email": email,
-        "telephone": telephone,
-        "accountType": accountType,
-        "image": '',
-        "address": {
-          'state': state,
-          "city": city,
-          "district": district,
-          "street": street,
-          "number": number,
-        },
-      });
+      registerUserDB(userCredential: userCredential, user: user);
+    });
+  }
+
+  registerUserDB(
+      {required UserCredential userCredential, required UserModel user}) async {
+    await _firebaseDB.collection("users").doc(userCredential.user?.uid).set({
+      "cpf": user.cpf,
+      'name': user.name,
+      "email": user.email,
+      "telephone": user.telephone,
+      "accountType": user.accountType,
+      "image": '',
+      "address": {
+        'state': user.address?.state,
+        "city": user.address?.city,
+        "district": user.address?.district,
+        "street": user.address?.street,
+        "number": user.address?.number,
+      },
     });
   }
 
@@ -67,24 +62,21 @@ class AuthProvider extends GetxController {
   Future updatePassword(String password) async {
     return await usuario?.updatePassword(password);
   }
-  
-  
+
   Future forgotPassword({required String email}) async {
     await _firebaseAuth.sendPasswordResetEmail(email: email);
   }
 
-  getEmail(String cpf) async {
-    String? email;
-    await _firebaseDB
+  getEmail(String? cpf) async {
+    var snapshot = await _firebaseDB
         .collection("users")
         .where("cpf", isEqualTo: cpf)
-        .get()
-        .then((snapshot) => {
-              snapshot.docs.forEach((doc) => {
-                    email = doc.get('email'),
-                  })
-            }); 
-    return email;
+        .get();
+    for (var doc in snapshot.docs) {
+      {
+        return doc.get("email");
+      }
+    }
   }
 
   Future deleteAccount() async {

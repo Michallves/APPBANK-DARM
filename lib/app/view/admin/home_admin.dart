@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import '../../models/card_model.dart';
-import '../../providers/admin_service.dart';
-import '../../providers/auth_provider.dart';
 import '../../routes/app_routes.dart';
+import '../../services/admin_service.dart';
+import '../../services/auth_service.dart';
 import '../widgets/cartao.dart';
 
 class HomeAdmin extends StatefulWidget {
@@ -36,7 +36,7 @@ class _HomeAdminState extends State<HomeAdmin> {
   }
 
   _logout() async {
-    context.read<AuthProvider>().logout().then(
+    context.read<AuthService>().logout().then(
         (_) => Navigator.of(context).pushReplacementNamed(Routes.PRELOAD));
   }
 

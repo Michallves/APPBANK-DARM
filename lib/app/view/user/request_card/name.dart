@@ -1,4 +1,4 @@
-import 'package:appbankdarm/app/providers/card_service.dart';
+import 'package:appbankdarm/app/services/card_service.dart';
 import 'package:appbankdarm/app/routes/app_routes.dart';
 import 'package:appbankdarm/app/view/widgets/bottom_button.dart';
 import 'package:flutter/material.dart';

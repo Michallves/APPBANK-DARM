@@ -22,37 +22,32 @@ class LoginCpf extends StatelessWidget {
           children: [
             Expanded(
               child: Container(
-                margin: const EdgeInsets.all(20),
-                child: TextFormField(
-                  key: controller.formKey,
-                  controller: controller.cpfTextController,
-                  keyboardType: TextInputType.number,
-                  textInputAction: TextInputAction.none,
-                  keyboardAppearance: Brightness.dark,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    CpfInputFormatter()
-                  ],
-                  autofocus: true,
-                  style: const TextStyle(fontSize: 26),
-                  validator: (String? value) {
-                    if (GetUtils.isCpf(
-                            controller.cpfTextController.value.text) ==
-                        false) {
-                      return 'CPF inválido. confira e tente novamente';
-                    }
-                  },
-                  decoration: const InputDecoration(
-                    hintText: '000.000.000-00',
-                    labelText: 'digite seu CPF',
-                    errorStyle: TextStyle(
-                      color: Colors.red,
+                  margin: const EdgeInsets.all(20),
+                  child: TextFormField(
+                    key: controller.formKey,
+                    controller: controller.cpfTextController,
+                    keyboardType: TextInputType.number,
+                    textInputAction: TextInputAction.none,
+                    keyboardAppearance: Brightness.dark,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      CpfInputFormatter()
+                    ],
+                    autofocus: true,
+                    style: const TextStyle(fontSize: 26),
+                    validator: (value) {
+                      return controller.validatorCpf(value!);
+                    },
+                    decoration: const InputDecoration(
+                      hintText: '000.000.000-00',
+                      labelText: 'digite seu CPF',
+                      errorStyle: TextStyle(
+                        color: Colors.red,
+                      ),
+                      border: InputBorder.none,
                     ),
-                    border: InputBorder.none,
-                  ),
-                  cursorColor: Colors.black,
-                ),
-              ),
+                    cursorColor: Colors.black,
+                  )),
             ),
             controller.role.value == 'admin'
                 ? Container(
@@ -67,10 +62,10 @@ class LoginCpf extends StatelessWidget {
                               fontWeight: FontWeight.bold),
                         )))
                 : Container(),
-            Obx(() => BottomButtom(
+            BottomButtom(
                 loading: controller.isLoading.value,
-                onPress: () => controller.getEmail(),
-                title: 'continuar'))
+                onPress: () => controller.validator(),
+                title: 'continuar')
           ],
         ),
       ),

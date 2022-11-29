@@ -1,20 +1,21 @@
-import 'package:appbankdarm/app/providers/auth_provider.dart';
+import 'package:appbankdarm/app/models/address_model.dart';
+import 'package:appbankdarm/app/models/user_model.dart';
+import 'package:appbankdarm/app/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../routes/app_routes.dart';
 
 class AuthController extends GetxController {
-  final AuthProvider authProvider = AuthProvider();
+  final AuthService authService = AuthService();
 
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
   final confirmPasswordTextController = TextEditingController();
 
   final nameTextController = TextEditingController();
-  var cpfTextController = TextEditingController();
+  final cpfTextController = TextEditingController();
   final telephoneTextController = TextEditingController();
   late String state;
   final cityTextController = TextEditingController();
@@ -37,7 +38,7 @@ class AuthController extends GetxController {
 
   loginUser() async {
     try {
-      await authProvider
+      await AuthService.to
           .login(
               email: emailTextController.text,
               password: passwordTextController.text)
@@ -49,18 +50,21 @@ class AuthController extends GetxController {
 
   registerUser() async {
     try {
-      await authProvider.registerUser(
-          email: emailTextController.text,
-          password: passwordTextController.text,
-          name: nameTextController.text,
-          cpf: cpfTextController.value.text,
-          telephone: telephoneTextController.text,
-          accountType: accountType,
-          state: state,
-          city: cityTextController.text,
-          district: districtTextController.text,
-          street: streetTextController.text,
-          number: numberTextController.text);
+      await AuthService.to.registerUser(
+        user: UserModel(
+            email: emailTextController.text,
+            name: nameTextController.text,
+            cpf: cpfTextController.value.text,
+            telephone: telephoneTextController.text,
+            accountType: accountType,
+            address: AddressModel(
+                state: state,
+                city: cityTextController.text,
+                district: districtTextController.text,
+                street: streetTextController.text,
+                number: numberTextController.text)),
+        password: passwordTextController.text,
+      );
     } on FirebaseAuthException catch (erro) {
       showSnack('Erro ao registrar!', erro.message!);
     }
@@ -68,7 +72,7 @@ class AuthController extends GetxController {
 
   forgotPassword() async {
     try {
-      await authProvider.forgotPassword(email: emailTextController.text);
+      await AuthService.to.forgotPassword(email: emailTextController.text);
     } on FirebaseAuthException catch (erro) {
       showSnack('Erro ao sair!', erro.message!);
     }
@@ -76,9 +80,23 @@ class AuthController extends GetxController {
 
   getEmail() async {
     isLoading.value = true;
-
-    await authProvider.getEmail(cpfTextController.text).then((email) {});
-    print(authProvider.getEmail(cpfTextController.text).toString());
+    print(await AuthService.to.getEmail(cpfTextController.value.text));
     isLoading.value = false;
+  }
+
+  validator() {
+    final isValid = formKey.currentState?.validate();
+    if (isValid!) {
+      return;
+    }
+    formKey.currentState?.save();
+  }
+
+  String? validatorCpf(String value) {
+    if (GetUtils.isCpf(value)) {
+      return 'ksfdgerger';
+    } else {
+      return null;
+    }
   }
 }

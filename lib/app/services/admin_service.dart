@@ -1,4 +1,4 @@
-import 'package:appbankdarm/app/providers/auth_provider.dart';
+import 'package:appbankdarm/app/services/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -6,7 +6,7 @@ import '../models/user_model.dart';
 
 class AdminService extends ChangeNotifier {
   late FirebaseFirestore db = FirebaseFirestore.instance;
-  late AuthProvider auth;
+  late AuthService auth;
   DocumentSnapshot<Object?>? user;
   DocumentSnapshot<Object?>? card;
 
@@ -43,16 +43,19 @@ class AdminService extends ChangeNotifier {
     return data;
   }
 
-    readUsers() async {
+  readUsers() async {
     List<UserModel> userModelList = [];
 
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    firestore.collection("users").orderBy(filter, descending: filter == 'cards' ? true : false).get().then((user) {
+    firestore
+        .collection("users")
+        .orderBy(filter, descending: filter == 'cards' ? true : false)
+        .get()
+        .then((user) {
       for (var doc in user.docs) {
         userModelList.add(UserModel.fromJson(doc.data()));
       }
     });
   }
-
 }

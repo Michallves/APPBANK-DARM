@@ -1,4 +1,4 @@
-import 'package:appbankdarm/app/providers/auth_provider.dart';
+import 'package:appbankdarm/app/services/auth_service.dart';
 import 'package:appbankdarm/app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -33,7 +33,7 @@ class _CurrentPasswordState extends State<CurrentPassword> {
 
   _reAuth() async {
     setState(() => isLoading = true);
-    context.read<AuthProvider>().reAuth(password.text).then((_) {
+    context.read<AuthService>().reAuth(password.text).then((_) {
       Navigator.of(context).pushNamed(Routes.NEW_PASSWORD);
       setState(() => isLoading = false);
     }).catchError((_) {

@@ -1,9 +1,9 @@
-import 'package:appbankdarm/app/providers/auth_provider.dart';
+import 'package:appbankdarm/app/services/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class UserService extends ChangeNotifier {
-  late AuthProvider auth;
+  late AuthService auth;
   DocumentSnapshot<Object?>? user;
 
   String screen = 'myCards';

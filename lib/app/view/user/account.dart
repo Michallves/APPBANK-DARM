@@ -7,7 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/user_model.dart';
-import '../../providers/user_service.dart';
+import '../../services/user_service.dart';
 
 class AccountUser extends StatefulWidget {
   const AccountUser({super.key});
@@ -112,7 +112,7 @@ class _AccountUserState extends State<AccountUser> {
                           telephone: user?['telephone'],
                           email: user?['email'],
                           accountType: user?['accountType'],
-                          state: user?['state'],
+                         
                           address: user?['address'])),
                     ],
                   ),

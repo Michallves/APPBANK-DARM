@@ -1,23 +1,27 @@
+import 'package:appbankdarm/app/models/address_model.dart';
+
 class UserModel {
-  String? image;
-  String? name;
-  String? cpf;
   String? email;
+  String? password;
+
+  String? name;
+  String? image;
+  String? cpf;
   String? telephone;
   String? accountType;
   String? role;
-  String? state;
-  Map<String, dynamic>? address;
+  AddressModel? address;
 
   UserModel({
+    this.email,
+    this.password,
+
     this.image,
     this.name,
     this.cpf,
-    this.email,
     this.telephone,
     this.accountType,
     this.role,
-    this.state,
     this.address,
   });
 
@@ -30,7 +34,6 @@ class UserModel {
       "telephone": telephone,
       "accountType": accountType,
       "role": role,
-      "state": state,
       "address": address,
     };
   }
@@ -44,7 +47,6 @@ class UserModel {
       telephone: json["telephone"],
       accountType: json["accountType"],
       role: json["role"],
-      state: json["state"],
       address: json["address"],
     );
   }

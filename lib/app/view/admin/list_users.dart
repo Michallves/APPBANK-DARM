@@ -1,4 +1,4 @@
-import 'package:appbankdarm/app/providers/admin_service.dart';
+import 'package:appbankdarm/app/services/admin_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +57,7 @@ class _ListUsersState extends State<ListUsers> {
                     leading: Image.network(
                         "https://commons.wikimedia.org/wiki/Commons:Quality_images#/media/File:Gull_portrait_ca_usa.jpg"),
                     title: Text(user.name!),
-                    subtitle: Text("Estado: ${user.state}"),
+                    subtitle: Text("Estado: ${user.address?.state}"),
                   );
                 }),
               );
